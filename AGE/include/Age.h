@@ -1,0 +1,14 @@
+//
+// Created by a on 24.08.22.
+//
+
+#ifndef AGE_AGE_H
+#define AGE_AGE_H
+
+// for client apps to consume
+
+#include "Age/Application.h"
+
+#include "Age/EntryPoint.h"
+
+#endif //AGE_AGE_H

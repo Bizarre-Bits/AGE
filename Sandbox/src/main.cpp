@@ -2,9 +2,19 @@
 // Created by a on 24.08.22.
 //
 
-#include "Core/lib.h"
+#include "Age.h"
 
-int main() {
-    AGE::Core::hello();
-    return 0;
+class Sandbox : public AGE::Application {
+	public:
+	Sandbox() {}
+
+	~Sandbox() {}
+
+	void Run() {
+		while(true);
+	}
+};
+
+AGE::Application *AGE::CreateApplication() {
+	return new Sandbox{};
 }

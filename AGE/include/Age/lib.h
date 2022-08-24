@@ -5,10 +5,13 @@
 #ifndef AGE_LIB_H
 #define AGE_LIB_H
 
+#include "Age/Core.h"
+
 #include <iostream>
 
-namespace AGE::Core {
-    void hello();
+namespace AGE {
+	DLL_PUBLIC void hello();
+	DLL_LOCAL void highFive();
 }
 
 #endif //AGE_LIB_H
