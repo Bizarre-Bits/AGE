@@ -1,2 +1,2 @@
 # AGE
-Anxious Game Engine
+Anxious Game Core
