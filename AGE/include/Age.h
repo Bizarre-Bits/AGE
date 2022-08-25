@@ -8,6 +8,7 @@
 // for client apps to consume
 
 #include "Age/Application.h"
+#include "Age/Log.h"
 
 #include "Age/EntryPoint.h"
 
