@@ -25,7 +25,7 @@ namespace AGE {
 
 } // AGE
 
-#ifdef BUILD_DEBUG
+#ifdef DEBUG
 //Core logger macros
 	#define CORE_LOG_TRACE(...)       ::AGE::Log::GetCoreLogger()->trace(__VA_ARGS__)
 	#define CORE_LOG_DEBUG(...)       ::AGE::Log::GetCoreLogger()->debug(__VA_ARGS__)
