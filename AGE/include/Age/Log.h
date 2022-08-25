@@ -25,7 +25,7 @@ namespace AGE {
 
 } // AGE
 
-#ifdef BUILD_DEBUG
+#ifdef DEBUG
 //Core logger macros
 	#define CORE_LOG_TRACE(...)       ::AGE::Log::GetCoreLogger()->trace(__VA_ARGS__)
 	#define CORE_LOG_DEBUG(...)       ::AGE::Log::GetCoreLogger()->debug(__VA_ARGS__)
@@ -39,7 +39,7 @@ namespace AGE {
 	#define CLIENT_LOG_INFO(...)      ::AGE::Log::GetClientLogger()->info(__VA_ARGS__)
 	#define CLIENT_LOG_ERROR(...)     ::AGE::Log::GetClientLogger()->error(__VA_ARGS__)
 	#define CLIENT_LOG_CRITICAL(...)  ::AGE::Log::GetClientLogger()->critical(__VA_ARGS__)
-#else
+#elif
 //Core logger macros
 	#define CORE_LOG_TRACE(...)
 	#define CORE_LOG_DEBUG(...)
