@@ -7,8 +7,6 @@
 
 #include "Core.h"
 
-#include "Events/WindowEvent.h"
-
 extern AGE::Application* AGE::CreateApplication();
 
 int main (int argc, char** argv) {
@@ -16,9 +14,6 @@ int main (int argc, char** argv) {
 
 	CORE_LOG_DEBUG("Initialized logging");
 	auto app = AGE::CreateApplication();
-
-	AGE::WindowCloseEvent event{};
-	CORE_LOG_INFO(event);
 
 	CORE_LOG_DEBUG("Created app");
 
