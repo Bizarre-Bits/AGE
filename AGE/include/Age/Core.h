@@ -5,6 +5,9 @@
 #ifndef AGE_CORE_H
 #define AGE_CORE_H
 
+#include <string>
+
+// DLL export/import macros definitions
 #if defined _WIN32 || defined __CYGWIN__
 #ifdef BUILDING_DLL
 	#ifdef __GNUC__
@@ -29,5 +32,10 @@
 	#define DLL_LOCAL
 #endif
 #endif
+
+//A macro for bitfields
+#define BIT(x) (1 << x)
+
+using age_string_t = std::string;
 
 #endif //AGE_CORE_H
