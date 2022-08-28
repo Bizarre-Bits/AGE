@@ -28,33 +28,31 @@ namespace AGE {
 } // AGE
 
 #ifdef DEBUG
-//Core logger macros
-	#define CORE_LOG_TRACE(...)       ::AGE::Log::GetCoreLogger()->trace(__VA_ARGS__)
-	#define CORE_LOG_DEBUG(...)       ::AGE::Log::GetCoreLogger()->debug(__VA_ARGS__)
-	#define CORE_LOG_INFO(...)        ::AGE::Log::GetCoreLogger()->info(__VA_ARGS__)
-	#define CORE_LOG_ERROR(...)       ::AGE::Log::GetCoreLogger()->error(__VA_ARGS__)
-	#define CORE_LOG_CRITICAL(...)    ::AGE::Log::GetCoreLogger()->critical(__VA_ARGS__)
+//Core log macros
+	#define AGE_CORE_TRACE(...)       ::AGE::Log::GetCoreLogger()->trace(__VA_ARGS__)
+	#define AGE_CORE_INFO(...)        ::AGE::Log::GetCoreLogger()->info(__VA_ARGS__)
+	#define AGE_CORE_ERROR(...)       ::AGE::Log::GetCoreLogger()->error(__VA_ARGS__)
+	#define AGE_CORE_CRITICAL(...)    ::AGE::Log::GetCoreLogger()->critical(__VA_ARGS__)
 
-//Client logger macros
-	#define CLIENT_LOG_TRACE(...)     ::AGE::Log::GetClientLogger()->trace(__VA_ARGS__)
-	#define CLIENT_LOG_DEBUG(...)     ::AGE::Log::GetClientLogger()->debug(__VA_ARGS__)
-	#define CLIENT_LOG_INFO(...)      ::AGE::Log::GetClientLogger()->info(__VA_ARGS__)
-	#define CLIENT_LOG_ERROR(...)     ::AGE::Log::GetClientLogger()->error(__VA_ARGS__)
-	#define CLIENT_LOG_CRITICAL(...)  ::AGE::Log::GetClientLogger()->critical(__VA_ARGS__)
+//Client log macros
+	#define AGE_TRACE(...)            ::AGE::Log::GetClientLogger()->trace(__VA_ARGS__)
+	#define AGE_INFO(...)             ::AGE::Log::GetClientLogger()->info(__VA_ARGS__)
+	#define AGE_ERROR(...)            ::AGE::Log::GetClientLogger()->error(__VA_ARGS__)
+	#define AGE_CRITICAL(...)         ::AGE::Log::GetClientLogger()->critical(__VA_ARGS__)
 #else
 //Core logger macros
-	#define CORE_LOG_TRACE(...)
-	#define CORE_LOG_DEBUG(...)
-	#define CORE_LOG_INFO(...)
-	#define CORE_LOG_ERROR(...)
-	#define CORE_LOG_CRITICAL(...)
+	#define AGE_CORE_TRACE(...)
+	#define AGE_CORE_TRACE(...)
+	#define AGE_CORE_INFO(...)
+	#define AGE_CORE_ERROR(...)
+	#define AGE_CORE_CRITICAL(...)
 
 //Client logger macros
-	#define CLIENT_LOG_TRACE(...)
-	#define CLIENT_LOG_DEBUG(...)
-	#define CLIENT_LOG_INFO(...)
-	#define CLIENT_LOG_ERROR(...)
-	#define CLIENT_LOG_CRITICAL(...)
+	#define AGE_TRACE(...)
+	#define AGE_TRACE(...)
+	#define AGE_INFO(...)
+	#define AGE_ERROR(...)
+	#define AGE_CRITICAL(...)
 #endif
 
 #endif //AGE_LOG_H

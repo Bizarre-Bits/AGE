@@ -27,17 +27,27 @@ set(SPDLOG_ENABLE_PCH ON)
 
 add_subdirectory(vendor/spdlog)
 
-target_link_libraries(Core PUBLIC glfw spdlog)
+target_link_libraries(Core PUBLIC GL glfw spdlog)
 
 target_precompile_headers(Core PUBLIC include/agepch.h)
 
 if (${CMAKE_BUILD_TYPE} STREQUAL Debug)
-    message("debug build mode")
+    message(STATUS "debug build mode")
     target_compile_definitions(Core PUBLIC DEBUG)
 elseif (${CMAKE_BUILD_TYPE} STREQUAL Release)
-    message("release build mode")
+    message(STATUS "release build mode")
     target_compile_definitions(Core PUBLIC NDEBUG RELEASE)
 else ()
-    message("undefined build mode")
+    message(STATUS "undefined build mode")
     target_compile_definitions(Core PUBLIC NDEBUG)
+endif ()
+
+if (WIN32)
+    message(STATUS ">>>> Windows")
+    target_compile_definitions(Core PUBLIC AGE_PLATFORM_WINDOWS)
+endif ()
+
+if (UNIX AND NOT APPLE)
+    message(STATUS ">>>> LINUX")
+    target_compile_definitions(Core PUBLIC AGE_PLATFORM_LINUX)
 endif ()

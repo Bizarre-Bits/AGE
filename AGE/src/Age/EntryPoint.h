@@ -11,16 +11,14 @@ extern AGE::Application* AGE::CreateApplication();
 
 int main (int argc, char** argv) {
 	AGE::Log::Init();
+	AGE_CORE_TRACE("Initialized logging");
 
-	CORE_LOG_DEBUG("Initialized logging");
 	auto app = AGE::CreateApplication();
-
-	CORE_LOG_DEBUG("Created app");
 
 	app->Run();
 	delete app;
 
-	CORE_LOG_DEBUG("App is terminated");
+	AGE_CORE_TRACE("App is terminated");
 
 }
 

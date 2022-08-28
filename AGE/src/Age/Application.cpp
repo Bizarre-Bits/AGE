@@ -8,14 +8,16 @@
 
 namespace AGE {
 	Application::Application() {
-
+		window_ = Window::Create();
 	}
 
 	Application::~Application() {
-
+		delete window_;
 	}
 
 	void Application::Run() {
-
+		while(running_) {
+			window_->OnUpdate();
+		}
 	}
 } // Age

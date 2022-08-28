@@ -7,6 +7,8 @@
 
 #include "Age/Core.h"
 
+#include "Window.h"
+
 namespace AGE {
 	class DLL_PUBLIC Application {
 		public:
@@ -14,6 +16,10 @@ namespace AGE {
 		virtual ~Application();
 
 		virtual void Run();
+
+	private:
+		Window* window_;
+		bool running_{true};
 	};
 
 	// To be defined in CLIENT
