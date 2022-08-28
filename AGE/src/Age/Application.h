@@ -9,6 +9,7 @@
 
 #include "Window.h"
 #include "Events/Event.h"
+#include "Events/WindowEvent.h"
 
 namespace AGE {
 	class DLL_PUBLIC Application {
@@ -19,6 +20,9 @@ namespace AGE {
 		virtual void Run();
 
 		void OnEvent(Event& e);
+
+	private:
+		bool OnWindowClose(WindowCloseEvent& e);
 
 	private:
 		Window* window_;

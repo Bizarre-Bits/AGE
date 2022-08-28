@@ -22,9 +22,13 @@ namespace AGE {
 		}
 	}
 	void Application::OnEvent(Event &e) {
+		EventDispatcher dispatcher(e);
+		dispatcher.Dispatch<WindowCloseEvent>(AGE_BIND_EVENT_FN(Application::OnWindowClose));
+
 		AGE_CORE_INFO(e);
-		if(e.GetEventType() == EventType::WindowClose) {
-			running_ = false;
-		}
+	}
+	bool Application::OnWindowClose(WindowCloseEvent &e) {
+		running_ = false;
+		return true;
 	}
 } // Age

@@ -61,7 +61,7 @@ namespace AGE {
 		 */
 		template<typename E, typename F>
 		bool Dispatch(const F& func) {
-			if(event_.GetEventType() == E::GetStaticType()) {
+			if(event_.GetEventType() == E::StaticType()) {
 				event_.Handled |= func(static_cast<E&>(event_));
 				return true;
 			}
