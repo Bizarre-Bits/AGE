@@ -7,7 +7,7 @@
 
 #include "Event.h"
 
-#include "Age/MouseCodes.h"
+#include "../MouseCodes.h"
 
 namespace AGE {
 	class DLL_PUBLIC MouseButtonEvent : public Event {

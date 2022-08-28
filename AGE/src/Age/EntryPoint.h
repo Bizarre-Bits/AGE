@@ -5,7 +5,7 @@
 #ifndef AGE_ENTRYPOINT_H
 #define AGE_ENTRYPOINT_H
 
-#include "Core.h"
+#include "Age/Core.h"
 
 extern AGE::Application* AGE::CreateApplication();
 

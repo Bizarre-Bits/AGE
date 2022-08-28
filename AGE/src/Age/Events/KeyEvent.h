@@ -5,9 +5,9 @@
 #ifndef AGE_KEYEVENT_H
 #define AGE_KEYEVENT_H
 
-#include "Age/Events/Event.h"
+#include "Event.h"
 
-#include "Age/KeyCodes.h"
+#include "../KeyCodes.h"
 
 namespace AGE {
 

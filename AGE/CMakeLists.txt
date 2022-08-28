@@ -8,11 +8,18 @@ set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 
 file(GLOB_RECURSE _SRCS src/*.cpp)
-file(GLOB_RECURSE _HDRS include/*.h)
+file(GLOB_RECURSE _HDRS src/*.h)
+file(GLOB_RECURSE _INCLDS include/*.h)
 
-add_library(Core SHARED ${_SRCS} ${_HDRS})
-target_include_directories(Core PUBLIC include vendor/include)
-target_link_directories(Core PUBLIC vendor/lib)
+add_library(Core SHARED ${_SRCS} ${_HDRS} ${_INCLDS})
+target_include_directories(Core
+        PUBLIC
+        src
+        include
+        vendor/GLFW/include
+        vendor/spdlog/include
+        )
+
 target_precompile_headers(Core PUBLIC include/agepch.h)
 
 if (${CMAKE_BUILD_TYPE} STREQUAL Debug)
@@ -21,7 +28,7 @@ if (${CMAKE_BUILD_TYPE} STREQUAL Debug)
 elseif (${CMAKE_BUILD_TYPE} STREQUAL Release)
     message("release build mode")
     target_compile_definitions(Core PUBLIC NDEBUG RELEASE)
-else()
+else ()
     message("undefined build mode")
     target_compile_definitions(Core PUBLIC NDEBUG)
 endif ()

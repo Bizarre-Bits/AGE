@@ -7,7 +7,7 @@
 
 #include "agepch.h"
 
-#include "Age/Core.h"
+#include "../Core.h"
 
 namespace AGE {
 

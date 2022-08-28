@@ -5,7 +5,7 @@
 #ifndef AGE_APPLICATION_H
 #define AGE_APPLICATION_H
 
-#include "Core.h"
+#include "Age/Core.h"
 
 namespace AGE {
 	class DLL_PUBLIC Application {

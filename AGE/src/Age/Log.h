@@ -6,6 +6,7 @@
 #define AGE_LOG_H
 
 #include "Age/Core.h"
+
 #include "spdlog/spdlog.h"
 #include "spdlog/fmt/ostr.h"
 
