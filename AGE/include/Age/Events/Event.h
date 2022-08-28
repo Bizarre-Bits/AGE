@@ -5,8 +5,7 @@
 #ifndef AGE_EVENT_H
 #define AGE_EVENT_H
 
-#include <functional>
-#include <sstream>
+#include "agepch.h"
 
 #include "Age/Core.h"
 

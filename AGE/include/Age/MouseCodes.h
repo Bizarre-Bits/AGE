@@ -5,7 +5,7 @@
 #ifndef AGE_MOUSECODES_H
 #define AGE_MOUSECODES_H
 
-#include <cstdint>
+#include "agepch.h"
 
 namespace AGE {
 	using MouseCode = uint8_t;

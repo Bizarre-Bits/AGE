@@ -3,6 +3,8 @@ project(AGE)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(CMAKE_VERBOSE_MAKEFILE ON)
+
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 
 file(GLOB_RECURSE _SRCS src/*.cpp)
@@ -11,6 +13,7 @@ file(GLOB_RECURSE _HDRS include/*.h)
 add_library(Core SHARED ${_SRCS} ${_HDRS})
 target_include_directories(Core PUBLIC include vendor/include)
 target_link_directories(Core PUBLIC vendor/lib)
+target_precompile_headers(Core PUBLIC include/agepch.h)
 
 if (${CMAKE_BUILD_TYPE} STREQUAL Debug)
     message("debug build mode")

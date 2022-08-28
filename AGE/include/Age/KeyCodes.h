@@ -5,7 +5,7 @@
 #ifndef AGE_KEYCODES_H
 #define AGE_KEYCODES_H
 
-#include <cinttypes>
+#include "agepch.h"
 
 namespace AGE {
 	using KeyCode = uint16_t;

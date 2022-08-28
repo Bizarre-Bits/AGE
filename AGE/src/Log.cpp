@@ -2,6 +2,8 @@
 // Created by a on 24.08.22.
 //
 
+#include "agepch.h"
+
 #include "Age/Log.h"
 
 #include "spdlog/sinks/stdout_color_sinks.h"
