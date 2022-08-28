@@ -20,6 +20,15 @@ target_include_directories(Core
         vendor/spdlog/include
         )
 
+add_subdirectory(vendor/GLFW)
+
+set(CMAKE_POSITION_INDEPENDENT_CODE 1)
+set(SPDLOG_ENABLE_PCH ON)
+
+add_subdirectory(vendor/spdlog)
+
+target_link_libraries(Core PUBLIC glfw spdlog)
+
 target_precompile_headers(Core PUBLIC include/agepch.h)
 
 if (${CMAKE_BUILD_TYPE} STREQUAL Debug)
