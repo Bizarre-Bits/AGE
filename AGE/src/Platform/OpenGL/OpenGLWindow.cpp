@@ -7,6 +7,7 @@
 #include "OpenGLWindow.h"
 
 #include "Age/Assert.h"
+#include "Age/Events/WindowEvent.h"
 
 namespace AGE {
 	bool OpenGLWindow::s_GLFWInitialized{false};
@@ -48,6 +49,24 @@ namespace AGE {
 		SetVSync(true);
 
 		AGE_CORE_INFO("Created Window \"{0}\" ({1}, {2})", props.title, props.width, props.height);
+
+		// Set GLFW callbacks
+		glfwSetWindowSizeCallback(window_, [](GLFWwindow *window, int width, int height) {
+			auto *data = (WindowData *) glfwGetWindowUserPointer(window);
+
+			WindowResizeEvent event(width, height);
+			data->EventCallback(event);
+
+			data->width = width;
+			data->height = height;
+		});
+
+		glfwSetWindowCloseCallback(window_, [](GLFWwindow *window) {
+			auto data = (WindowData *) glfwGetWindowUserPointer(window);
+
+			WindowCloseEvent event;
+			data->EventCallback(event);
+		});
 	}
 
 	void OpenGLWindow::OnUpdate() {
@@ -66,7 +85,7 @@ namespace AGE {
 		return data_.vSync;
 	}
 	void OpenGLWindow::EventCallback(const Window::EventCallbackFn &callback) {
-
+		data_.EventCallback = callback;
 	}
 	void OpenGLWindow::Destroy() {
 		glfwDestroyWindow(window_);

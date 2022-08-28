@@ -8,6 +8,7 @@
 #include "Age/Core.h"
 
 #include "Window.h"
+#include "Events/Event.h"
 
 namespace AGE {
 	class DLL_PUBLIC Application {
@@ -16,6 +17,8 @@ namespace AGE {
 		virtual ~Application();
 
 		virtual void Run();
+
+		void OnEvent(Event& e);
 
 	private:
 		Window* window_;

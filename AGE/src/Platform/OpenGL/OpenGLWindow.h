@@ -37,6 +37,8 @@ namespace AGE {
 			age_string_t title;
 			unsigned int width, height;
 			bool vSync;
+
+			EventCallbackFn EventCallback;
 		} data_;
 
 		static bool s_GLFWInitialized;

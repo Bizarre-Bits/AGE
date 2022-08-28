@@ -9,6 +9,7 @@
 namespace AGE {
 	Application::Application() {
 		window_ = Window::Create();
+		window_->EventCallback(AGE_BIND_EVENT_FN(Application::OnEvent));
 	}
 
 	Application::~Application() {
@@ -18,6 +19,12 @@ namespace AGE {
 	void Application::Run() {
 		while(running_) {
 			window_->OnUpdate();
+		}
+	}
+	void Application::OnEvent(Event &e) {
+		AGE_CORE_INFO(e);
+		if(e.GetEventType() == EventType::WindowClose) {
+			running_ = false;
 		}
 	}
 } // Age
