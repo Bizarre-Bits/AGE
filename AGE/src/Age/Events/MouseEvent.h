@@ -29,7 +29,8 @@ namespace AGE {
 
 		virtual const age_string_t ToString() const override {
 			std::stringstream ss;
-			ss << Name() << ": " << mouseButtonCode_;
+			//TODO figure out something about uint8 type
+			ss << Name() << ": " << (int)mouseButtonCode_;
 			return ss.str();
 		}
 
@@ -42,7 +43,8 @@ namespace AGE {
 
 		virtual const age_string_t ToString() const override {
 			std::stringstream ss;
-			ss << Name() << ": " << mouseButtonCode_;
+			//TODO figure out something about uint8 type
+			ss << Name() << ": " << (int)mouseButtonCode_;
 			return ss.str();
 		}
 

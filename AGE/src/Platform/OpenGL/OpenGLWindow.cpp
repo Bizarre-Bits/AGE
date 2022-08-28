@@ -8,6 +8,8 @@
 
 #include "Age/Assert.h"
 #include "Age/Events/WindowEvent.h"
+#include "Age/Events/KeyEvent.h"
+#include "Age/Events/MouseEvent.h"
 
 namespace AGE {
 	bool OpenGLWindow::s_GLFWInitialized{false};
@@ -65,6 +67,60 @@ namespace AGE {
 			auto data = (WindowData *) glfwGetWindowUserPointer(window);
 
 			WindowCloseEvent event;
+			data->EventCallback(event);
+		});
+
+		glfwSetKeyCallback(window_, [](GLFWwindow *window, int keycode, int scancode, int action, int mods) {
+			auto data = (WindowData *) glfwGetWindowUserPointer(window);
+			switch (action) {
+				case GLFW_PRESS: {
+					KeyPressedEvent event(keycode, false);
+					data->EventCallback(event);
+					break;
+				}
+				case GLFW_RELEASE: {
+					KeyReleasedEvent event(keycode);
+					data->EventCallback(event);
+					break;
+				}
+				case GLFW_REPEAT: {
+					KeyPressedEvent event(keycode, true);
+					data->EventCallback(event);
+					break;
+				}
+				default: break;
+			}
+		});
+
+		glfwSetMouseButtonCallback(window_, [](GLFWwindow *window, int button, int action, int mods) {
+			auto data = (WindowData *) glfwGetWindowUserPointer(window);
+
+			switch (action) {
+				case GLFW_PRESS: {
+					MouseButtonPressedEvent event(button);
+					data->EventCallback(event);
+					break;
+				}
+				case GLFW_RELEASE: {
+					MouseButtonReleasedEvent event(button);
+					data->EventCallback(event);
+					break;
+				}
+				default: break;
+			}
+		});
+
+		glfwSetCursorPosCallback(window_, [](GLFWwindow *window, double x, double y) {
+			auto data = (WindowData *) glfwGetWindowUserPointer(window);
+
+			MouseMovedEvent event((float)x, (float)y);
+			data->EventCallback(event);
+		});
+
+		glfwSetScrollCallback(window_, [](GLFWwindow *window, double xOffset, double yOffset) {
+			auto data = (WindowData *) glfwGetWindowUserPointer(window);
+
+			MouseScrolledEvent event((float)xOffset, (float)yOffset);
 			data->EventCallback(event);
 		});
 	}
