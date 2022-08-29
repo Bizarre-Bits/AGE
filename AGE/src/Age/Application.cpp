@@ -25,7 +25,7 @@ namespace AGE {
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<WindowCloseEvent>(AGE_BIND_EVENT_FN(Application::OnWindowClose));
 
-		AGE_CORE_INFO(e);
+		AGE_CORE_TRACE(e);
 	}
 	bool Application::OnWindowClose(WindowCloseEvent &e) {
 		running_ = false;
