@@ -1,3 +1,3 @@
-# Welcome to the AGE contributing guideline
+# Welcome to the AGE contributing guide
 
 Some contributing policies will be here as I'll manage to understand how to do it correctly...
