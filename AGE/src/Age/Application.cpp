@@ -17,7 +17,10 @@ namespace AGE {
 	}
 
 	void Application::Run() {
-		while(running_) {
+		while (running_) {
+			for (Layer *layer: layerStack_)
+				layer->OnUpdate();
+
 			window_->OnUpdate();
 		}
 	}
@@ -26,9 +29,20 @@ namespace AGE {
 		dispatcher.Dispatch<WindowCloseEvent>(AGE_BIND_EVENT_FN(Application::OnWindowClose));
 
 		AGE_CORE_TRACE(e);
+
+		for (auto it{layerStack_.end()}; it != layerStack_.begin(); ) {
+			(*(--it))->OnEvent(e);
+			if (e.Handled) break;
+		}
 	}
 	bool Application::OnWindowClose(WindowCloseEvent &e) {
 		running_ = false;
 		return true;
+	}
+	void Application::PushLayer(Layer *layer) {
+		layerStack_.PushLayer(layer);
+	}
+	void Application::PushOverlay(Layer *layer) {
+		layerStack_.PushOverlay(layer);
 	}
 } // Age
