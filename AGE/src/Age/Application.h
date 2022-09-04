@@ -7,9 +7,10 @@
 
 #include "Age/Core.h"
 
-#include "Window.h"
-#include "Events/Event.h"
-#include "Events/WindowEvent.h"
+#include "Age/Window.h"
+#include "Age/Events/Event.h"
+#include "Age/Events/WindowEvent.h"
+#include "Age/LayerStack.h"
 
 namespace AGE {
 	class DLL_PUBLIC Application {
@@ -21,12 +22,14 @@ namespace AGE {
 
 		void OnEvent(Event& e);
 
+		void PushLayer(Layer* layer);
+		void PushOverlay(Layer* layer);
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
 
-	private:
 		Window* window_;
 		bool running_{true};
+		LayerStack layerStack_;
 	};
 
 	// To be defined in CLIENT

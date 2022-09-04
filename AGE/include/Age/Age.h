@@ -8,8 +8,10 @@
 // for client apps to consume
 
 #include "Age/Application.h"
+#include "Age/Layer.h"
 #include "Age/Log.h"
 
+// Entry Point of an app
 #include "Age/EntryPoint.h"
 
 #endif //AGE_AGE_H
