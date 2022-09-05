@@ -15,8 +15,8 @@
 namespace AGE {
 	class DLL_PUBLIC Application {
 		public:
-		Application();
-		virtual ~Application();
+        Application();
+        virtual ~Application();
 
 		virtual void Run();
 
@@ -24,12 +24,19 @@ namespace AGE {
 
 		void PushLayer(Layer* layer);
 		void PushOverlay(Layer* layer);
+
+        Window* Window();
+
+        static Application* Get();
+
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
 
-		Window* window_;
+		class Window* window_;
 		bool running_{true};
 		LayerStack layerStack_;
+
+        static Application* s_Application;
 	};
 
 	// To be defined in CLIENT

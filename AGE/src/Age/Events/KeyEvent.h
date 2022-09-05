@@ -54,6 +54,19 @@ namespace AGE {
 		EVENT_CLASS_TYPE(KeyReleased)
 	};
 
+    class DLL_PUBLIC KeyTypedEvent : public KeyEvent {
+    public:
+        explicit  KeyTypedEvent(const KeyCode keycode) : KeyEvent(keycode) {}
+
+        const age_string_t ToString() const override {
+            std::stringstream ss;
+            ss << "KeyTypedEvent: " << keycode_;
+            return ss.str();
+        }
+
+        EVENT_CLASS_TYPE(KeyTyped)
+    };
+
 } // AGE
 
 #endif //AGE_KEYEVENT_H

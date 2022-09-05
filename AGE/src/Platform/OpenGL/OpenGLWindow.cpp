@@ -118,6 +118,12 @@ namespace AGE {
 			}
 		});
 
+        glfwSetCharCallback(window_, [](GLFWwindow* window, unsigned int keycode) {
+            auto data = (WindowData *) glfwGetWindowUserPointer(window);
+            KeyTypedEvent event{static_cast<unsigned short>(keycode)};
+            data->EventCallback(event);
+        });
+
 		glfwSetCursorPosCallback(window_, [](GLFWwindow *window, double x, double y) {
 			auto data = (WindowData *) glfwGetWindowUserPointer(window);
 
@@ -134,8 +140,14 @@ namespace AGE {
 	}
 
 	void OpenGLWindow::OnUpdate() {
-		glfwPollEvents();
+        glfwPollEvents();
+
+        //Swaps buffers
 		glfwSwapBuffers(window_);
+
+        // And starts the next frame
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 	void OpenGLWindow::SetVSync(bool enabled) {
 		if (enabled) {
