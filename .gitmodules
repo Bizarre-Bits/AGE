@@ -5,3 +5,6 @@
 [submodule "AGE/vendor/spdlog"]
 	path = AGE/vendor/spdlog
 	url = git@github.com:gabime/spdlog.git
+[submodule "AGE/vendor/imgui"]
+	path = AGE/vendor/imgui
+	url = git@github.com:ocornut/imgui.git

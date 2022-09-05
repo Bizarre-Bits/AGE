@@ -10,6 +10,7 @@
 #include "Age/Application.h"
 #include "Age/Layer.h"
 #include "Age/Log.h"
+#include "Age/ImGui/ImGuiLayer.h"
 
 // Entry Point of an app
 #include "Age/EntryPoint.h"

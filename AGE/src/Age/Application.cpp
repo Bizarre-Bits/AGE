@@ -6,8 +6,14 @@
 
 #include "Age/Application.h"
 
+#include "Age/Assert.h"
+
 namespace AGE {
+    Application* Application::s_Application{nullptr};
+
 	Application::Application() {
+        s_Application = this;
+
 		window_ = Window::Create();
 		window_->EventCallback(AGE_BIND_EVENT_FN(Application::OnEvent));
 	}
@@ -28,8 +34,6 @@ namespace AGE {
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<WindowCloseEvent>(AGE_BIND_EVENT_FN(Application::OnWindowClose));
 
-		AGE_CORE_TRACE(e);
-
 		for (auto it{layerStack_.end()}; it != layerStack_.begin(); ) {
 			(*(--it))->OnEvent(e);
 			if (e.Handled) break;
@@ -41,8 +45,19 @@ namespace AGE {
 	}
 	void Application::PushLayer(Layer *layer) {
 		layerStack_.PushLayer(layer);
+        layer->OnAttach();
 	}
 	void Application::PushOverlay(Layer *layer) {
 		layerStack_.PushOverlay(layer);
+        layer->OnAttach();
 	}
+
+    Application *Application::Get() {
+        AGE_ASSERT(s_Application);
+        return s_Application;
+    }
+
+    Window *Application::Window() {
+        return window_;
+    }
 } // Age

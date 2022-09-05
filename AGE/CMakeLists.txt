@@ -11,13 +11,17 @@ file(GLOB_RECURSE _SRCS src/*.cpp)
 file(GLOB_RECURSE _HDRS src/*.h)
 file(GLOB_RECURSE _INCLDS include/*.h)
 
-add_library(Core SHARED ${_SRCS} ${_HDRS} ${_INCLDS})
+file(GLOB _IMGUI_SRCS vendor/imgui/*.cpp)
+file(GLOB _IMGUI_BE vendor/imgui/backends/imgui_impl_opengl3*)
+
+add_library(Core SHARED ${_SRCS} ${_HDRS} ${_INCLDS} ${_IMGUI_SRCS} ${_IMGUI_BE})
 target_include_directories(Core
         PUBLIC
         src
         include
         vendor/GLFW/include
         vendor/spdlog/include
+        vendor/imgui/
         )
 
 set(BUILD_SHARED_LIBS ON)
@@ -29,6 +33,7 @@ set(CMAKE_POSITION_INDEPENDENT_CODE 1)
 set(SPDLOG_ENABLE_PCH ON)
 
 add_subdirectory(vendor/spdlog)
+
 
 target_link_libraries(Core PUBLIC spdlog glad glfw ${GLFW_LIBRARIES})
 
