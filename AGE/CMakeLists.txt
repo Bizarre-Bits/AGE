@@ -20,6 +20,9 @@ target_include_directories(Core
         vendor/spdlog/include
         )
 
+set(BUILD_SHARED_LIBS ON)
+
+add_subdirectory(vendor/GLAD)
 add_subdirectory(vendor/GLFW)
 
 set(CMAKE_POSITION_INDEPENDENT_CODE 1)
@@ -27,7 +30,7 @@ set(SPDLOG_ENABLE_PCH ON)
 
 add_subdirectory(vendor/spdlog)
 
-target_link_libraries(Core PUBLIC GL glfw spdlog)
+target_link_libraries(Core PUBLIC spdlog glad glfw ${GLFW_LIBRARIES})
 
 target_precompile_headers(Core PUBLIC include/agepch.h)
 
