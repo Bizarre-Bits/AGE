@@ -4,7 +4,7 @@
 
 #include "agepch.h"
 
-#include "OpenGLWindow.h"
+#include "Platform/OpenGL/OpenGLWindow.h"
 
 #include "Age/Assert.h"
 #include "Age/Events/WindowEvent.h"
@@ -48,6 +48,14 @@ namespace AGE {
 		window_ = glfwCreateWindow(props.width, props.height, props.title.c_str(), NULL, NULL);
 		glfwSetWindowUserPointer(window_, &data_);
 		glfwMakeContextCurrent(window_);
+
+        //Initialize GLAD
+        {
+            int status = gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
+            AGE_CORE_ASSERT(status, "Failed to initialize Glad");
+            AGE_CORE_INFO("Initialized Glad");
+        }
+
 		SetVSync(true);
 
 		AGE_CORE_INFO("Created Window \"{0}\" ({1}, {2})", props.title, props.width, props.height);
