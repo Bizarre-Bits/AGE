@@ -1,1 +1,7 @@
 
+[submodule "AGE/vendor/GLFW"]
+	path = AGE/vendor/GLFW
+	url = git@github.com:glfw/glfw.git
+[submodule "AGE/vendor/spdlog"]
+	path = AGE/vendor/spdlog
+	url = git@github.com:gabime/spdlog.git
