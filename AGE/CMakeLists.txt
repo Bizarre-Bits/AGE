@@ -34,8 +34,10 @@ set(SPDLOG_ENABLE_PCH ON)
 
 add_subdirectory(vendor/spdlog)
 
+add_subdirectory(vendor/glm)
 
-target_link_libraries(Core PUBLIC spdlog glad glfw ${GLFW_LIBRARIES})
+
+target_link_libraries(Core PUBLIC spdlog glad glfw ${GLFW_LIBRARIES} glm)
 
 target_precompile_headers(Core PUBLIC src/agepch.h)
 
