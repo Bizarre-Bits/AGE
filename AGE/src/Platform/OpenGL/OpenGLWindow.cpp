@@ -170,4 +170,7 @@ namespace AGE {
   void OpenGLWindow::Destroy() {
     glfwDestroyWindow(m_Window);
   }
+  void* OpenGLWindow::NativeWindow() const {
+    return m_Window;
+  }
 }// namespace AGE

@@ -12,10 +12,8 @@
 #include "Platform/OpenGL/PlatformGL.h"
 #include "backends/imgui_impl_opengl3.h"
 
-#include "Age/Core/KeyCodes.h"
-#include "Age/Core/MouseCodes.h"
-
 #include "Age/Core/Application.h"
+#include "Age/Core/Input.h"
 
 
 namespace AGE {
@@ -58,7 +56,8 @@ namespace AGE {
     static bool showDemo{false};
     ImGui::Begin("Debug");
     ImGui::Text("Window (%i, %i): %f FPS", (int)io.DisplaySize.x, (int)io.DisplaySize.y, 1.0f / io.DeltaTime);
-    ImGui::Text("MousePos: %i, %i", (int)io.MousePos.x, (int)io.MousePos.y);
+    auto [x, y] = Input::MousePos();
+    ImGui::Text("MousePos: %i, %i", (int)x, (int)y);
     if (ImGui::Button("Demo"))
       showDemo = !showDemo;
     ImGui::End();

@@ -37,6 +37,8 @@ namespace AGE {
     virtual void SetVSync(bool enabled) = 0;
     virtual bool VSync() const = 0;
 
+    inline virtual void* NativeWindow() const = 0;
+
     // Must be implemented per Platform
     static Window* Create(const WindowProps& props = WindowProps());
   };
