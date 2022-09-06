@@ -55,9 +55,18 @@ namespace AGE {
 
     static bool showDemo{false};
     ImGui::Begin("Debug");
-    ImGui::Text("Window (%i, %i): %f FPS", (int)io.DisplaySize.x, (int)io.DisplaySize.y, 1.0f / io.DeltaTime);
+
+    ImGui::Text("ImGui window (%i, %i)", (int)io.DisplaySize.x, (int)io.DisplaySize.y);
+
+    auto window = Application::Instance()->Window();
+    ImGui::Text("Application window (%i, %i)", window->Width(), window->Width());
+
     auto [x, y] = Input::MousePos();
     ImGui::Text("MousePos: %i, %i", (int)x, (int)y);
+
+    bool isTabPressed = Input::IsKeyPressed(Key::Tab);
+    ImGui::Text("Tab is %s", isTabPressed ? "is pressed" : "is not pressed");
+
     if (ImGui::Button("Demo"))
       showDemo = !showDemo;
     ImGui::End();

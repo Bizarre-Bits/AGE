@@ -5,15 +5,23 @@
 #ifndef AGE_AGE_H
 #define AGE_AGE_H
 
-// for client apps to consume
-
+// Base systems
 #include "Age/Core/Application.h"
-#include "Age/Core/Layer.h"
 #include "Age/Core/Log.h"
-#include "Age/Debug/Assert.h"
+
+// Input handling
+#include "Age/Core/Input.h"
+#include "Age/Core/KeyCodes.h"
+#include "Age/Core/MouseCodes.h"
+
+// Layers
+#include "Age/Core/Layer.h"
 #include "Age/ImGui/ImGuiLayer.h"
 
-// Entry Point of an app
+// Debug
+#include "Age/Debug/Assert.h"
+
+// Entry point
 #include "Age/Core/EntryPoint.h"
 
-#endif //AGE_AGE_H
+#endif//AGE_AGE_H

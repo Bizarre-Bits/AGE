@@ -12,7 +12,6 @@ namespace AGE {
 
   namespace Key {
     enum : KeyCode {
-
       // From glfw3.h
       Space      = 32,
       Apostrophe = 39, /* ' */
@@ -145,7 +144,7 @@ namespace AGE {
       RightSuper   = 347,
       Menu         = 348
     };
-  }
+  }// namespace Key
 }// namespace AGE
 
 #endif//AGE_KEYCODES_H
