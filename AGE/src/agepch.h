@@ -5,28 +5,28 @@
 #ifndef AGE_AGEPCH_H
 #define AGE_AGEPCH_H
 
-#include <iostream>
-#include <memory>
-#include <utility>
 #include <algorithm>
 #include <functional>
+#include <iostream>
+#include <memory>
 #include <sstream>
+#include <utility>
 
 #include <string>
-#include <vector>
 #include <unordered_map>
 #include <unordered_set>
+#include <vector>
 
 #include <cstdint>
 
-#include "spdlog/spdlog.h"
 #include "spdlog/fmt/ostr.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
+#include "spdlog/spdlog.h"
 
-#include "Age/Log.h"
+#include "Age/Core/Log.h"
 
 #ifdef AGE_PLATFORM_WINDOWS
-	#include <Windows.h>
+  #include <Windows.h>
 #endif
 
-#endif //AGE_AGEPCH_H
+#endif//AGE_AGEPCH_H

@@ -7,44 +7,44 @@
 
 #define GLFW_INCLUDE_NONE
 
-#include "Age/Core.h"
-#include "Age/Window.h"
+#include "Age/Core/Core.h"
+#include "Age/Core/Window.h"
 
 #include "Platform/OpenGL/PlatformGL.h"
 
 namespace AGE {
-	class DLL_PUBLIC OpenGLWindow : public Window {
-	public:
-		OpenGLWindow(const WindowProps &props);
-		virtual ~OpenGLWindow();
+  class DLL_PUBLIC OpenGLWindow : public Window {
+  public:
+    OpenGLWindow(const WindowProps& props);
+    virtual ~OpenGLWindow();
 
-		virtual void OnUpdate() override;
+    virtual void OnUpdate() override;
 
-		inline unsigned int Width() const override { return data_.width; }
-		inline unsigned int Height() const override { return data_.height; }
+    inline unsigned int Width() const override { return data_.width; }
+    inline unsigned int Height() const override { return data_.height; }
 
-		void SetVSync(bool enabled) override;
-		bool IsVSync() const override;
+    void SetVSync(bool enabled) override;
+    bool IsVSync() const override;
 
-		virtual void EventCallback(const EventCallbackFn &callback) override;
+    virtual void EventCallback(const EventCallbackFn& callback) override;
 
-	private:
-		virtual void Init(const WindowProps& props);
-		virtual void Destroy();
+  private:
+    virtual void Init(const WindowProps& props);
+    virtual void Destroy();
 
-	private:
-		GLFWwindow *window_;
+  private:
+    GLFWwindow* window_;
 
-		struct WindowData {
-			age_string_t title;
-			unsigned int width, height;
-			bool vSync;
+    struct WindowData {
+      age_string_t title;
+      unsigned int width, height;
+      bool vSync;
 
-			EventCallbackFn EventCallback;
-		} data_;
+      EventCallbackFn EventCallback;
+    } data_;
 
-		static bool s_GLFWInitialized;
-	};
-} // AGE
+    static bool s_GLFWInitialized;
+  };
+}// namespace AGE
 
-#endif //AGE_OPENGLWINDOW_H
+#endif//AGE_OPENGLWINDOW_H

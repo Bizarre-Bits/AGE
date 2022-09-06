@@ -6,14 +6,14 @@
 
 class Sandbox : public AGE::Application {
 public:
-    Sandbox() {
-        PushOverlay(new AGE::ImGuiLayer());
-    }
+  Sandbox() {
+    PushOverlay(new AGE::ImGuiLayer());
+  }
 
-    ~Sandbox() {}
+  ~Sandbox() {}
 };
 
 // Define app factory for entry point to have something to start.
-AGE::Application *AGE::CreateApplication() {
-    return new Sandbox{};
+AGE::Application* AGE::CreateApplication() {
+  return new Sandbox{};
 }

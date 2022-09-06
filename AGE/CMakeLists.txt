@@ -17,8 +17,8 @@ file(GLOB _IMGUI_BE vendor/imgui/backends/imgui_impl_opengl3*)
 add_library(Core SHARED ${_SRCS} ${_HDRS} ${_INCLDS} ${_IMGUI_SRCS} ${_IMGUI_BE})
 target_include_directories(Core
         PUBLIC
-        src
         include
+        src
         vendor/GLFW/include
         vendor/spdlog/include
         vendor/imgui/
@@ -37,7 +37,7 @@ add_subdirectory(vendor/spdlog)
 
 target_link_libraries(Core PUBLIC spdlog glad glfw ${GLFW_LIBRARIES})
 
-target_precompile_headers(Core PUBLIC include/agepch.h)
+target_precompile_headers(Core PUBLIC src/agepch.h)
 
 if (${CMAKE_BUILD_TYPE} STREQUAL Debug)
     message(STATUS "debug build mode")
