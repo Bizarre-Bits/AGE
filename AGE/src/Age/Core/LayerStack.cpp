@@ -7,35 +7,35 @@
 
 namespace AGE {
   LayerStack::LayerStack() {
-    layerInsert_ = layers_.begin();
+    m_LayerInsert = m_Layers.begin();
   }
 
   LayerStack::~LayerStack() {
-    for (Layer* l: layers_) {
+    for (Layer* l: m_Layers) {
       delete l;
     }
   }
 
   void LayerStack::PushLayer(Layer* layer) {
-    layerInsert_ = layers_.emplace(layerInsert_, layer);
+    m_LayerInsert = m_Layers.emplace(m_LayerInsert, layer);
   }
 
   void LayerStack::PushOverlay(Layer* layer) {
-    layers_.emplace_back(layer);
+    m_Layers.emplace_back(layer);
   }
 
   void LayerStack::PopLayer(Layer* layer) {
-    auto it = std::find(layers_.begin(), layers_.end(), layer);
-    if (it != layers_.end()) {
-      layers_.erase(it);
-      layerInsert_--;
+    auto it = std::find(m_Layers.begin(), m_Layers.end(), layer);
+    if (it != m_Layers.end()) {
+      m_Layers.erase(it);
+      m_LayerInsert--;
     }
   }
 
   void LayerStack::PopOverlay(Layer* layer) {
-    auto it = std::find(layers_.begin(), layers_.end(), layer);
-    if (it != layers_.end())
-      layers_.erase(it);
+    auto it = std::find(m_Layers.begin(), m_Layers.end(), layer);
+    if (it != m_Layers.end())
+      m_Layers.erase(it);
   }
 
 }// namespace AGE

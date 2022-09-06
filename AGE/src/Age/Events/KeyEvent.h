@@ -13,40 +13,40 @@ namespace AGE {
 
   class DLL_PUBLIC KeyEvent : public Event {
   public:
-    inline KeyCode GetKeyCode() const { return keycode_; }
+    inline KeyCode KeyCode() const { return m_Keycode; }
 
     EVENT_CLASS_CATEGORY(EventCategoryInput | EventCategoryKeyboard)
 
   protected:
-    explicit KeyEvent(const KeyCode keycode) : keycode_{keycode} {}
+    explicit KeyEvent(const ::AGE::KeyCode keycode) : m_Keycode{keycode} {}
 
-    KeyCode keycode_;
+    ::AGE::KeyCode m_Keycode;
   };
 
   class DLL_PUBLIC KeyPressedEvent : public KeyEvent {
   public:
-    explicit KeyPressedEvent(const KeyCode keyCode, const bool isRepeated = false) : KeyEvent(keyCode),
-                                                                                     isRepeated_{isRepeated} {}
+    explicit KeyPressedEvent(const ::AGE::KeyCode keyCode, const bool isRepeated = false) : KeyEvent(keyCode),
+                                                                                            m_IsRepeated{isRepeated} {}
 
     virtual const age_string_t ToString() const override {
       std::stringstream ss;
-      ss << "KeyPressedEvent: " << keycode_ << " (repeat=" << isRepeated_ << ")";
+      ss << "KeyPressedEvent: " << m_Keycode << " (repeat=" << m_IsRepeated << ")";
       return ss.str();
     }
 
     EVENT_CLASS_TYPE(KeyPressed)
 
   private:
-    bool isRepeated_;
+    bool m_IsRepeated;
   };
 
   class DLL_PUBLIC KeyReleasedEvent : public KeyEvent {
   public:
-    explicit KeyReleasedEvent(const KeyCode keycode) : KeyEvent(keycode) {}
+    explicit KeyReleasedEvent(const ::AGE::KeyCode keycode) : KeyEvent(keycode) {}
 
     virtual const age_string_t ToString() const override {
       std::stringstream ss;
-      ss << "KeyReleasedEvent: " << keycode_;
+      ss << "KeyReleasedEvent: " << m_Keycode;
       return ss.str();
     }
 
@@ -55,11 +55,11 @@ namespace AGE {
 
   class DLL_PUBLIC KeyTypedEvent : public KeyEvent {
   public:
-    explicit KeyTypedEvent(const KeyCode keycode) : KeyEvent(keycode) {}
+    explicit KeyTypedEvent(const ::AGE::KeyCode keycode) : KeyEvent(keycode) {}
 
     const age_string_t ToString() const override {
       std::stringstream ss;
-      ss << "KeyTypedEvent: " << keycode_;
+      ss << "KeyTypedEvent: " << m_Keycode;
       return ss.str();
     }
 

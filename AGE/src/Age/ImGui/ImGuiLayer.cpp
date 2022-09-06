@@ -19,7 +19,7 @@
 
 
 namespace AGE {
-  ImGuiLayer::ImGuiLayer() : Layer("ImGui"), time_{0.0f} {}
+  ImGuiLayer::ImGuiLayer() : Layer("ImGui"), m_Time{0.0f} {}
 
   ImGuiLayer::~ImGuiLayer() {
   }
@@ -30,7 +30,7 @@ namespace AGE {
 
     ImGuiIO& io = ImGui::GetIO();
 
-    Window* window = Application::Get()->Window();
+    Window* window = Application::Instance()->Window();
     io.DisplaySize = ImVec2(window->Width(), window->Height());
 
     io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;
@@ -49,8 +49,8 @@ namespace AGE {
     ImGuiIO& io = ImGui::GetIO();
 
     auto time    = (float)glfwGetTime();
-    io.DeltaTime = time_ > 0.0f ? (time - time_) : (1.0f / 60.0f);
-    time_        = time;
+    io.DeltaTime = m_Time > 0.0f ? (time - m_Time) : (1.0f / 60.0f);
+    m_Time       = time;
 
     ImGui_ImplOpenGL3_NewFrame();
     ImGui::NewFrame();
@@ -126,7 +126,7 @@ namespace AGE {
 
   bool ImGuiLayer::OnKeyTypedEvent(KeyTypedEvent& e) {
     ImGuiIO& io = ImGui::GetIO();
-    int keyCode = e.GetKeyCode();
+    int keyCode = e.KeyCode();
 
     if (keyCode > 0 && keyCode < 0x10000)
       io.AddInputCharacter(keyCode);
@@ -137,7 +137,7 @@ namespace AGE {
   bool ImGuiLayer::OnKeyPressedEvent(KeyPressedEvent& e) {
     ImGuiIO& io = ImGui::GetIO();
 
-    io.KeysDown[e.GetKeyCode()] = true;
+    io.KeysDown[e.KeyCode()] = true;
 
     return false;
   }
@@ -145,7 +145,7 @@ namespace AGE {
   bool ImGuiLayer::OnKeyReleasedEvent(KeyReleasedEvent& e) {
     ImGuiIO& io = ImGui::GetIO();
 
-    io.KeysDown[e.GetKeyCode()] = true;
+    io.KeysDown[e.KeyCode()] = true;
 
     return false;
   }

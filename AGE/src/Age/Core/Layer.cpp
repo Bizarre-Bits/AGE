@@ -5,6 +5,6 @@
 #include "Layer.h"
 
 namespace AGE {
-  Layer::Layer(const age_string_t& debugName) : debugName_(debugName) {}
+  Layer::Layer(const age_string_t& debugName) : m_DebugName(debugName) {}
   Layer::~Layer() {}
 }// namespace AGE

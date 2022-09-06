@@ -23,12 +23,12 @@ namespace AGE {
     void PopLayer(Layer* layer);
     void PopOverlay(Layer* layer);
 
-    inline std::vector<Layer*>::iterator begin() { return layers_.begin(); }
-    inline std::vector<Layer*>::iterator end() { return layers_.end(); }
+    inline std::vector<Layer*>::iterator begin() { return m_Layers.begin(); }
+    inline std::vector<Layer*>::iterator end() { return m_Layers.end(); }
 
   private:
-    std::vector<Layer*> layers_;
-    std::vector<Layer*>::iterator layerInsert_;
+    std::vector<Layer*> m_Layers;
+    std::vector<Layer*>::iterator m_LayerInsert;
   };
 
 }// namespace AGE

@@ -27,16 +27,16 @@ namespace AGE {
 
     Window* Window();
 
-    static Application* Get();
+    static Application* Instance();
 
   private:
     bool OnWindowClose(WindowCloseEvent& e);
 
-    class Window* window_;
-    bool running_{true};
-    LayerStack layerStack_;
+    class Window* m_Window;
+    bool m_Running{true};
+    LayerStack m_LayerStack;
 
-    static Application* s_Application;
+    static Application* s_Instance;
   };
 
   // To be defined in CLIENT
