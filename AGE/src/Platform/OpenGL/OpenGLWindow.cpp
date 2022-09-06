@@ -31,9 +31,9 @@ namespace AGE {
   }
 
   void OpenGLWindow::Init(const WindowProps& props) {
-    data_.title  = props.title;
-    data_.width  = props.width;
-    data_.height = props.height;
+    m_Data.Title  = props.title;
+    m_Data.Width  = props.width;
+    m_Data.Height = props.height;
 
     AGE_CORE_INFO("Creating Window \"{0}\" ({1}, {2})", props.title, props.width, props.height);
 
@@ -45,9 +45,9 @@ namespace AGE {
       glfwSetErrorCallback(GLFWErrorCallback);
     }
 
-    window_ = glfwCreateWindow(props.width, props.height, props.title.c_str(), NULL, NULL);
-    glfwSetWindowUserPointer(window_, &data_);
-    glfwMakeContextCurrent(window_);
+    m_Window = glfwCreateWindow(props.width, props.height, props.title.c_str(), NULL, NULL);
+    glfwSetWindowUserPointer(m_Window, &m_Data);
+    glfwMakeContextCurrent(m_Window);
 
     //Initialize GLAD
     {
@@ -61,24 +61,24 @@ namespace AGE {
     AGE_CORE_INFO("Created Window \"{0}\" ({1}, {2})", props.title, props.width, props.height);
 
     // Set GLFW callbacks
-    glfwSetWindowSizeCallback(window_, [](GLFWwindow* window, int width, int height) {
+    glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height) {
       auto* data = (WindowData*)glfwGetWindowUserPointer(window);
 
       WindowResizeEvent event(width, height);
       data->EventCallback(event);
 
-      data->width  = width;
-      data->height = height;
+      data->Width  = width;
+      data->Height = height;
     });
 
-    glfwSetWindowCloseCallback(window_, [](GLFWwindow* window) {
+    glfwSetWindowCloseCallback(m_Window, [](GLFWwindow* window) {
       auto data = (WindowData*)glfwGetWindowUserPointer(window);
 
       WindowCloseEvent event;
       data->EventCallback(event);
     });
 
-    glfwSetKeyCallback(window_, [](GLFWwindow* window, int keycode, int scancode, int action, int mods) {
+    glfwSetKeyCallback(m_Window, [](GLFWwindow* window, int keycode, int scancode, int action, int mods) {
       auto data = (WindowData*)glfwGetWindowUserPointer(window);
       switch (action) {
         case GLFW_PRESS: {
@@ -100,7 +100,7 @@ namespace AGE {
       }
     });
 
-    glfwSetMouseButtonCallback(window_, [](GLFWwindow* window, int button, int action, int mods) {
+    glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* window, int button, int action, int mods) {
       auto data = (WindowData*)glfwGetWindowUserPointer(window);
 
       switch (action) {
@@ -118,20 +118,20 @@ namespace AGE {
       }
     });
 
-    glfwSetCharCallback(window_, [](GLFWwindow* window, unsigned int keycode) {
+    glfwSetCharCallback(m_Window, [](GLFWwindow* window, unsigned int keycode) {
       auto data = (WindowData*)glfwGetWindowUserPointer(window);
       KeyTypedEvent event{static_cast<unsigned short>(keycode)};
       data->EventCallback(event);
     });
 
-    glfwSetCursorPosCallback(window_, [](GLFWwindow* window, double x, double y) {
+    glfwSetCursorPosCallback(m_Window, [](GLFWwindow* window, double x, double y) {
       auto data = (WindowData*)glfwGetWindowUserPointer(window);
 
       MouseMovedEvent event((float)x, (float)y);
       data->EventCallback(event);
     });
 
-    glfwSetScrollCallback(window_, [](GLFWwindow* window, double xOffset, double yOffset) {
+    glfwSetScrollCallback(m_Window, [](GLFWwindow* window, double xOffset, double yOffset) {
       auto data = (WindowData*)glfwGetWindowUserPointer(window);
 
       MouseScrolledEvent event((float)xOffset, (float)yOffset);
@@ -143,7 +143,7 @@ namespace AGE {
     glfwPollEvents();
 
     //Swaps buffers
-    glfwSwapBuffers(window_);
+    glfwSwapBuffers(m_Window);
 
     // And starts the next frame
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -156,18 +156,18 @@ namespace AGE {
     } else {
       glfwSwapInterval(0);
     }
-    data_.vSync = enabled;
+    m_Data.VSync = enabled;
   }
 
-  bool OpenGLWindow::IsVSync() const {
-    return data_.vSync;
+  bool OpenGLWindow::VSync() const {
+    return m_Data.VSync;
   }
 
   void OpenGLWindow::EventCallback(const Window::EventCallbackFn& callback) {
-    data_.EventCallback = callback;
+    m_Data.EventCallback = callback;
   }
 
   void OpenGLWindow::Destroy() {
-    glfwDestroyWindow(window_);
+    glfwDestroyWindow(m_Window);
   }
 }// namespace AGE

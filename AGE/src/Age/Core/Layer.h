@@ -19,10 +19,10 @@ namespace AGE {
     virtual void OnUpdate() {}
     virtual void OnEvent(Event& e) {}
 
-    inline const age_string_t& Name() const { return debugName_; }
+    inline const age_string_t& Name() const { return m_DebugName; }
 
   protected:
-    age_string_t debugName_;
+    age_string_t m_DebugName;
   };
 
 }// namespace AGE

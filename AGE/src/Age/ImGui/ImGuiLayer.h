@@ -37,7 +37,7 @@ namespace AGE {
     bool OnKeyReleasedEvent(KeyReleasedEvent& e);
 
   private:
-    float time_;
+    float m_Time;
   };
 
 }// namespace AGE

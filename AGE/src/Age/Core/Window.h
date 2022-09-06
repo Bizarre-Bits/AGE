@@ -35,7 +35,7 @@ namespace AGE {
 
     virtual void EventCallback(const EventCallbackFn& callback) = 0;
     virtual void SetVSync(bool enabled) = 0;
-    virtual bool IsVSync() const = 0;
+    virtual bool VSync() const = 0;
 
     // Must be implemented per Platform
     static Window* Create(const WindowProps& props = WindowProps());

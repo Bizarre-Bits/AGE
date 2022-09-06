@@ -20,11 +20,11 @@ namespace AGE {
 
     virtual void OnUpdate() override;
 
-    inline unsigned int Width() const override { return data_.width; }
-    inline unsigned int Height() const override { return data_.height; }
+    inline unsigned int Width() const override { return m_Data.Width; }
+    inline unsigned int Height() const override { return m_Data.Height; }
 
     void SetVSync(bool enabled) override;
-    bool IsVSync() const override;
+    bool VSync() const override;
 
     virtual void EventCallback(const EventCallbackFn& callback) override;
 
@@ -33,15 +33,15 @@ namespace AGE {
     virtual void Destroy();
 
   private:
-    GLFWwindow* window_;
+    GLFWwindow* m_Window;
 
     struct WindowData {
-      age_string_t title;
-      unsigned int width, height;
-      bool vSync;
+      age_string_t Title;
+      unsigned int Width, Height;
+      bool VSync;
 
       EventCallbackFn EventCallback;
-    } data_;
+    } m_Data;
 
     static bool s_GLFWInitialized;
   };

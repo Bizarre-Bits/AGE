@@ -37,8 +37,8 @@ namespace AGE {
   };
 
 #define EVENT_CLASS_TYPE(type)                                             \
-  static EventType StaticType() { return EventType::type; }                \
-  virtual EventType GetEventType() const override { return StaticType(); } \
+  static enum EventType StaticType() { return EventType::type; }                \
+  virtual enum EventType EventType() const override { return StaticType(); } \
   virtual const char* Name() const override { return #type; }
 
 #define EVENT_CLASS_CATEGORY(category) \
@@ -48,7 +48,7 @@ namespace AGE {
     friend class EventDispatcher;
 
   public:
-    virtual EventType GetEventType() const = 0;
+    virtual enum EventType EventType() const = 0;
     virtual const char* Name() const       = 0;
     virtual int CategoryFlags() const      = 0;
 
@@ -72,7 +72,7 @@ namespace AGE {
 		 */
     template<typename E, typename F>
     bool Dispatch(const F& func) {
-      if (event_.GetEventType() == E::StaticType()) {
+      if (event_.EventType() == E::StaticType()) {
         event_.Handled |= func(static_cast<E&>(event_));
         return true;
       }

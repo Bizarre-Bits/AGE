@@ -16,8 +16,8 @@ namespace AGE {
   public:
     static void Init();
 
-    inline static std::shared_ptr<spdlog::logger>& GetCoreLogger() { return s_CoreLogger; }
-    inline static std::shared_ptr<spdlog::logger>& GetClientLogger() { return s_ClientLogger; }
+    inline static std::shared_ptr<spdlog::logger>& CoreLogger() { return s_CoreLogger; }
+    inline static std::shared_ptr<spdlog::logger>& ClientLogger() { return s_ClientLogger; }
 
   private:
     static std::shared_ptr<spdlog::logger> s_CoreLogger;
@@ -28,16 +28,16 @@ namespace AGE {
 
 #ifdef DEBUG
   //Core log macros
-  #define AGE_CORE_TRACE(...) ::AGE::Log::GetCoreLogger()->trace(__VA_ARGS__)
-  #define AGE_CORE_INFO(...) ::AGE::Log::GetCoreLogger()->info(__VA_ARGS__)
-  #define AGE_CORE_ERROR(...) ::AGE::Log::GetCoreLogger()->error(__VA_ARGS__)
-  #define AGE_CORE_CRITICAL(...) ::AGE::Log::GetCoreLogger()->critical(__VA_ARGS__)
+  #define AGE_CORE_TRACE(...) ::AGE::Log::CoreLogger()->trace(__VA_ARGS__)
+  #define AGE_CORE_INFO(...) ::AGE::Log::CoreLogger()->info(__VA_ARGS__)
+  #define AGE_CORE_ERROR(...) ::AGE::Log::CoreLogger()->error(__VA_ARGS__)
+  #define AGE_CORE_CRITICAL(...) ::AGE::Log::CoreLogger()->critical(__VA_ARGS__)
 
   //Client log macros
-  #define AGE_TRACE(...) ::AGE::Log::GetClientLogger()->trace(__VA_ARGS__)
-  #define AGE_INFO(...) ::AGE::Log::GetClientLogger()->info(__VA_ARGS__)
-  #define AGE_ERROR(...) ::AGE::Log::GetClientLogger()->error(__VA_ARGS__)
-  #define AGE_CRITICAL(...) ::AGE::Log::GetClientLogger()->critical(__VA_ARGS__)
+  #define AGE_TRACE(...) ::AGE::Log::ClientLogger()->trace(__VA_ARGS__)
+  #define AGE_INFO(...) ::AGE::Log::ClientLogger()->info(__VA_ARGS__)
+  #define AGE_ERROR(...) ::AGE::Log::ClientLogger()->error(__VA_ARGS__)
+  #define AGE_CRITICAL(...) ::AGE::Log::ClientLogger()->critical(__VA_ARGS__)
 #else
   //Core logger macros
   #define AGE_CORE_TRACE(...)

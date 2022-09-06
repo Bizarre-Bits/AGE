@@ -12,14 +12,14 @@
 namespace AGE {
   class DLL_PUBLIC MouseButtonEvent : public Event {
   public:
-    inline MouseCode MouseButton() const { return mouseButtonCode_; }
+    inline MouseCode MouseButton() const { return m_MouseButtonCode; }
 
     EVENT_CLASS_CATEGORY(EventCategoryInput | EventCategoryMouse | EventCategoryMouseButton)
 
   protected:
-    explicit MouseButtonEvent(MouseCode mouseButtonCode) : mouseButtonCode_(mouseButtonCode) {}
+    explicit MouseButtonEvent(MouseCode mouseButtonCode) : m_MouseButtonCode(mouseButtonCode) {}
 
-    MouseCode mouseButtonCode_;
+    MouseCode m_MouseButtonCode;
   };
 
   class DLL_PUBLIC MouseButtonPressedEvent : public MouseButtonEvent {
@@ -29,7 +29,7 @@ namespace AGE {
     virtual const age_string_t ToString() const override {
       std::stringstream ss;
       //TODO figure out something about uint8 type
-      ss << Name() << ": " << (int)mouseButtonCode_;
+      ss << Name() << ": " << (int)m_MouseButtonCode;
       return ss.str();
     }
 
@@ -43,7 +43,7 @@ namespace AGE {
     virtual const age_string_t ToString() const override {
       std::stringstream ss;
       //TODO figure out something about uint8 type
-      ss << Name() << ": " << (int)mouseButtonCode_;
+      ss << Name() << ": " << (int)m_MouseButtonCode;
       return ss.str();
     }
 
@@ -52,14 +52,14 @@ namespace AGE {
 
   class DLL_PUBLIC MouseMovedEvent : public Event {
   public:
-    MouseMovedEvent(float x, float y) : x_(x), y_(y) {}
+    MouseMovedEvent(float x, float y) : m_X(x), m_Y(y) {}
 
-    inline float X() const { return x_; }
-    inline float Y() const { return y_; }
+    inline float X() const { return m_X; }
+    inline float Y() const { return m_Y; }
 
     virtual const age_string_t ToString() const override {
       std::stringstream ss;
-      ss << Name() << ": " << x_ << ", " << y_;
+      ss << Name() << ": " << m_X << ", " << m_Y;
       return ss.str();
     }
 
@@ -67,19 +67,19 @@ namespace AGE {
     EVENT_CLASS_CATEGORY(EventCategoryInput | EventCategoryMouse)
 
   private:
-    float x_, y_;
+    float m_X, m_Y;
   };
 
   class DLL_PUBLIC MouseScrolledEvent : public Event {
   public:
-    MouseScrolledEvent(const float xOffset, const float yOffset) : xOffset_(xOffset), yOffset_(yOffset) {}
+    MouseScrolledEvent(const float xOffset, const float yOffset) : m_XOffset(xOffset), m_YOffset(yOffset) {}
 
-    inline float XOffset() const { return xOffset_; }
-    inline float YOffset() const { return yOffset_; }
+    inline float XOffset() const { return m_XOffset; }
+    inline float YOffset() const { return m_YOffset; }
 
     virtual const age_string_t ToString() const override {
       std::stringstream ss;
-      ss << Name() << ": " << xOffset_ << ", " << yOffset_;
+      ss << Name() << ": " << m_XOffset << ", " << m_YOffset;
       return ss.str();
     }
 
@@ -87,7 +87,7 @@ namespace AGE {
     EVENT_CLASS_CATEGORY(EventCategoryInput | EventCategoryMouse)
 
   private:
-    float xOffset_, yOffset_;
+    float m_XOffset, m_YOffset;
   };
 }// namespace AGE
 
