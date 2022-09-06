@@ -7,12 +7,13 @@
 
 // for client apps to consume
 
-#include "Age/Application.h"
-#include "Age/Layer.h"
-#include "Age/Log.h"
+#include "Age/Core/Application.h"
+#include "Age/Core/Layer.h"
+#include "Age/Core/Log.h"
+#include "Age/Debug/Assert.h"
 #include "Age/ImGui/ImGuiLayer.h"
 
 // Entry Point of an app
-#include "Age/EntryPoint.h"
+#include "Age/Core/EntryPoint.h"
 
 #endif //AGE_AGE_H
