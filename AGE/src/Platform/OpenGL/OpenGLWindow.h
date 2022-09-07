@@ -5,8 +5,6 @@
 #ifndef AGE_OPENGLWINDOW_H
 #define AGE_OPENGLWINDOW_H
 
-#define GLFW_INCLUDE_NONE
-
 #include "Age/Core/Core.h"
 #include "Age/Core/Window.h"
 

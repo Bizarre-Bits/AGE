@@ -7,37 +7,75 @@ set(CMAKE_VERBOSE_MAKEFILE ON)
 
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 
-file(GLOB_RECURSE _SRCS src/*.cpp)
-file(GLOB_RECURSE _HDRS src/*.h)
+
+# Core lib files
+file(GLOB_RECURSE _SRCS src/Age/*.cpp)
+file(GLOB_RECURSE _HDRS src/Age/*.h)
 file(GLOB_RECURSE _INCLDS include/*.h)
 
-file(GLOB _IMGUI_SRCS vendor/imgui/*.cpp)
-file(GLOB _IMGUI_BE vendor/imgui/backends/imgui_impl_opengl3*)
+# TODO: define it outside of cmake lists
+set(AGE_RENDER_PLATFORM OPENGL)
 
-add_library(Core SHARED ${_SRCS} ${_HDRS} ${_INCLDS} ${_IMGUI_SRCS} ${_IMGUI_BE})
+set(AGE_NOT_FOUND_RENDER_PLATFORMS "")
+
+# TODO Some render platform-specific code. Should be added package location and fallback to OpenGL.
+set(AGE_VULCAN_AVAILABLE OFF)
+set(AGE_DIRECTX_AVAILABLE OFF)
+
+# OpenGL is always available as we linking it from the repo
+set(AGE_OPENGL_AVAILABLE ON)
+
+
+# Fatal error if there is no available render platform
+set(AGE_RENDER_PLATFORM_CHECK "AGE_${AGE_RENDER_PLATFORM}_AVAILABLE")
+
+if (NOT ${${AGE_RENDER_PLATFORM_CHECK}})
+    message(SEND_ERROR
+            "No render platform is available! You tried to compile AGE with ${AGE_RENDER_PLATFORM}, but it seems it cannot be resolved\n"
+            "Packages we could not find (some of them might be essential for the platform you've chosen): ${AGE_NOT_FOUND_RENDER_PLATFORMS}"
+            )
+    message(STATUS "${AGE_RENDER_PLATFORM} could not be resolved, falling back to the OPENGL")
+    set(AGE_RENDER_PLATFORM OPENGL)
+endif ()
+
+if (AGE_RENDER_PLATFORM STREQUAL OPENGL)
+    # Add OpenGL Platform anyway as a fallback
+    set(BUILD_SHARED_LIBS ON)
+    add_subdirectory(vendor/GLAD)
+    add_subdirectory(vendor/GLFW)
+
+    set(AGE_RENDER_PLATFORM_LIBS glfw glad ${GLFW_LIBRARIES})
+    set(AGE_RENDER_PLATFORM_INCLUDES vendor/GLFW/include)
+
+    file(GLOB _IMGUI_BE vendor/imgui/backends/imgui_impl_opengl3* vendor/imgui/backends/imgui_impl_glfw.*)
+    file(GLOB _RENDER_PLATFORM_SRCS src/Platform/OpenGL/*.cpp)
+    file(GLOB _RENDER_PLATFORM_HEADERS src/Platform/OpenGL/*.h)
+
+    add_compile_definitions(AGE_OPENGL_RENDER_PLATFORM)
+endif ()
+
+
+
+# ImGui sources
+file(GLOB _IMGUI_SRCS vendor/imgui/*.cpp)
+
+add_library(Core SHARED ${_SRCS} ${_RENDER_PLATFORM_SRCS} ${_RENDER_PLATFORM_HEADERS} src/agepch.cpp src/agepch.h ${_HDRS} ${_INCLDS} ${_IMGUI_SRCS} ${_IMGUI_BE})
 target_include_directories(Core
         PUBLIC
         include
         src
-        vendor/GLFW/include
         vendor/spdlog/include
         vendor/imgui/
+        ${AGE_RENDER_PLATFORM_INCLUDES}
         )
-
-set(BUILD_SHARED_LIBS ON)
-
-add_subdirectory(vendor/GLAD)
-add_subdirectory(vendor/GLFW)
 
 set(CMAKE_POSITION_INDEPENDENT_CODE 1)
 set(SPDLOG_ENABLE_PCH ON)
-
 add_subdirectory(vendor/spdlog)
 
 add_subdirectory(vendor/glm)
 
-
-target_link_libraries(Core PUBLIC spdlog glad glfw ${GLFW_LIBRARIES} glm)
+target_link_libraries(Core PUBLIC spdlog ${AGE_RENDER_PLATFORM_LIBS} glm)
 
 target_precompile_headers(Core PUBLIC src/agepch.h)
 
