@@ -8,6 +8,7 @@
 [submodule "AGE/vendor/imgui"]
 	path = AGE/vendor/imgui
 	url = git@github.com:ocornut/imgui.git
+	branch = docking
 [submodule "AGE/vendor/glm"]
 	path = AGE/vendor/glm
 	url = git@github.com:g-truc/glm.git

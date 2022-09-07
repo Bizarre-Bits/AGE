@@ -11,7 +11,7 @@
 
 namespace AGE {
 
-  enum class DLL_PUBLIC EventType {
+  enum class  EventType {
     None = 0,
     WindowClose,
     WindowResize,
@@ -27,7 +27,7 @@ namespace AGE {
     MouseScrolled
   };
 
-  enum DLL_PUBLIC EventCategory {
+  enum  EventCategory {
     None                     = 0,
     EventCategoryApplication = BIT(0),
     EventCategoryInput       = BIT(1),
@@ -44,7 +44,7 @@ namespace AGE {
 #define EVENT_CLASS_CATEGORY(category) \
   virtual int CategoryFlags() const override { return category; }
 
-  class DLL_PUBLIC Event {
+  class  Event {
     friend class EventDispatcher;
 
   public:
@@ -58,7 +58,7 @@ namespace AGE {
     bool Handled{false};
   };
 
-  class DLL_PUBLIC EventDispatcher {
+  class  EventDispatcher {
   public:
     EventDispatcher(Event& event) : event_{event} {}
 
@@ -84,7 +84,7 @@ namespace AGE {
     Event& event_;
   };
 
-  DLL_PUBLIC inline std::ostream& operator<<(std::ostream& os, const Event& e) {
+   inline std::ostream& operator<<(std::ostream& os, const Event& e) {
     return os << e.ToString();
   }
 

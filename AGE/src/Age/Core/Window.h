@@ -22,7 +22,7 @@ namespace AGE {
   /**
 	 * @brief Interface representing a desktop based system's window
 	 */
-  class DLL_PUBLIC Window {
+  class  Window {
   public:
     using EventCallbackFn = std::function<void(Event&)>;
 

@@ -8,7 +8,7 @@
 #include "Event.h"
 
 namespace AGE {
-  class DLL_PUBLIC WindowResizeEvent : public Event {
+  class  WindowResizeEvent : public Event {
   public:
     WindowResizeEvent(unsigned int width, unsigned int height) : m_Width(width), m_Height(height) {}
 
@@ -28,7 +28,7 @@ namespace AGE {
     unsigned int m_Width, m_Height;
   };
 
-  class DLL_PUBLIC WindowCloseEvent : public Event {
+  class  WindowCloseEvent : public Event {
   public:
     WindowCloseEvent() = default;
 

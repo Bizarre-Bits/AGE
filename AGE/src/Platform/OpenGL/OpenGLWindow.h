@@ -11,7 +11,7 @@
 #include "Platform/OpenGL/PlatformGL.h"
 
 namespace AGE {
-  class DLL_PUBLIC OpenGLWindow : public Window {
+  class  OpenGLWindow : public Window {
   public:
     OpenGLWindow(const WindowProps& props);
     virtual ~OpenGLWindow();

@@ -12,7 +12,7 @@
 
 namespace AGE {
 
-  class DLL_PUBLIC Log {
+  class  Log {
   public:
     static void Init();
 

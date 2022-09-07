@@ -11,7 +11,7 @@
 
 namespace AGE {
 
-  class DLL_PUBLIC KeyEvent : public Event {
+  class  KeyEvent : public Event {
   public:
     inline KeyCode KeyCode() const { return m_Keycode; }
 
@@ -23,7 +23,7 @@ namespace AGE {
     ::AGE::KeyCode m_Keycode;
   };
 
-  class DLL_PUBLIC KeyPressedEvent : public KeyEvent {
+  class  KeyPressedEvent : public KeyEvent {
   public:
     explicit KeyPressedEvent(const ::AGE::KeyCode keyCode, const bool isRepeated = false) : KeyEvent(keyCode),
                                                                                             m_IsRepeated{isRepeated} {}
@@ -40,7 +40,7 @@ namespace AGE {
     bool m_IsRepeated;
   };
 
-  class DLL_PUBLIC KeyReleasedEvent : public KeyEvent {
+  class  KeyReleasedEvent : public KeyEvent {
   public:
     explicit KeyReleasedEvent(const ::AGE::KeyCode keycode) : KeyEvent(keycode) {}
 
@@ -53,7 +53,7 @@ namespace AGE {
     EVENT_CLASS_TYPE(KeyReleased)
   };
 
-  class DLL_PUBLIC KeyTypedEvent : public KeyEvent {
+  class  KeyTypedEvent : public KeyEvent {
   public:
     explicit KeyTypedEvent(const ::AGE::KeyCode keycode) : KeyEvent(keycode) {}
 

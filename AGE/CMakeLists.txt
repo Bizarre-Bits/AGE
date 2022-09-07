@@ -13,6 +13,7 @@ file(GLOB_RECURSE _SRCS src/Age/*.cpp)
 file(GLOB_RECURSE _HDRS src/Age/*.h)
 file(GLOB_RECURSE _INCLDS include/*.h)
 
+
 # TODO: define it outside of cmake lists
 set(AGE_RENDER_PLATFORM OPENGL)
 
@@ -39,8 +40,6 @@ if (NOT ${${AGE_RENDER_PLATFORM_CHECK}})
 endif ()
 
 if (AGE_RENDER_PLATFORM STREQUAL OPENGL)
-    # Add OpenGL Platform anyway as a fallback
-    set(BUILD_SHARED_LIBS ON)
     add_subdirectory(vendor/GLAD)
     add_subdirectory(vendor/GLFW)
 
@@ -50,16 +49,13 @@ if (AGE_RENDER_PLATFORM STREQUAL OPENGL)
     file(GLOB _IMGUI_BE vendor/imgui/backends/imgui_impl_opengl3* vendor/imgui/backends/imgui_impl_glfw.*)
     file(GLOB _RENDER_PLATFORM_SRCS src/Platform/OpenGL/*.cpp)
     file(GLOB _RENDER_PLATFORM_HEADERS src/Platform/OpenGL/*.h)
-
-    add_compile_definitions(AGE_OPENGL_RENDER_PLATFORM)
 endif ()
 
 
-
 # ImGui sources
-file(GLOB _IMGUI_SRCS vendor/imgui/*.cpp)
+file(GLOB _IMGUI_SRCS vendor/imgui/*.cpp vendor/imgui/*.h)
 
-add_library(Core SHARED ${_SRCS} ${_RENDER_PLATFORM_SRCS} ${_RENDER_PLATFORM_HEADERS} src/agepch.cpp src/agepch.h ${_HDRS} ${_INCLDS} ${_IMGUI_SRCS} ${_IMGUI_BE})
+add_library(Core STATIC ${_SRCS} ${_RENDER_PLATFORM_SRCS} ${_RENDER_PLATFORM_HEADERS} src/agepch.cpp src/agepch.h ${_HDRS} ${_INCLDS} ${_IMGUI_SRCS} ${_IMGUI_BE})
 target_include_directories(Core
         PUBLIC
         include
@@ -78,6 +74,10 @@ add_subdirectory(vendor/glm)
 target_link_libraries(Core PUBLIC spdlog ${AGE_RENDER_PLATFORM_LIBS} glm)
 
 target_precompile_headers(Core PUBLIC src/agepch.h)
+
+if (AGE_RENDER_PLATFORM STREQUAL OPENGL)
+    target_compile_definitions(Core PUBLIC AGE_RENDER_PLATFORM_OPENGL)
+endif ()
 
 if (${CMAKE_BUILD_TYPE} STREQUAL Debug)
     message(STATUS "debug build mode")
