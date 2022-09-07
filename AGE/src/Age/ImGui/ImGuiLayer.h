@@ -29,6 +29,11 @@ namespace AGE {
     virtual void Begin();
     virtual void End();
 
+  protected:
+    void InitImGui();
+
+    static bool s_IsImGuiInitialized;
+
   private:
     float m_Time;
   };
