@@ -14,9 +14,9 @@
 
 
 namespace AGE {
-  bool ImGuiLayer::s_IsImGuiInitialized{false};
+  bool ImGuiLayer::IsInitialized{false};
 
-  ImGuiLayer::ImGuiLayer() : Layer("ImGui"), m_Time{0.0f} {}
+  ImGuiLayer::ImGuiLayer() : Layer("ImGui") {}
 
   ImGuiLayer::~ImGuiLayer() {
   }
@@ -70,11 +70,11 @@ namespace AGE {
   }
 
   void ImGuiLayer::InitImGui() {
-    if (!s_IsImGuiInitialized) {
+    if (!IsInitialized) {
       auto window = (GLFWwindow*)Application::Instance()->Window()->NativeWindow();
       ImGui_ImplGlfw_InitForOpenGL(window, true);
       ImGui_ImplOpenGL3_Init("#version 410");
-      s_IsImGuiInitialized = true;
+      IsInitialized = true;
     }
   }
 }// namespace AGE

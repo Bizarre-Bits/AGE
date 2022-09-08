@@ -4,21 +4,9 @@
 
 #include "Age/Age.h"
 
-#include "imgui.h"
-
-class ImGuiExample : public AGE::ImGuiLayer {
-public:
-  virtual void OnUpdate() override {
-    Begin();
-    ImGui::Text("Hello");
-    End();
-  }
-};
-
 class Sandbox : public AGE::Application {
 public:
   Sandbox() {
-    PushOverlay(new ImGuiExample);
   }
 
   ~Sandbox() {}

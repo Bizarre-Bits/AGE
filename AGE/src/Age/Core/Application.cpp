@@ -7,6 +7,8 @@
 #include "Application.h"
 
 #include "Age/Debug/Assert.h"
+#include "Age/Debug/DebugLayer.h"
+#include "Age/ImGui/ImGuiLayer.h"
 
 namespace AGE {
   Application* Application::s_Instance{nullptr};
@@ -16,6 +18,10 @@ namespace AGE {
 
     m_Window = Window::Create();
     m_Window->EventCallback(AGE_BIND_EVENT_FN(Application::OnEvent));
+
+#ifdef DEBUG
+    PushOverlay(new DebugLayer);
+#endif
   }
 
   Application::~Application() {
@@ -24,8 +30,17 @@ namespace AGE {
 
   void Application::Run() {
     while (m_Running) {
+      m_Window->Clear();
+
+      // TODO: That looks strange, should figure out a better solution.
+      if (ImGuiLayer::IsInitialized)
+        ImGuiLayer::Begin();
+
       for (Layer* layer: m_LayerStack)
         layer->OnUpdate();
+
+      if (ImGuiLayer::IsInitialized)
+        ImGuiLayer::End();
 
       m_Window->OnUpdate();
     }

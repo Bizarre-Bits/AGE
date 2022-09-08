@@ -29,7 +29,7 @@
 
 #else
   #define AGE_ASSERT(...)
-  #deine AGE_CORE_ASSERT(...)
+  #define AGE_CORE_ASSERT(...)
 #endif
 
 #endif//AGE_ASSERT_H
