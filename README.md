@@ -23,3 +23,4 @@ To install it run
 ```bash
 sudo apt-get install xorg-dev
 ```
+If you want to run the Sandbox app with Nvidia dGPU you should add `__NV_PRIME_RENDER_OFFLOAD=1` and `__GLX_VENDOR_LIBRARY_NAME=nvidia` to the environment variables of your run. (At least it works on my laptop with Intel iGPU and Nvidia dGPU)
