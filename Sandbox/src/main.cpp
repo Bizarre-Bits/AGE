@@ -4,8 +4,6 @@
 
 #include "Age/Age.h"
 
-#include "imgui.h"
-
 class Sandbox : public AGE::Application {
 public:
   Sandbox() {

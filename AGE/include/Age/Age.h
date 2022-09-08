@@ -18,6 +18,7 @@
 #include "Age/Core/Layer.h"
 #include "Age/ImGui/ImGuiBuild.h"
 #include "Age/ImGui/ImGuiLayer.h"
+#include "Age/Debug/DebugLayer.h"
 
 // Debug
 #include "Age/Debug/Assert.h"

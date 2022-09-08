@@ -4,33 +4,35 @@
 
 #include "agepch.h"
 
-#include "Platform/OpenGL/OpenGLWindow.h"
+#include "Platform/OpenGL/WindowOpenGL.h"
 
 #include "Age/Debug/Assert.h"
 #include "Age/Events/KeyEvent.h"
 #include "Age/Events/MouseEvent.h"
 #include "Age/Events/WindowEvent.h"
 
+#include "Platform/OpenGL/ContextOpenGL.h"
+
 namespace AGE {
-  bool OpenGLWindow::s_GLFWInitialized{false};
+  bool WindowOpenGL::s_GLFWInitialized{false};
 
   void GLFWErrorCallback(int error, const char* description) {
     AGE_CORE_ERROR("GLFW Error ({0}): {1}", error, description);
   }
 
   Window* Window::Create(const AGE::WindowProps& props) {
-    return new OpenGLWindow(props);
+    return new WindowOpenGL(props);
   }
 
-  OpenGLWindow::OpenGLWindow(const WindowProps& props) {
+  WindowOpenGL::WindowOpenGL(const WindowProps& props) {
     Init(props);
   }
 
-  OpenGLWindow::~OpenGLWindow() {
+  WindowOpenGL::~WindowOpenGL() {
     Destroy();
   }
 
-  void OpenGLWindow::Init(const WindowProps& props) {
+  void WindowOpenGL::Init(const WindowProps& props) {
     m_Data.Title  = props.title;
     m_Data.Width  = props.width;
     m_Data.Height = props.height;
@@ -47,14 +49,9 @@ namespace AGE {
 
     m_Window = glfwCreateWindow(props.width, props.height, props.title.c_str(), NULL, NULL);
     glfwSetWindowUserPointer(m_Window, &m_Data);
-    glfwMakeContextCurrent(m_Window);
 
-    //Initialize GLAD
-    {
-      int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-      AGE_CORE_ASSERT(status, "Failed to initialize Glad");
-      AGE_CORE_INFO("Initialized Glad");
-    }
+    m_Context = new ContextOpenGL{m_Window};
+    m_Context->Init();
 
     SetVSync(true);
 
@@ -139,18 +136,13 @@ namespace AGE {
     });
   }
 
-  void OpenGLWindow::OnUpdate() {
+  void WindowOpenGL::OnUpdate() {
     glfwPollEvents();
 
-    //Swaps buffers
-    glfwSwapBuffers(m_Window);
-
-    // And starts the next frame
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    m_Context->SwapBuffers();
   }
 
-  void OpenGLWindow::SetVSync(bool enabled) {
+  void WindowOpenGL::SetVSync(bool enabled) {
     if (enabled) {
       glfwSwapInterval(1);
     } else {
@@ -159,21 +151,21 @@ namespace AGE {
     m_Data.VSync = enabled;
   }
 
-  bool OpenGLWindow::VSync() const {
+  bool WindowOpenGL::VSync() const {
     return m_Data.VSync;
   }
 
-  void OpenGLWindow::EventCallback(const Window::EventCallbackFn& callback) {
+  void WindowOpenGL::EventCallback(const Window::EventCallbackFn& callback) {
     m_Data.EventCallback = callback;
   }
 
-  void OpenGLWindow::Destroy() {
+  void WindowOpenGL::Destroy() {
     glfwDestroyWindow(m_Window);
   }
-  void* OpenGLWindow::NativeWindow() const {
+  void* WindowOpenGL::NativeWindow() const {
     return m_Window;
   }
-  void OpenGLWindow::Clear() {
+  void WindowOpenGL::Clear() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   }
 }// namespace AGE

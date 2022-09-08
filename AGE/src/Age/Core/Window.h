@@ -9,6 +9,7 @@
 
 #include "Age/Core/Core.h"
 #include "Age/Events/Event.h"
+#include "Age/Renderer/Context.h"
 
 namespace AGE {
   struct WindowProps {
@@ -44,6 +45,9 @@ namespace AGE {
 
     // Must be implemented per Platform
     static Window* Create(const WindowProps& props = WindowProps());
+
+  protected:
+    Context* m_Context;
   };
 }// namespace AGE
 
