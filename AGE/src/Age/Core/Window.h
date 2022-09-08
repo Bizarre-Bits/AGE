@@ -27,7 +27,9 @@ namespace AGE {
   public:
     using EventCallbackFn = std::function<void(Event&)>;
 
-    virtual ~Window() {}
+    virtual ~Window() {
+      delete m_Context;
+    }
 
     virtual void OnUpdate() = 0;
     virtual void Clear() = 0;
@@ -47,7 +49,7 @@ namespace AGE {
     static Window* Create(const WindowProps& props = WindowProps());
 
   protected:
-    Context* m_Context;
+    Context* m_Context{nullptr};
   };
 }// namespace AGE
 
