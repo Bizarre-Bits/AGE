@@ -11,13 +11,15 @@
 #include "Platform/OpenGL/PlatformGL.h"
 
 namespace AGE {
-  class  OpenGLWindow : public Window {
+  class OpenGLWindow : public Window {
   public:
     OpenGLWindow(const WindowProps& props);
     virtual ~OpenGLWindow();
 
     virtual void OnUpdate() override;
+    virtual void Clear() override;
 
+    inline age_string_t Title() const override { return m_Data.Title; }
     inline unsigned int Width() const override { return m_Data.Width; }
     inline unsigned int Height() const override { return m_Data.Height; }
 

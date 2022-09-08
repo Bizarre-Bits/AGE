@@ -18,7 +18,7 @@
 
 namespace AGE {
 
-  class  ImGuiLayer : public Layer {
+  class ImGuiLayer : public Layer {
   public:
     ImGuiLayer();
     ~ImGuiLayer() override;
@@ -26,16 +26,12 @@ namespace AGE {
     void OnAttach() override;
     void OnDetach() override;
 
-    virtual void Begin();
-    virtual void End();
+    static void Begin();
+    static void End();
+    static bool IsInitialized;
 
   protected:
     void InitImGui();
-
-    static bool s_IsImGuiInitialized;
-
-  private:
-    float m_Time;
   };
 
 }// namespace AGE
