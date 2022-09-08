@@ -10,7 +10,7 @@
 #include "Age/Core/MouseCodes.h"
 
 namespace AGE {
-  class DLL_PUBLIC Input {
+  class  Input {
   public:
     inline static bool IsKeyPressed(KeyCode keycode) { return s_Instance->IsKeyPressedImpl(keycode); }
     inline static bool IsMousePressed(MouseCode mousecode) { return s_Instance->IsMousePressedImpl(mousecode); }

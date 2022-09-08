@@ -10,7 +10,7 @@
 #include "Age/Core/MouseCodes.h"
 
 namespace AGE {
-  class DLL_PUBLIC MouseButtonEvent : public Event {
+  class  MouseButtonEvent : public Event {
   public:
     inline MouseCode MouseButton() const { return m_MouseButtonCode; }
 
@@ -22,7 +22,7 @@ namespace AGE {
     MouseCode m_MouseButtonCode;
   };
 
-  class DLL_PUBLIC MouseButtonPressedEvent : public MouseButtonEvent {
+  class  MouseButtonPressedEvent : public MouseButtonEvent {
   public:
     explicit MouseButtonPressedEvent(MouseCode mouseButtonCode) : MouseButtonEvent(mouseButtonCode) {}
 
@@ -36,7 +36,7 @@ namespace AGE {
     EVENT_CLASS_TYPE(MouseButtonPressed)
   };
 
-  class DLL_PUBLIC MouseButtonReleasedEvent : public MouseButtonEvent {
+  class  MouseButtonReleasedEvent : public MouseButtonEvent {
   public:
     explicit MouseButtonReleasedEvent(MouseCode mouseButtonCode) : MouseButtonEvent(mouseButtonCode) {}
 
@@ -50,7 +50,7 @@ namespace AGE {
     EVENT_CLASS_TYPE(MouseButtonReleased)
   };
 
-  class DLL_PUBLIC MouseMovedEvent : public Event {
+  class  MouseMovedEvent : public Event {
   public:
     MouseMovedEvent(float x, float y) : m_X(x), m_Y(y) {}
 
@@ -70,7 +70,7 @@ namespace AGE {
     float m_X, m_Y;
   };
 
-  class DLL_PUBLIC MouseScrolledEvent : public Event {
+  class  MouseScrolledEvent : public Event {
   public:
     MouseScrolledEvent(const float xOffset, const float yOffset) : m_XOffset(xOffset), m_YOffset(yOffset) {}
 

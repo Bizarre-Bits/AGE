@@ -5,15 +5,13 @@
 #ifndef AGE_OPENGLWINDOW_H
 #define AGE_OPENGLWINDOW_H
 
-#define GLFW_INCLUDE_NONE
-
 #include "Age/Core/Core.h"
 #include "Age/Core/Window.h"
 
 #include "Platform/OpenGL/PlatformGL.h"
 
 namespace AGE {
-  class DLL_PUBLIC OpenGLWindow : public Window {
+  class  OpenGLWindow : public Window {
   public:
     OpenGLWindow(const WindowProps& props);
     virtual ~OpenGLWindow();

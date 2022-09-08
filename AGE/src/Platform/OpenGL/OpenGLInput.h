@@ -10,7 +10,7 @@
 
 namespace AGE {
 
-  class DLL_PUBLIC OpenGLInput : public Input {
+  class  OpenGLInput : public Input {
 
   protected:
     virtual bool IsKeyPressedImpl(KeyCode keycode) override;

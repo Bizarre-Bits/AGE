@@ -9,7 +9,7 @@
 #include "Age/Events/Event.h"
 
 namespace AGE {
-  class DLL_PUBLIC Layer {
+  class  Layer {
   public:
     explicit Layer(const age_string_t& debugName = "Layer");
     virtual ~Layer();

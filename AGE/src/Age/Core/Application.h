@@ -13,7 +13,7 @@
 #include "Window.h"
 
 namespace AGE {
-  class DLL_PUBLIC Application {
+  class Application {
   public:
     Application();
     virtual ~Application();
