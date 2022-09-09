@@ -75,8 +75,17 @@ target_link_libraries(Core PUBLIC spdlog ${AGE_RENDER_PLATFORM_LIBS} glm)
 
 target_precompile_headers(Core PUBLIC src/agepch.h)
 
-if (AGE_RENDER_PLATFORM STREQUAL OPENGL)
-    target_compile_definitions(Core PUBLIC AGE_RENDER_PLATFORM_OPENGL)
+
+target_compile_definitions(Core PUBLIC AGE_RENDER_PLATFORM_${AGE_RENDER_PLATFORM})
+
+if (AGE_OPENGL_AVAILABLE)
+    target_compile_definitions(Core PUBLIC AGE_OPENGL_AVAILABLE)
+endif ()
+if (AGE_VULCAN_AVAILABLE)
+    target_compile_definitions(Core PUBLIC AGE_VULCAN_AVAILABLE)
+endif ()
+if (AGE_DIRECTX_AVAILABLE)
+    target_compile_definitions(Core PUBLIC AGE_DIRECTX_AVAILABLE)
 endif ()
 
 if (${CMAKE_BUILD_TYPE} STREQUAL Debug)

@@ -2,17 +2,17 @@
 // Created by alex on 08.09.22.
 //
 
-#ifndef AGE_SHADEROPENGL_H
-#define AGE_SHADEROPENGL_H
+#ifndef AGE_OPENGLSHADER_H
+#define AGE_OPENGLSHADER_H
 
 #include "Age/Core/Core.h"
 #include "Age/Renderer/Shader.h"
 
 namespace AGE {
-  class ShaderOpenGL : public Shader {
+  class OpenGLShader : public Shader {
   public:
-    ShaderOpenGL(const age_string_t& vertexSrc, const age_string_t& fragmentSrc);
-    ~ShaderOpenGL();
+    OpenGLShader(const age_string_t& vertexSrc, const age_string_t& fragmentSrc);
+    ~OpenGLShader();
 
     virtual void Bind() const override;
     virtual void Unbind() const override;
@@ -22,4 +22,4 @@ namespace AGE {
   };
 }
 
-#endif //AGE_SHADEROPENGL_H
+#endif //AGE_OPENGLSHADER_H

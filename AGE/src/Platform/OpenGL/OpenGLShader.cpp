@@ -3,11 +3,11 @@
 //
 #include "agepch.h"
 
-#include "Platform/OpenGL/PlatformGL.h"
-#include "Platform/OpenGL/ShaderOpenGL.h"
+#include "Platform/OpenGL/OpenGLPlatform.h"
+#include "Platform/OpenGL/OpenGLShader.h"
 
 namespace AGE {
-  ShaderOpenGL::ShaderOpenGL(const age_string_t& vertexSrc, const age_string_t& fragmentSrc) {
+  OpenGLShader::OpenGLShader(const age_string_t& vertexSrc, const age_string_t& fragmentSrc) {
 
 
     // Create an empty vertex shader handle
@@ -97,15 +97,15 @@ namespace AGE {
     glDetachShader(m_RendererID, fragmentShader);
   }
 
-  ShaderOpenGL::~ShaderOpenGL() {
+  OpenGLShader::~OpenGLShader() {
 
   }
 
-  void ShaderOpenGL::Bind() const {
+  void OpenGLShader::Bind() const {
     glUseProgram(m_RendererID);
   }
 
-  void ShaderOpenGL::Unbind() const {
+  void OpenGLShader::Unbind() const {
     glUseProgram(0);
   }
 

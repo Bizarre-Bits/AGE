@@ -2,19 +2,19 @@
 // Created by alex on 28.08.22.
 //
 
-#ifndef AGE_WINDOWOPENGL_H
-#define AGE_WINDOWOPENGL_H
+#ifndef AGE_OPENGLWINDOW_H
+#define AGE_OPENGLWINDOW_H
 
 #include "Age/Core/Core.h"
 #include "Age/Core/Window.h"
 
-#include "Platform/OpenGL/PlatformGL.h"
+#include "Platform/OpenGL/OpenGLPlatform.h"
 
 namespace AGE {
-  class WindowOpenGL : public Window {
+  class OpenGLWindow : public Window {
   public:
-    WindowOpenGL(const WindowProps& props);
-    virtual ~WindowOpenGL();
+    OpenGLWindow(const WindowProps& props);
+    virtual ~OpenGLWindow();
 
     virtual void OnUpdate() override;
     virtual void Clear() override;
@@ -49,4 +49,4 @@ namespace AGE {
   };
 }// namespace AGE
 
-#endif//AGE_WINDOWOPENGL_H
+#endif//AGE_OPENGLWINDOW_H

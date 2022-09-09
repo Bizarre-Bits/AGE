@@ -4,35 +4,35 @@
 
 #include "agepch.h"
 
-#include "Platform/OpenGL/WindowOpenGL.h"
+#include "Platform/OpenGL/OpenGLWindow.h"
 
 #include "Age/Debug/Assert.h"
 #include "Age/Events/KeyEvent.h"
 #include "Age/Events/MouseEvent.h"
 #include "Age/Events/WindowEvent.h"
 
-#include "Platform/OpenGL/ContextOpenGL.h"
+#include "Platform/OpenGL/OpenGLContext.h"
 
 namespace AGE {
-  bool WindowOpenGL::s_GLFWInitialized{false};
+  bool OpenGLWindow::s_GLFWInitialized{false};
 
   void GLFWErrorCallback(int error, const char* description) {
     AGE_CORE_ERROR("GLFW Error ({0}): {1}", error, description);
   }
 
   Window* Window::Create(const AGE::WindowProps& props) {
-    return new WindowOpenGL(props);
+    return new OpenGLWindow(props);
   }
 
-  WindowOpenGL::WindowOpenGL(const WindowProps& props) {
+  OpenGLWindow::OpenGLWindow(const WindowProps& props) {
     Init(props);
   }
 
-  WindowOpenGL::~WindowOpenGL() {
+  OpenGLWindow::~OpenGLWindow() {
     Destroy();
   }
 
-  void WindowOpenGL::Init(const WindowProps& props) {
+  void OpenGLWindow::Init(const WindowProps& props) {
     m_Data.Title  = props.title;
     m_Data.Width  = props.width;
     m_Data.Height = props.height;
@@ -50,7 +50,7 @@ namespace AGE {
     m_Window = glfwCreateWindow((int)props.width, (int)props.height, props.title.c_str(), NULL, NULL);
     glfwSetWindowUserPointer(m_Window, &m_Data);
 
-    m_Context = new ContextOpenGL{m_Window};
+    m_Context = new OpenGLContext{m_Window};
     m_Context->Init();
 
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
@@ -138,13 +138,13 @@ namespace AGE {
     });
   }
 
-  void WindowOpenGL::OnUpdate() {
+  void OpenGLWindow::OnUpdate() {
     glfwPollEvents();
 
     m_Context->SwapBuffers();
   }
 
-  void WindowOpenGL::SetVSync(bool enabled) {
+  void OpenGLWindow::SetVSync(bool enabled) {
     if (enabled) {
       glfwSwapInterval(1);
     } else {
@@ -153,21 +153,21 @@ namespace AGE {
     m_Data.VSync = enabled;
   }
 
-  bool WindowOpenGL::VSync() const {
+  bool OpenGLWindow::VSync() const {
     return m_Data.VSync;
   }
 
-  void WindowOpenGL::EventCallback(const Window::EventCallbackFn& callback) {
+  void OpenGLWindow::EventCallback(const Window::EventCallbackFn& callback) {
     m_Data.EventCallback = callback;
   }
 
-  void WindowOpenGL::Destroy() {
+  void OpenGLWindow::Destroy() {
     glfwDestroyWindow(m_Window);
   }
-  void* WindowOpenGL::NativeWindow() const {
+  void* OpenGLWindow::NativeWindow() const {
     return m_Window;
   }
-  void WindowOpenGL::Clear() {
+  void OpenGLWindow::Clear() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   }
 }// namespace AGE

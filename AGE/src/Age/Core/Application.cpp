@@ -11,8 +11,8 @@
 #include "Age/ImGui/ImGuiLayer.h"
 
 // TODO: Temp
-#include "Platform/OpenGL/PlatformGL.h"
-#include "Platform/OpenGL/ShaderOpenGL.h"
+#include "Platform/OpenGL/OpenGLPlatform.h"
+#include "Platform/OpenGL/OpenGLShader.h"
 
 namespace AGE {
   Application* Application::s_Instance{nullptr};
@@ -30,25 +30,18 @@ namespace AGE {
     glGenVertexArrays(1, &m_VertexArray);
     glBindVertexArray(m_VertexArray);
 
-    glGenBuffers(1, &m_VertexBuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
-
     float vertices[3 * 3]{
         -0.5f, -0.5f, 0.0f,
         0.5f, -0.5f, 0.0f,
         0.0f, 0.5f, 0.0f,
     };
-
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    m_VertexBuffer = VertexBuffer::Create(vertices, sizeof(vertices) / sizeof(float));
 
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
 
-    glGenBuffers(1, &m_IndexBuffer);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IndexBuffer);
-
     unsigned int indices[3]{0, 1, 2};
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+    m_IndexBuffer = IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
 
     age_string_t vertexSrc{R"(
        #version 330 core
@@ -74,7 +67,7 @@ namespace AGE {
         }
     )"};
 
-    m_Shader = new ShaderOpenGL(vertexSrc, fragmentSrc);
+    m_Shader = new OpenGLShader(vertexSrc, fragmentSrc);
   }
 
   Application::~Application() {
@@ -90,7 +83,7 @@ namespace AGE {
       m_Shader->Bind();
 
       glBindVertexArray(m_VertexArray);
-      glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
+      glDrawElements(GL_TRIANGLES, m_IndexBuffer->Count(), GL_UNSIGNED_INT, nullptr);
 
       // TODO: That looks strange, should figure out a better solution.
       if (ImGuiLayer::IsInitialized)

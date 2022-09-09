@@ -5,7 +5,7 @@
 #include "agepch.h"
 
 // TODO: must be moved to the platform specific code
-#include "Platform/OpenGL/PlatformGL.h"
+#include "Platform/OpenGL/OpenGLPlatform.h"
 
 #include "Age/ImGui/ImGuiLayer.h"
 

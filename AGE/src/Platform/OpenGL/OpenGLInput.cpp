@@ -4,7 +4,7 @@
 
 #include "agepch.h"
 
-#include "Platform/OpenGL/PlatformGL.h"
+#include "Platform/OpenGL/OpenGLPlatform.h"
 
 #include "Age/Core/Application.h"
 #include "Platform/OpenGL/OpenGLInput.h"
