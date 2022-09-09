@@ -12,6 +12,8 @@
 #include "LayerStack.h"
 #include "Window.h"
 
+#include "Platform/OpenGL/ShaderOpenGL.h"
+
 namespace AGE {
   class Application {
   public:
@@ -39,6 +41,8 @@ namespace AGE {
     unsigned int m_VertexArray;
     unsigned int m_VertexBuffer;
     unsigned int m_IndexBuffer;
+    ShaderOpenGL* m_Shader{nullptr};
+
 
     static Application* s_Instance;
   };

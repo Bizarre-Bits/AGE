@@ -12,6 +12,7 @@
 
 // TODO: Temp
 #include "Platform/OpenGL/PlatformGL.h"
+#include "Platform/OpenGL/ShaderOpenGL.h"
 
 namespace AGE {
   Application* Application::s_Instance{nullptr};
@@ -48,15 +49,45 @@ namespace AGE {
 
     unsigned int indices[3]{0, 1, 2};
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+    age_string_t vertexSrc{R"(
+       #version 330 core
+
+        layout(location = 0) in vec3 a_Position;
+
+        out vec3 v_Position;
+
+        void main() {
+          v_Position = a_Position + 0.5;
+          gl_Position = vec4(a_Position, 1.0);
+        }
+    )"};
+
+    age_string_t fragmentSrc{R"(
+        #version 330 core
+
+        layout(location = 0) out vec4 color;
+        in vec3 v_Position;
+
+        void main() {
+          color = vec4(v_Position * 0.5 + 0.5, 1.0);
+        }
+    )"};
+
+    m_Shader = new ShaderOpenGL(vertexSrc, fragmentSrc);
   }
 
   Application::~Application() {
     delete m_Window;
+    delete m_Shader;
   }
 
   void Application::Run() {
     while (m_Running) {
       m_Window->Clear();
+
+      AGE_CORE_ASSERT(m_Shader);
+      m_Shader->Bind();
 
       glBindVertexArray(m_VertexArray);
       glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
