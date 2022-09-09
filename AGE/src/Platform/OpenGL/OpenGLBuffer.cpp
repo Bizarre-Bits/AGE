@@ -6,13 +6,16 @@
 #include "Platform/OpenGL/OpenGLPlatform.h"
 
 #include "OpenGLBuffer.h"
+#include "Age/Debug/Assert.h"
 
 namespace AGE {
 
-  // Vertex buffer
+////////////////////////////////////////////////////////////////////////////////////
+/// Vertex buffer //////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+
   OpenGLVertexBuffer::OpenGLVertexBuffer(float* vertices, uint32_t count)
-    : m_Count{count}
-  {
+      : m_Count{count} {
     glCreateBuffers(1, &m_RendererID);
     glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
     glBufferData(GL_ARRAY_BUFFER, count * sizeof(float), vertices, GL_STATIC_DRAW);
@@ -34,10 +37,12 @@ namespace AGE {
     return m_Count;
   }
 
-  // Index buffer
+////////////////////////////////////////////////////////////////////////////////////
+/// Index buffer ///////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+
   OpenGLIndexBuffer::OpenGLIndexBuffer(uint32_t* indices, uint32_t count)
-    : m_Count{count}
-  {
+      : m_Count{count} {
     glCreateBuffers(1, &m_RendererID);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_RendererID);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(uint32_t), indices, GL_STATIC_DRAW);
@@ -58,4 +63,23 @@ namespace AGE {
   uint32_t OpenGLIndexBuffer::Count() const {
     return m_Count;
   }
+
+
+////////////////////////////////////////////////////////////////////////////////////
+/// Free Functions /////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+
+  GLenum ShaderDataTypeToOpenGLBaseType(ShaderDataType type) {
+    ShaderDataType baseType = base_shader_data_type(type);
+    switch(baseType) {
+      case ShaderDataType::Float: return GL_FLOAT;
+      case ShaderDataType::Int: return GL_INT;
+      case ShaderDataType::Bool: return GL_BOOL;
+      default: break;
+    }
+
+    AGE_CORE_ASSERT(false, "Unknown ShaderDataType");
+    return 0;
+  }
+
 } // AGE
