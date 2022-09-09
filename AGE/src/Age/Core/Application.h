@@ -12,6 +12,7 @@
 #include "LayerStack.h"
 #include "Window.h"
 #include "Age/Renderer/Buffer.h"
+#include "Age/Renderer/VertexArray.h"
 
 #include "Platform/OpenGL/OpenGLShader.h"
 
@@ -39,7 +40,7 @@ namespace AGE {
     bool m_Running{true};
     LayerStack m_LayerStack;
 
-    unsigned int m_VertexArray;
+    VertexArray* m_VertexArray;
     VertexBuffer* m_VertexBuffer;
     IndexBuffer* m_IndexBuffer;
 

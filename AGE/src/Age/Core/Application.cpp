@@ -28,9 +28,6 @@ namespace AGE {
     PushOverlay(new DebugLayer);
 #endif
 
-    glGenVertexArrays(1, &m_VertexArray);
-    glBindVertexArray(m_VertexArray);
-
     float vertices[3 * 7]{
         -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
         0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
@@ -44,19 +41,12 @@ namespace AGE {
     };
     m_VertexBuffer->SetLayout(layout);
 
-    uint32_t index{0};
-    for (const BufferElement& element: m_VertexBuffer->Layout()) {
-      glEnableVertexAttribArray(index);
-      glVertexAttribPointer(
-          index, element.ComponentCount(), ShaderDataTypeToOpenGLBaseType(element.Type),
-          element.Normalized ? GL_TRUE : GL_FALSE,
-          m_VertexBuffer->Layout().Stride(), (void*)element.Offset
-      );
-      index++;
-    }
-
     unsigned int indices[3]{0, 1, 2};
     m_IndexBuffer = IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
+
+    m_VertexArray = VertexArray::Create();
+    m_VertexArray->AddVertexBuffer(m_VertexBuffer);
+    m_VertexArray->SetIndexBuffer(m_IndexBuffer);
 
     age_string_t vertexSrc{R"(
        #version 330 core
@@ -98,7 +88,7 @@ namespace AGE {
       AGE_CORE_ASSERT(m_Shader);
       m_Shader->Bind();
 
-      glBindVertexArray(m_VertexArray);
+      m_VertexArray->Bind();
       glDrawElements(GL_TRIANGLES, m_IndexBuffer->Count(), GL_UNSIGNED_INT, nullptr);
 
       // TODO: That looks strange, should figure out a better solution.
