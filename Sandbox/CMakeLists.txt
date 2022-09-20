@@ -3,5 +3,5 @@ project(AGE)
 set(CMAKE_CXX_STANDARD 20)
 
 add_executable(Sandbox src/main.cpp)
-target_link_libraries(Sandbox PRIVATE Core)
+target_link_libraries(Sandbox PRIVATE age_core)
 

@@ -33,20 +33,38 @@ namespace AGE {
         0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
         0.0f, 0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f
     };
-    m_VertexBuffer = VertexBuffer::Create(vertices, sizeof(vertices) / sizeof(float));
+    VertexBuffer* triangleVB = VertexBuffer::Create(vertices, sizeof(vertices) / sizeof(float));
 
     BufferLayout layout{
         {"a_Position", ShaderDataType::Float3},
-        {"a_Color", ShaderDataType::Float4}
+        {"a_Color",    ShaderDataType::Float4}
     };
-    m_VertexBuffer->SetLayout(layout);
+    triangleVB->SetLayout(layout);
 
     unsigned int indices[3]{0, 1, 2};
-    m_IndexBuffer = IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
+    IndexBuffer* triangleIB = IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
 
-    m_VertexArray = VertexArray::Create();
-    m_VertexArray->AddVertexBuffer(m_VertexBuffer);
-    m_VertexArray->SetIndexBuffer(m_IndexBuffer);
+    m_TriangleVA = VertexArray::Create();
+    m_TriangleVA->AddVertexBuffer(triangleVB);
+    m_TriangleVA->SetIndexBuffer(triangleIB);
+
+    m_SquareVA = VertexArray::Create();
+
+    float squareVertices[4 * 7]{
+        -0.6f, 0.6f, 0.0f, 0.0f, 0.0f, 0.0f,
+        -0.6f, -0.6f, 0.0f, 0.0f, 0.0f, 0.0f,
+        0.6f, -0.6f, 0.0f, 0.0f, 0.0f, 0.0f,
+        0.6f, 0.6f, 0.0f, 0.0f, 0.0f, 0.0f,
+    };
+
+    VertexBuffer* squareVB = VertexBuffer::Create(squareVertices, sizeof(squareVertices) / sizeof(float));
+    squareVB->SetLayout(layout);
+
+    uint32_t squareIndices[6]{1, 2, 3, 1, 3, 4};
+    IndexBuffer* squareIB = IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t));
+//
+//    m_SquareVA->AddVertexBuffer(squareVB);
+//    m_SquareVA->SetIndexBuffer(squareIB);
 
     age_string_t vertexSrc{R"(
        #version 330 core
@@ -73,6 +91,7 @@ namespace AGE {
         }
     )"};
 
+
     m_Shader = new OpenGLShader(vertexSrc, fragmentSrc);
   }
 
@@ -85,11 +104,19 @@ namespace AGE {
     while (m_Running) {
       m_Window->Clear();
 
+//      Renderer::BeginScene();
+//
+//      Renderer::Submit();
+//
+//      Renderer::EndScene();
+//
+//      Renderer::Flush();
+
       AGE_CORE_ASSERT(m_Shader);
       m_Shader->Bind();
 
-      m_VertexArray->Bind();
-      glDrawElements(GL_TRIANGLES, m_IndexBuffer->Count(), GL_UNSIGNED_INT, nullptr);
+      m_TriangleVA->Bind();
+      glDrawElements(GL_TRIANGLES, m_TriangleVA->IndexBuffer()->Count(), GL_UNSIGNED_INT, nullptr);
 
       // TODO: That looks strange, should figure out a better solution.
       if (ImGuiLayer::IsInitialized)

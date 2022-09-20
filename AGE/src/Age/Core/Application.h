@@ -40,9 +40,8 @@ namespace AGE {
     bool m_Running{true};
     LayerStack m_LayerStack;
 
-    VertexArray* m_VertexArray;
-    VertexBuffer* m_VertexBuffer;
-    IndexBuffer* m_IndexBuffer;
+    VertexArray* m_TriangleVA;
+    VertexArray* m_SquareVA;
 
     OpenGLShader* m_Shader{nullptr};
 

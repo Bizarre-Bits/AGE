@@ -6,7 +6,7 @@
 #include "Age/Debug/Assert.h"
 #include "Age/Renderer/Buffer.h"
 
-#ifdef AGE_OPENGL_AVAILABLE
+#ifdef AGE_INCLUDE_OPENGL
 
   #include "Platform/OpenGL/OpenGLBuffer.h"
 
@@ -34,17 +34,17 @@ namespace AGE {
     }
   }
 
-  VertexBuffer* VertexBuffer::Create(float* vertices, uint32_t size) {
+  VertexBuffer* VertexBuffer::Create(float* vertices, uint32_t count) {
     switch (Renderer::API()) {
       case RenderAPI::None: AGE_CORE_ASSERT(false, "RenderAPI::None is not supported");
-      case RenderAPI::OpenGL: return new OpenGLVertexBuffer(vertices, size);
+      case RenderAPI::OpenGL: return new OpenGLVertexBuffer(vertices, count);
     }
   }
 
-  IndexBuffer* IndexBuffer::Create(uint32_t* indices, uint32_t size) {
+  IndexBuffer* IndexBuffer::Create(uint32_t* indices, uint32_t count) {
     switch (Renderer::API()) {
       case RenderAPI::None: AGE_CORE_ASSERT(false, "RenderAPI::None is not supported");
-      case RenderAPI::OpenGL: return new OpenGLIndexBuffer(indices, size);
+      case RenderAPI::OpenGL: return new OpenGLIndexBuffer(indices, count);
     }
   }
 
@@ -53,9 +53,9 @@ namespace AGE {
     uint8_t componentCount = (uint8_t)type & 0b000'11111;
 
     switch (dataType) {
-      case 0: return sizeof(float)*componentCount;
-      case 1: return sizeof(int)*componentCount;
-      case 2: return sizeof(bool)*componentCount;
+      case 0: return sizeof(float) * componentCount;
+      case 1: return sizeof(int) * componentCount;
+      case 2: return sizeof(bool) * componentCount;
       default: break;
     }
 

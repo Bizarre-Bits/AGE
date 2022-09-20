@@ -44,12 +44,22 @@ namespace AGE {
     }
 
     m_VertexBuffers.push_back((OpenGLVertexBuffer*)vertexBuffer);
+    glBindVertexArray(0);
   }
 
-  void OpenGLVertexArray::SetIndexBuffer(const IndexBuffer* const indexBuffer) {
+  void OpenGLVertexArray::SetIndexBuffer(const class IndexBuffer* const indexBuffer) {
     glBindVertexArray(m_RenderID);
     indexBuffer->Bind();
 
     m_IndexBuffer = (OpenGLIndexBuffer*)indexBuffer;
+    glBindVertexArray(0);
+  }
+
+  std::vector<VertexBuffer*> OpenGLVertexArray::VertexBuffers() const {
+    return m_VertexBuffers;
+  }
+
+  IndexBuffer* OpenGLVertexArray::IndexBuffer() const {
+    return m_IndexBuffer;
   }
 } // AGE

@@ -20,11 +20,14 @@ namespace AGE {
     virtual void Unbind() const override;
 
     virtual void AddVertexBuffer(const VertexBuffer* const vertexBuffer) override;
-    virtual void SetIndexBuffer(const IndexBuffer* const indexBuffer) override;
+    virtual void SetIndexBuffer(const class IndexBuffer* const indexBuffer) override;
+
+    virtual std::vector<VertexBuffer*> VertexBuffers() const override;
+    virtual class IndexBuffer* IndexBuffer() const override;
 
   private:
-    std::vector<OpenGLVertexBuffer*> m_VertexBuffers;
-    OpenGLIndexBuffer* m_IndexBuffer;
+    std::vector<VertexBuffer*> m_VertexBuffers;
+    class IndexBuffer* m_IndexBuffer;
     uint32_t m_RenderID;
   };
 } // AGE
