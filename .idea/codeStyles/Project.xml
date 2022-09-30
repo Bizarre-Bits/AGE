@@ -21,6 +21,8 @@
       <option name="ADD_BRIEF_TAG" value="true" />
     </Objective-C>
     <codeStyleSettings language="ObjectiveC">
+      <option name="BLANK_LINES_BEFORE_IMPORTS" value="0" />
+      <option name="BLANK_LINES_AFTER_IMPORTS" value="0" />
       <option name="BLANK_LINES_AROUND_METHOD" value="0" />
       <option name="BLANK_LINES_AROUND_METHOD_IN_INTERFACE" value="0" />
       <option name="ALIGN_MULTILINE_CHAINED_METHODS" value="true" />

@@ -37,14 +37,37 @@ namespace AGE {
   VertexBuffer* VertexBuffer::Create(float* vertices, uint32_t count) {
     switch (Renderer::API()) {
       case RenderAPI::None: AGE_CORE_ASSERT(false, "RenderAPI::None is not supported");
-      case RenderAPI::OpenGL: return new OpenGLVertexBuffer(vertices, count);
+      case RenderAPI::OpenGL:
+        //Sorry for this mess. TODO: should figure out a way to make it more readable.
+
+        // OpenGL VertexBuffer
+#ifdef AGE_INCLUDE_OPENGL
+        return new OpenGLVertexBuffer(vertices, count);
+#else
+        AGE_CORE_ASSERT(false, "RenderAPI::OpenGL is not available because OpenGL is not included in this compilation")
+#endif
+
+      // Handle unconfigured RenderAPI
+      default: {
+        AGE_CORE_ASSERT(false, "Could not create a vertex buffer, as there is no RenderAPI selected");
+        throw;
+      }
     }
   }
 
   IndexBuffer* IndexBuffer::Create(uint32_t* indices, uint32_t count) {
     switch (Renderer::API()) {
       case RenderAPI::None: AGE_CORE_ASSERT(false, "RenderAPI::None is not supported");
-      case RenderAPI::OpenGL: return new OpenGLIndexBuffer(indices, count);
+      case RenderAPI::OpenGL:
+#ifdef AGE_INCLUDE_OPENGL
+        return new OpenGLIndexBuffer(indices, count);
+#else
+        AGE_CORE_ASSERT(false, "RenderAPI::OpenGL is not available because OpenGL is not included in this compilation");
+#endif
+      default: {
+        AGE_CORE_ASSERT(false, "Could not create an Index Buffer, as there is no RenderAPI selected")
+        throw;
+      }
     }
   }
 

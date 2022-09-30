@@ -11,7 +11,7 @@
 
 namespace AGE {
   OpenGLVertexArray::OpenGLVertexArray() {
-    glCreateBuffers(1, &m_RenderID);
+    glGenVertexArrays(1, &m_RenderID);
   }
 
   OpenGLVertexArray::~OpenGLVertexArray() {
@@ -26,7 +26,7 @@ namespace AGE {
     glBindVertexArray(0);
   }
 
-  void OpenGLVertexArray::AddVertexBuffer(const VertexBuffer* const vertexBuffer) {
+  void OpenGLVertexArray::AddVertexBuffer(VertexBuffer* vertexBuffer) {
     AGE_CORE_ASSERT(!vertexBuffer->Layout().Elements().empty(), "Vertex buffer has no layout");
 
     glBindVertexArray(m_RenderID);
@@ -36,18 +36,23 @@ namespace AGE {
     for (const BufferElement& element: vertexBuffer->Layout()) {
       glEnableVertexAttribArray(index);
       glVertexAttribPointer(
-          index, element.ComponentCount(), ShaderDataTypeToOpenGLBaseType(element.Type),
+          index,
+          element.ComponentCount(),
+          shader_data_to_glenum(element.Type),
           element.Normalized ? GL_TRUE : GL_FALSE,
-          vertexBuffer->Layout().Stride(), (void*)element.Offset
+          vertexBuffer->Layout().Stride(),
+          (void*)element.Offset
       );
       index++;
     }
 
-    m_VertexBuffers.push_back((OpenGLVertexBuffer*)vertexBuffer);
+    m_VertexBuffers.push_back(vertexBuffer);
+
     glBindVertexArray(0);
+    vertexBuffer->Unbind();
   }
 
-  void OpenGLVertexArray::SetIndexBuffer(const class IndexBuffer* const indexBuffer) {
+  void OpenGLVertexArray::SetIndexBuffer(AGE::IndexBuffer* indexBuffer) {
     glBindVertexArray(m_RenderID);
     indexBuffer->Bind();
 

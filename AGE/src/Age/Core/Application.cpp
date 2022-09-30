@@ -28,43 +28,62 @@ namespace AGE {
     PushOverlay(new DebugLayer);
 #endif
 
-    float vertices[3 * 7]{
-        -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-        0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
-        0.0f, 0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f
-    };
-    VertexBuffer* triangleVB = VertexBuffer::Create(vertices, sizeof(vertices) / sizeof(float));
-
-    BufferLayout layout{
-        {"a_Position", ShaderDataType::Float3},
-        {"a_Color",    ShaderDataType::Float4}
-    };
-    triangleVB->SetLayout(layout);
-
-    unsigned int indices[3]{0, 1, 2};
-    IndexBuffer* triangleIB = IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
-
-    m_TriangleVA = VertexArray::Create();
-    m_TriangleVA->AddVertexBuffer(triangleVB);
-    m_TriangleVA->SetIndexBuffer(triangleIB);
-
-    m_SquareVA = VertexArray::Create();
-
-    float squareVertices[4 * 7]{
-        -0.6f, 0.6f, 0.0f, 0.0f, 0.0f, 0.0f,
-        -0.6f, -0.6f, 0.0f, 0.0f, 0.0f, 0.0f,
-        0.6f, -0.6f, 0.0f, 0.0f, 0.0f, 0.0f,
-        0.6f, 0.6f, 0.0f, 0.0f, 0.0f, 0.0f,
+    auto layout = BufferLayout{
+        {"aPos", ShaderDataType::Float3},
+        {"aCol", ShaderDataType::Float4}
     };
 
-    VertexBuffer* squareVB = VertexBuffer::Create(squareVertices, sizeof(squareVertices) / sizeof(float));
-    squareVB->SetLayout(layout);
+    {
+      m_TriangleVA = VertexArray::Create();
 
-    uint32_t squareIndices[6]{1, 2, 3, 1, 3, 4};
-    IndexBuffer* squareIB = IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t));
+      float vertices[3 * 7]{
+          0.0f, 0.5f, 0.0f, 0.8f, 0.2f, 0.2f, 1.0f,
+          -0.5f, -0.5f, 0.0f, 0.2f, 0.8f, 0.2f, 1.0f,
+          0.5f, -0.5f, 0.0f, 0.2f, 0.2f, 0.8f, 1.0f,
+      };
+
+      auto VB = VertexBuffer::Create(vertices, sizeof(vertices) / sizeof(float));
+
+      VB->SetLayout(
+          layout
+      );
+
+      m_TriangleVA->AddVertexBuffer(VB);
+
+      uint32_t indices[3]{0, 1, 2};
+
+      auto IB = IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
+
+      m_TriangleVA->SetIndexBuffer(IB);
+    }
+
+    {
+      m_SquareVA = VertexArray::Create();
+
+      float vertices[4 * 7]{
+          -0.6f, 0.6f, 0.0f, 0.1f, 0.6f, 0.1f, 1.0f,
+          -0.6f, -0.6f, 0.0f, 0.1f, 0.1f, 0.6f, 1.0f,
+          0.6f, -0.6f, 0.0f, 0.6f, 0.1f, 0.1f, 1.0f,
+          0.6f, 0.6f, 0.0f, 0.1f, 0.6f, 0.1f, 1.0f,
+      };
+
+      auto VB = VertexBuffer::Create(vertices, sizeof(vertices) / sizeof(float));
+
+      VB->SetLayout(
+          layout
+      );
+
+      m_SquareVA->AddVertexBuffer(VB);
 //
-//    m_SquareVA->AddVertexBuffer(squareVB);
-//    m_SquareVA->SetIndexBuffer(squareIB);
+      uint32_t indices[6]{0, 2, 1, 0, 3, 2};
+
+      auto IB = IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
+
+      m_SquareVA->SetIndexBuffer(IB);
+    }
+
+    AGE_CORE_ASSERT(m_TriangleVA != m_SquareVA);
+    AGE_CORE_ASSERT(m_TriangleVA->VertexBuffers()[0] != m_SquareVA->VertexBuffers()[0])
 
     age_string_t vertexSrc{R"(
        #version 330 core
@@ -115,8 +134,13 @@ namespace AGE {
       AGE_CORE_ASSERT(m_Shader);
       m_Shader->Bind();
 
+      m_SquareVA->Bind();
+      glDrawElements(GL_TRIANGLES, m_SquareVA->IndexBuffer()->Count(), GL_UNSIGNED_INT, (void*)0);
+
       m_TriangleVA->Bind();
-      glDrawElements(GL_TRIANGLES, m_TriangleVA->IndexBuffer()->Count(), GL_UNSIGNED_INT, nullptr);
+      glDrawElements(GL_TRIANGLES, m_TriangleVA->IndexBuffer()->Count(), GL_UNSIGNED_INT, (void*)0);
+
+
 
       // TODO: That looks strange, should figure out a better solution.
       if (ImGuiLayer::IsInitialized)
@@ -129,6 +153,7 @@ namespace AGE {
         ImGuiLayer::End();
 
       m_Window->OnUpdate();
+
     }
   }
 

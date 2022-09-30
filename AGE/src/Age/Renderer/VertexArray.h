@@ -15,11 +15,11 @@ namespace AGE {
     virtual void Bind() const = 0;
     virtual void Unbind() const = 0;
 
-    virtual void AddVertexBuffer(const VertexBuffer* const vertexBuffer) = 0;
-    virtual void SetIndexBuffer(const IndexBuffer* const indexBuffer) = 0;
+    virtual void AddVertexBuffer(VertexBuffer* vertexBuffer) = 0;
+    virtual void SetIndexBuffer(IndexBuffer* indexBuffer) = 0;
 
-    virtual std::vector<VertexBuffer*> VertexBuffers() const = 0;
-    virtual IndexBuffer* IndexBuffer() const = 0;
+    virtual std::vector<AGE::VertexBuffer*> VertexBuffers() const = 0;
+    virtual AGE::IndexBuffer* IndexBuffer() const = 0;
 
     static VertexArray* Create();
   };

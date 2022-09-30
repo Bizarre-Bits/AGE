@@ -13,7 +13,7 @@ namespace AGE {
 
   class  KeyEvent : public Event {
   public:
-    inline KeyCode KeyCode() const { return m_Keycode; }
+    inline AGE::KeyCode KeyCode() const { return m_Keycode; }
 
     EVENT_CLASS_CATEGORY(EventCategoryInput | EventCategoryKeyboard)
 

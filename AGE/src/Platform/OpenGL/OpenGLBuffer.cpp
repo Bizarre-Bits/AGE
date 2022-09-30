@@ -10,23 +10,25 @@
 
 namespace AGE {
 
-////////////////////////////////////////////////////////////////////////////////////
-/// Vertex buffer //////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
+/*
+ * ===============================================================
+ * ||                  VertexBuffer                             ||
+ * ===============================================================
+ */
 
   OpenGLVertexBuffer::OpenGLVertexBuffer(float* vertices, uint32_t count)
       : m_Count{count} {
-    glCreateBuffers(1, &m_RendererID);
-    glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
-    glBufferData(GL_ARRAY_BUFFER, count * sizeof(float), vertices, GL_STATIC_DRAW);
+    glGenBuffers(1, &m_RenderID);
+    glBindBuffer(GL_ARRAY_BUFFER, m_RenderID);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * count, vertices, GL_STATIC_DRAW);
   }
 
   OpenGLVertexBuffer::~OpenGLVertexBuffer() {
-    glDeleteBuffers(1, &m_RendererID);
+    glDeleteBuffers(1, &m_RenderID);
   }
 
   void OpenGLVertexBuffer::Bind() const {
-    glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
+    glBindBuffer(GL_ARRAY_BUFFER, m_RenderID);
   }
 
   void OpenGLVertexBuffer::Unbind() const {
@@ -37,13 +39,14 @@ namespace AGE {
     return m_Count;
   }
 
-////////////////////////////////////////////////////////////////////////////////////
-/// Index buffer ///////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
+/* ===============================================================
+ * ||                   IndexBuffer                             ||
+ * ===============================================================
+ */
 
   OpenGLIndexBuffer::OpenGLIndexBuffer(uint32_t* indices, uint32_t count)
       : m_Count{count} {
-    glCreateBuffers(1, &m_RendererID);
+    glGenBuffers(1, &m_RendererID);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_RendererID);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(uint32_t), indices, GL_STATIC_DRAW);
   }
@@ -65,11 +68,12 @@ namespace AGE {
   }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-/// Free Functions /////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
+/* ===============================================================
+ * ||                Free Functions                             ||
+ * ===============================================================
+ */
 
-  GLenum ShaderDataTypeToOpenGLBaseType(ShaderDataType type) {
+  GLenum shader_data_to_glenum(ShaderDataType type) {
     ShaderDataType baseType = base_shader_data_type(type);
     switch(baseType) {
       case ShaderDataType::Float: return GL_FLOAT;

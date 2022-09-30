@@ -34,10 +34,10 @@ elseif (UNIX AND NOT APPLE)
 endif ()
 
 if (${CMAKE_BUILD_TYPE} STREQUAL "Debug")
-    target_compile_definitions(age_core PRIVATE DEBUG)
+    target_compile_definitions(age_core PUBLIC DEBUG)
     message(STATUS "Debug configuration")
 else ()
-    target_compile_definitions(age_core PRIVATE NDEBUG)
+    target_compile_definitions(age_core PUBLIC NDEBUG)
     message(STATUS "Non-debug configuration")
 endif ()
 

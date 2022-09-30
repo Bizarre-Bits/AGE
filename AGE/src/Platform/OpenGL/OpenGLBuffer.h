@@ -13,7 +13,7 @@
 
 namespace AGE {
 
-  GLenum ShaderDataTypeToOpenGLBaseType(ShaderDataType type);
+  GLenum shader_data_to_glenum(ShaderDataType type);
 
   class OpenGLVertexBuffer : public VertexBuffer {
   public:
@@ -29,7 +29,7 @@ namespace AGE {
     virtual uint32_t Count() const override;
 
   private:
-    uint32_t m_RendererID;
+    uint32_t m_RenderID{};
     uint32_t m_Count;
 
     BufferLayout m_Layout;

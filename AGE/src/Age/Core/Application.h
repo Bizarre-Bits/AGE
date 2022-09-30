@@ -29,7 +29,7 @@ namespace AGE {
     void PushLayer(Layer* layer);
     void PushOverlay(Layer* layer);
 
-    Window* Window();
+    AGE::Window* Window();
 
     static Application* Instance();
 
