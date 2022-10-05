@@ -37,7 +37,7 @@ namespace AGE {
 
     class Window* m_Window;
 
-    bool       m_Running{true};
+    bool       m_Running;
     LayerStack m_LayerStack;
 
     static Application* s_Instance;

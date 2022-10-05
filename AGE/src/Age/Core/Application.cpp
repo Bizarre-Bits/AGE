@@ -14,7 +14,7 @@
 namespace AGE {
   Application* Application::s_Instance{nullptr};
 
-  Application::Application(): m_LayerStack() {
+  Application::Application() : m_Running{true}, m_LayerStack() {
     s_Instance = this;
 
     m_Window = Window::Create();
