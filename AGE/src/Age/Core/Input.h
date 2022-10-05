@@ -13,14 +13,14 @@ namespace AGE {
   class  Input {
   public:
     inline static bool IsKeyPressed(KeyCode keycode) { return s_Instance->IsKeyPressedImpl(keycode); }
-    inline static bool IsMousePressed(MouseCode mousecode) { return s_Instance->IsMousePressedImpl(mousecode); }
+    inline static bool IsMousePressed(MouseCode mouseCode) { return s_Instance->IsMousePressedImpl(mouseCode); }
     inline static std::pair<float, float> MousePos() { return s_Instance->MousePosImpl(); }
     inline static float MouseX() { return s_Instance->MouseYImpl(); }
     inline static float MouseY() { return s_Instance->MouseXImpl(); }
 
   protected:
     virtual bool IsKeyPressedImpl(KeyCode keycode) = 0;
-    virtual bool IsMousePressedImpl(MouseCode mousecode) = 0;
+    virtual bool IsMousePressedImpl(MouseCode mouseCode) = 0;
     virtual std::pair<float, float> MousePosImpl() = 0;
     virtual float MouseXImpl() = 0;
     virtual float MouseYImpl() = 0;

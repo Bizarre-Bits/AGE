@@ -13,11 +13,11 @@
 
 namespace AGE {
   struct WindowProps {
-    age_string_t title;
-    unsigned int width, height;
+    age_string_t Title;
+    unsigned int Width, Height;
 
     explicit WindowProps(const age_string_t& title = "AGEngine", unsigned int width = 1280, unsigned int height = 720)
-        : title{title}, width{width}, height{height} {}
+        : Title{title}, Width{width}, Height{height} {}
   };
 
   /**

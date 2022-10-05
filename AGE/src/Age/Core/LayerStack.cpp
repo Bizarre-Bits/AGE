@@ -6,6 +6,7 @@
 #include "LayerStack.h"
 
 namespace AGE {
+  LayerStack::LayerStack() : m_Layers(), m_InsertIndex{0} {}
 
   LayerStack::~LayerStack() {
     for (Layer* l: m_Layers) {

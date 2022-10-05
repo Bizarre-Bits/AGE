@@ -33,11 +33,11 @@ namespace AGE {
   }
 
   void OpenGLWindow::Init(const WindowProps& props) {
-    m_Data.Title  = props.title;
-    m_Data.Width  = props.width;
-    m_Data.Height = props.height;
+    m_Data.Title  = props.Title;
+    m_Data.Width  = props.Width;
+    m_Data.Height = props.Height;
 
-    AGE_CORE_TRACE("Creating Window \"{0}\" ({1}, {2})", props.title, props.width, props.height);
+    AGE_CORE_TRACE("Creating Window \"{0}\" ({1}, {2})", props.Title, props.Width, props.Height);
 
     if (!s_GLFWInitialized) {
       int success = glfwInit();
@@ -47,7 +47,7 @@ namespace AGE {
       glfwSetErrorCallback(GLFWErrorCallback);
     }
 
-    m_Window = glfwCreateWindow((int)props.width, (int)props.height, props.title.c_str(), NULL, NULL);
+    m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, props.Title.c_str(), NULL, NULL);
     glfwSetWindowUserPointer(m_Window, &m_Data);
 
     m_Context = new OpenGLContext{m_Window};
@@ -57,7 +57,7 @@ namespace AGE {
 
     SetVSync(true);
 
-    AGE_CORE_TRACE("Created Window \"{0}\" ({1}, {2})", props.title, props.width, props.height);
+    AGE_CORE_TRACE("Created Window \"{0}\" ({1}, {2})", props.Title, props.Width, props.Height);
 
     // Set GLFW callbacks
     glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height) {

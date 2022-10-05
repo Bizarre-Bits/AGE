@@ -6,5 +6,5 @@
 
 namespace AGE {
   Layer::Layer(const age_string_t& debugName) : m_DebugName(debugName) {}
-  Layer::~Layer() {}
+  Layer::~Layer() = default;
 }// namespace AGE
