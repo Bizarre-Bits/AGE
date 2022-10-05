@@ -18,6 +18,14 @@
 #include "Age/Core/Layer.h"
 #include "Age/ImGui/ImGuiBuild.h"
 #include "Age/ImGui/ImGuiLayer.h"
+#include "Age/Debug/DebugLayer.h"
+
+//Renderer
+#include "Age/Renderer/Renderer.h"
+#include "Age/Renderer/VertexArray.h"
+#include "Age/Renderer/Buffer.h"
+#include "Age/Renderer/Shader.h"
+#include "Age/Renderer/Context.h"
 
 // Debug
 #include "Age/Debug/Assert.h"

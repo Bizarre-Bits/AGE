@@ -9,11 +9,12 @@
 #include "Age/Debug/Assert.h"
 #include "Age/Debug/DebugLayer.h"
 #include "Age/ImGui/ImGuiLayer.h"
+#include "Age/Renderer/Renderer.h"
 
 namespace AGE {
   Application* Application::s_Instance{nullptr};
 
-  Application::Application() {
+  Application::Application(): m_LayerStack() {
     s_Instance = this;
 
     m_Window = Window::Create();
@@ -43,6 +44,7 @@ namespace AGE {
         ImGuiLayer::End();
 
       m_Window->OnUpdate();
+
     }
   }
 

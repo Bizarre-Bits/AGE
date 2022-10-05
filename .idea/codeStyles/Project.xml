@@ -20,10 +20,9 @@
       <option name="INSERT_VIRTUAL_WITH_OVERRIDE" value="true" />
       <option name="ADD_BRIEF_TAG" value="true" />
     </Objective-C>
-    <clangFormatSettings>
-      <option name="ENABLED" value="true" />
-    </clangFormatSettings>
     <codeStyleSettings language="ObjectiveC">
+      <option name="BLANK_LINES_BEFORE_IMPORTS" value="0" />
+      <option name="BLANK_LINES_AFTER_IMPORTS" value="0" />
       <option name="BLANK_LINES_AROUND_METHOD" value="0" />
       <option name="BLANK_LINES_AROUND_METHOD_IN_INTERFACE" value="0" />
       <option name="ALIGN_MULTILINE_CHAINED_METHODS" value="true" />
@@ -32,6 +31,7 @@
       <option name="METHOD_CALL_CHAIN_WRAP" value="5" />
       <option name="BINARY_OPERATION_SIGN_ON_NEXT_LINE" value="true" />
       <option name="PLACE_ASSIGNMENT_SIGN_ON_NEXT_LINE" value="true" />
+      <option name="ENUM_CONSTANTS_WRAP" value="1" />
       <indentOptions>
         <option name="INDENT_SIZE" value="2" />
         <option name="CONTINUATION_INDENT_SIZE" value="4" />

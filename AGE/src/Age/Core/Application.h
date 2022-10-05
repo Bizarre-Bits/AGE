@@ -11,6 +11,9 @@
 #include "Age/Events/WindowEvent.h"
 #include "LayerStack.h"
 #include "Window.h"
+#include "Age/Renderer/Buffer.h"
+#include "Age/Renderer/VertexArray.h"
+#include "Age/Renderer/Shader.h"
 
 namespace AGE {
   class Application {
@@ -25,7 +28,7 @@ namespace AGE {
     void PushLayer(Layer* layer);
     void PushOverlay(Layer* layer);
 
-    Window* Window();
+    AGE::Window* Window();
 
     static Application* Instance();
 
@@ -33,7 +36,8 @@ namespace AGE {
     bool OnWindowClose(WindowCloseEvent& e);
 
     class Window* m_Window;
-    bool m_Running{true};
+
+    bool       m_Running{true};
     LayerStack m_LayerStack;
 
     static Application* s_Instance;

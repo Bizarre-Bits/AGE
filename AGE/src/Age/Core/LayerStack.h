@@ -14,7 +14,6 @@ namespace AGE {
 
   class LayerStack {
   public:
-    LayerStack();
     ~LayerStack();
 
     void PushLayer(Layer* layer);
@@ -28,7 +27,7 @@ namespace AGE {
 
   private:
     std::vector<Layer*> m_Layers;
-    std::vector<Layer*>::iterator m_LayerInsert;
+    unsigned int m_InsertIndex{0};
   };
 
 }// namespace AGE

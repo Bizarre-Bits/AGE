@@ -11,6 +11,8 @@
 #include "Age/Events/MouseEvent.h"
 #include "Age/Events/WindowEvent.h"
 
+#include "Platform/OpenGL/OpenGLContext.h"
+
 namespace AGE {
   bool OpenGLWindow::s_GLFWInitialized{false};
 
@@ -35,30 +37,27 @@ namespace AGE {
     m_Data.Width  = props.width;
     m_Data.Height = props.height;
 
-    AGE_CORE_INFO("Creating Window \"{0}\" ({1}, {2})", props.title, props.width, props.height);
+    AGE_CORE_TRACE("Creating Window \"{0}\" ({1}, {2})", props.title, props.width, props.height);
 
     if (!s_GLFWInitialized) {
       int success = glfwInit();
       AGE_CORE_ASSERT(success, "Could not initialize GLFW");
       s_GLFWInitialized = true;
-      AGE_CORE_INFO("Initialized GLFW: {0}", glfwGetVersionString());
+      AGE_CORE_TRACE("Initialized GLFW: {0}", glfwGetVersionString());
       glfwSetErrorCallback(GLFWErrorCallback);
     }
 
-    m_Window = glfwCreateWindow(props.width, props.height, props.title.c_str(), NULL, NULL);
+    m_Window = glfwCreateWindow((int)props.width, (int)props.height, props.title.c_str(), NULL, NULL);
     glfwSetWindowUserPointer(m_Window, &m_Data);
-    glfwMakeContextCurrent(m_Window);
 
-    //Initialize GLAD
-    {
-      int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-      AGE_CORE_ASSERT(status, "Failed to initialize Glad");
-      AGE_CORE_INFO("Initialized Glad");
-    }
+    m_Context = new OpenGLContext{m_Window};
+    m_Context->Init();
+
+    glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 
     SetVSync(true);
 
-    AGE_CORE_INFO("Created Window \"{0}\" ({1}, {2})", props.title, props.width, props.height);
+    AGE_CORE_TRACE("Created Window \"{0}\" ({1}, {2})", props.title, props.width, props.height);
 
     // Set GLFW callbacks
     glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height) {
@@ -142,12 +141,7 @@ namespace AGE {
   void OpenGLWindow::OnUpdate() {
     glfwPollEvents();
 
-    //Swaps buffers
-    glfwSwapBuffers(m_Window);
-
-    // And starts the next frame
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    m_Context->SwapBuffers();
   }
 
   void OpenGLWindow::SetVSync(bool enabled) {

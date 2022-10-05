@@ -9,6 +9,7 @@
 
 #include "Age/Core/Core.h"
 #include "Age/Events/Event.h"
+#include "Age/Renderer/Context.h"
 
 namespace AGE {
   struct WindowProps {
@@ -26,7 +27,9 @@ namespace AGE {
   public:
     using EventCallbackFn = std::function<void(Event&)>;
 
-    virtual ~Window() {}
+    virtual ~Window() {
+      delete m_Context;
+    }
 
     virtual void OnUpdate() = 0;
     virtual void Clear() = 0;
@@ -44,6 +47,9 @@ namespace AGE {
 
     // Must be implemented per Platform
     static Window* Create(const WindowProps& props = WindowProps());
+
+  protected:
+    Context* m_Context{nullptr};
   };
 }// namespace AGE
 

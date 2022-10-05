@@ -8,7 +8,7 @@
 #include "Age/Core/Core.h"
 #include "Age/Core/Window.h"
 
-#include "Platform/OpenGL/PlatformGL.h"
+#include "Platform/OpenGL/OpenGLPlatform.h"
 
 namespace AGE {
   class OpenGLWindow : public Window {

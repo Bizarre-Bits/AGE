@@ -1,0 +1,18 @@
+//
+// Created by alex on 04.10.22.
+//
+
+#ifndef AGE_OPENGLRENDERAPI_H
+#define AGE_OPENGLRENDERAPI_H
+
+#include "Age/Renderer/RenderAPI.h"
+namespace AGE {
+  class OpenGLRenderAPI : public RenderAPI {
+  public:
+    virtual void SetClearColor(const glm::vec4& color) override;
+    virtual void Clear() override;
+    virtual void DrawIndexed(const VertexArray* va) override;
+  };
+}
+
+#endif //AGE_OPENGLRENDERAPI_H

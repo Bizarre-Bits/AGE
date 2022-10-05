@@ -8,9 +8,9 @@
 #include <string>
 
 #ifdef DEBUG
-  #if defined AGE_PLATFORM_WINDOWS
+  #if AGE_OS_WINDOWS
     #define AGE_DEBUG_BREAK() __debugbreak()
-  #elif defined AGE_PLATFORM_LINUX
+  #elif AGE_OS_LINUX
     #include <csignal>
     #define AGE_DEBUG_BREAK() raise(SIGTRAP)
   #else
