@@ -13,8 +13,7 @@
 #include "Window.h"
 #include "Age/Renderer/Buffer.h"
 #include "Age/Renderer/VertexArray.h"
-
-#include "Platform/OpenGL/OpenGLShader.h"
+#include "Age/Renderer/Shader.h"
 
 namespace AGE {
   class Application {
@@ -37,14 +36,9 @@ namespace AGE {
     bool OnWindowClose(WindowCloseEvent& e);
 
     class Window* m_Window;
-    bool m_Running{true};
+
+    bool       m_Running{true};
     LayerStack m_LayerStack;
-
-    VertexArray* m_TriangleVA;
-    VertexArray* m_SquareVA;
-
-    OpenGLShader* m_Shader{nullptr};
-
 
     static Application* s_Instance;
   };

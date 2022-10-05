@@ -5,11 +5,11 @@
 
 #include "Age/Debug/Assert.h"
 #include "Age/Renderer/Buffer.h"
+#include "Renderer.h"
+#include "RenderAPI.h"
 
 #ifdef AGE_INCLUDE_OPENGL
-
   #include "Platform/OpenGL/OpenGLBuffer.h"
-
 #endif
 
 namespace AGE {
@@ -35,37 +35,37 @@ namespace AGE {
   }
 
   VertexBuffer* VertexBuffer::Create(float* vertices, uint32_t count) {
-    switch (Renderer::API()) {
-      case RenderAPI::None: AGE_CORE_ASSERT(false, "RenderAPI::None is not supported");
-      case RenderAPI::OpenGL:
+    switch (Renderer::GetAPI()) {
+      case RenderAPI::API::None: AGE_CORE_ASSERT(false, "RendererAPI::None is not supported");
+      case RenderAPI::API::OpenGL:
         //Sorry for this mess. TODO: should figure out a way to make it more readable.
 
         // OpenGL VertexBuffer
 #ifdef AGE_INCLUDE_OPENGL
         return new OpenGLVertexBuffer(vertices, count);
 #else
-        AGE_CORE_ASSERT(false, "RenderAPI::OpenGL is not available because OpenGL is not included in this compilation")
+        AGE_CORE_ASSERT(false, "RendererAPI::OpenGL is not available because OpenGL is not included in this compilation")
 #endif
 
-      // Handle unconfigured RenderAPI
+        // Handle unconfigured RendererAPI
       default: {
-        AGE_CORE_ASSERT(false, "Could not create a vertex buffer, as there is no RenderAPI selected");
+        AGE_CORE_ASSERT(false, "Could not create a vertex buffer, as there is no RendererAPI selected");
         throw;
       }
     }
   }
 
   IndexBuffer* IndexBuffer::Create(uint32_t* indices, uint32_t count) {
-    switch (Renderer::API()) {
-      case RenderAPI::None: AGE_CORE_ASSERT(false, "RenderAPI::None is not supported");
-      case RenderAPI::OpenGL:
+    switch (Renderer::GetAPI()) {
+      case RenderAPI::API::None: AGE_CORE_ASSERT(false, "RendererAPI::None is not supported");
+      case RenderAPI::API::OpenGL:
 #ifdef AGE_INCLUDE_OPENGL
         return new OpenGLIndexBuffer(indices, count);
 #else
-        AGE_CORE_ASSERT(false, "RenderAPI::OpenGL is not available because OpenGL is not included in this compilation");
+        AGE_CORE_ASSERT(false, "RendererAPI::OpenGL is not available because OpenGL is not included in this compilation");
 #endif
       default: {
-        AGE_CORE_ASSERT(false, "Could not create an Index Buffer, as there is no RenderAPI selected")
+        AGE_CORE_ASSERT(false, "Could not create an Index Buffer, as there is no RendererAPI selected")
         throw;
       }
     }

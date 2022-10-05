@@ -10,7 +10,6 @@
 #include <cinttypes>
 
 #include "Age/Core/Core.h"
-#include "Renderer.h"
 
 namespace AGE {
 

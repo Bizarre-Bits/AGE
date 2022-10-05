@@ -1,10 +1,22 @@
 //
-// Created by alex on 09.09.22.
+// Created by alex on 04.10.22.
 //
+#include "agepch.h"
 
 #include "Renderer.h"
+#include "RenderCommand.h"
 
 namespace AGE {
-  // TODO: runtime decision on RenderAPI
-  RenderAPI Renderer::s_RenderAPI{RenderAPI::OpenGL};
+
+  void Renderer::BeginScene() {
+
+  }
+
+  void Renderer::EndScene() {
+
+  }
+
+  void Renderer::Submit(const VertexArray* va) {
+    RenderCommand::DrawIndexed(va);
+  }
 } // AGE

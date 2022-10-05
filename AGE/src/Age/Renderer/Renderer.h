@@ -1,22 +1,22 @@
 //
-// Created by alex on 09.09.22.
+// Created by alex on 04.10.22.
 //
 
 #ifndef AGE_RENDERER_H
 #define AGE_RENDERER_H
 
-namespace AGE {
-  enum class RenderAPI {
-    None   = 0,
-    OpenGL = 1,
-  };
+#include "RenderAPI.h"
+#include "VertexArray.h"
+#include "glm/vec4.hpp"
 
+namespace AGE {
   class Renderer {
   public:
-    static inline RenderAPI API() { return s_RenderAPI; }
-    static inline void SetAPI(RenderAPI api) { s_RenderAPI = api; }
-  private:
-    static RenderAPI s_RenderAPI;
+    static void BeginScene();
+    static void EndScene();
+    static void Submit(const VertexArray* va);
+
+    static RenderAPI::API GetAPI() { return RenderAPI::GetAPI(); }
   };
 
 } // AGE

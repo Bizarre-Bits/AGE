@@ -15,16 +15,16 @@
 
 namespace AGE {
   VertexArray* VertexArray::Create() {
-    switch (Renderer::API()) {
-      case RenderAPI::None: AGE_CORE_ASSERT(false, "RenderAPI::None is not supported");
-      case RenderAPI::OpenGL:
+    switch (Renderer::GetAPI()) {
+      case RenderAPI::API::None: AGE_CORE_ASSERT(false, "RendererAPI::None is not supported");
+      case RenderAPI::API::OpenGL:
 #ifdef AGE_INCLUDE_OPENGL
         return new OpenGLVertexArray();
 #else
-        AGE_CORE_ASSER(false, "RenderAPI::OpenGL is not available, because it is not included into the current compilation")
+        AGE_CORE_ASSER(false, "OpenGL is not available, because it is not included into the current compilation")
 #endif
       default: {
-        AGE_CORE_ASSERT(false, "Could not create a Vertex Array, as there is no RenderAPI selected");
+        AGE_CORE_ASSERT(false, "Could not create a Vertex Array, as there is no RendererAPI selected");
         throw;
       }
     }

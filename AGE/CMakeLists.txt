@@ -5,9 +5,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED 20)
 
 add_library(age_core STATIC)
 
-target_include_directories(age_core INTERFACE include PUBLIC src vendor/imgui)
+target_include_directories(age_core INTERFACE include PUBLIC src vendor/imgui vendor/glm/)
 
 file(GLOB_RECURSE _AGE_CORE_SRCS src/agepch.h src/agepch.cpp src/Age/*.cpp src/Age/*.h)
+list(REMOVE_ITEM _AGE_CORE_SRCS ${REMOVE_CMAKE})
+
 file(GLOB _IMGUI_SRCS vendor/imgui/*.cpp vendor/imgui/*.h)
 
 target_sources(age_core PRIVATE ${_AGE_CORE_SRCS} PUBLIC ${_IMGUI_SRCS})
@@ -21,7 +23,8 @@ set(AGE_RENDER_PLATFORM OPENGL CACHE STRING "Render platform to be used. (OPENGL
 add_subdirectory(vendor/glm)
 add_subdirectory(vendor/spdlog)
 
-target_link_libraries(age_core PUBLIC spdlog)
+target_link_libraries(age_core PUBLIC spdlog glm)
+
 ##################################################
 #                Figure out OS                   #
 ##################################################
