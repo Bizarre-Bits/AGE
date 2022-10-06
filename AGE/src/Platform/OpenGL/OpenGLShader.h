@@ -16,6 +16,7 @@ namespace AGE {
 
     virtual void Bind() const override;
     virtual void Unbind() const override;
+    virtual void UploadUniformMat4(const age_string_t& name, const glm::mat4& matrix) const override;
 
   private:
     unsigned int m_RendererID;

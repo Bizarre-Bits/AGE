@@ -7,11 +7,15 @@
 
 #include "Age/Core/Core.h"
 
+#include <glm/glm.hpp>
+
 namespace AGE {
   class Shader {
   public:
     virtual void Bind() const = 0;
     virtual void Unbind() const = 0;
+
+    virtual void UploadUniformMat4(const age_string_t& name, const glm::mat4& matrix) const = 0;
 
     static Shader* Create(const age_string_t& vertexSrc, const age_string_t& fragmentSrc);
 

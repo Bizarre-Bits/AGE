@@ -3,7 +3,7 @@ project(AGE VERSION 1.0.0 LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD_REQUIRED 20)
 
-add_library(age_core STATIC)
+add_library(age_core STATIC src/Age/Renderer/OrthographicCamera.cpp src/Age/Renderer/OrthographicCamera.h)
 
 target_include_directories(age_core INTERFACE include PUBLIC src vendor/imgui vendor/glm/)
 

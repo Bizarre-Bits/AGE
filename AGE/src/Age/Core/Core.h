@@ -24,7 +24,7 @@
 #define AGE_EXPAND_MACRO(x) x
 #define AGE_STRINGIFY(x) #x
 
-#define AGE_BIND_EVENT_FN(x) std::bind(&(x), this, std::placeholders::_1)
+#define AGE_BIND_EVENT_FN(x) std::bind((x), this, std::placeholders::_1)
 
 //A macro for bitfields
 #define BIT(x) (1 << (x))

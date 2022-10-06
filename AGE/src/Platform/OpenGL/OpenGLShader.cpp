@@ -3,6 +3,8 @@
 //
 #include "agepch.h"
 
+#include <glm/gtc/type_ptr.hpp>
+
 #include "Platform/OpenGL/OpenGLPlatform.h"
 #include "Platform/OpenGL/OpenGLShader.h"
 
@@ -99,6 +101,11 @@ namespace AGE {
 
   OpenGLShader::~OpenGLShader() {
 
+  }
+
+  void OpenGLShader::UploadUniformMat4(const age_string_t& name, const glm::mat4& matrix) const {
+    GLint location = glGetUniformLocation(m_RendererID, name.c_str());
+    glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
   }
 
   void OpenGLShader::Bind() const {

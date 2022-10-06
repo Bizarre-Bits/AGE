@@ -17,9 +17,28 @@ Sandbox::~Sandbox() {}
 // Sandbox Layer
 
 void SandboxLayer::OnUpdate() {
-  m_Shader->Bind();
-  AGE::Renderer::Submit(m_SquareVA);
-  AGE::Renderer::Submit(m_TriangleVA);
+  glm::vec3 cameraPos = m_Camera.Position();
+
+  if (AGE::Input::IsKeyPressed(AGE::Key::W)) {
+    cameraPos.y += m_CameraSpeed;
+  }
+  if (AGE::Input::IsKeyPressed(AGE::Key::S)) {
+    cameraPos.y -= m_CameraSpeed;
+  }
+  if (AGE::Input::IsKeyPressed(AGE::Key::D)) {
+    cameraPos.x += m_CameraSpeed;
+  }
+  if (AGE::Input::IsKeyPressed(AGE::Key::A)) {
+    cameraPos.x -= m_CameraSpeed;
+  }
+
+  m_Camera.SetPosition(cameraPos);
+
+  AGE::RenderCommand::Clear();
+  AGE::Renderer::BeginScene(m_Camera);
+
+  AGE::Renderer::Submit(m_SquareVA, m_Shader);
+  AGE::Renderer::Submit(m_TriangleVA, m_Shader);
 }
 
 SandboxLayer::~SandboxLayer() {
@@ -28,7 +47,8 @@ SandboxLayer::~SandboxLayer() {
   delete m_SquareVA;
 }
 
-SandboxLayer::SandboxLayer() {
+SandboxLayer::SandboxLayer() : m_Camera(-1.6f, 1.6f, -0.9f, 0.9f), m_CameraSpeed{0.05f} {
+  AGE::RenderCommand::SetClearColor(glm::vec4{0.2f, 0.2f, 0.2f, 1.0f});
 
   auto layout = AGE::BufferLayout{
       {"aPos", AGE::ShaderDataType::Float3},
@@ -90,10 +110,12 @@ SandboxLayer::SandboxLayer() {
         layout(location = 0) in vec3 a_Position;
         layout(location = 1) in vec4 a_Color;
 
+        uniform mat4 u_ViewProjection;
+
         out vec4 v_Color;
 
         void main() {
-          gl_Position = vec4(a_Position, 1.0f);
+          gl_Position = u_ViewProjection * vec4(a_Position, 1.0f);
           v_Color = a_Color;
         }
     )"};
