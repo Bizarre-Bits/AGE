@@ -16,7 +16,7 @@
 namespace AGE {
   bool ImGuiLayer::IsInitialized{false};
 
-  ImGuiLayer::ImGuiLayer() : Layer("ImGui") {}
+  ImGuiLayer::ImGuiLayer(age_string_t name) : Layer(name) {}
 
   ImGuiLayer::~ImGuiLayer() {
   }
@@ -54,8 +54,8 @@ namespace AGE {
   }
 
   void ImGuiLayer::End() {
-    ImGuiIO& io    = ImGui::GetIO();
-    Window* window = Application::Instance()->Window();
+    ImGuiIO& io     = ImGui::GetIO();
+    Window * window = Application::Instance()->Window();
     io.DisplaySize = ImVec2((float)window->Width(), (float)window->Height());
 
     ImGui::Render();

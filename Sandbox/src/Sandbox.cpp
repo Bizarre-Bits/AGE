@@ -16,20 +16,20 @@ Sandbox::~Sandbox() {}
 
 // Sandbox Layer
 
-void SandboxLayer::OnUpdate() {
+void SandboxLayer::OnUpdate(AGE::Timestep ts) {
   glm::vec3 cameraPos = m_Camera.Position();
 
   if (AGE::Input::IsKeyPressed(AGE::Key::W)) {
-    cameraPos.y += m_CameraSpeed;
+    cameraPos.y += m_CameraSpeed * ts.Seconds();
   }
   if (AGE::Input::IsKeyPressed(AGE::Key::S)) {
-    cameraPos.y -= m_CameraSpeed;
+    cameraPos.y -= m_CameraSpeed * ts.Seconds();
   }
   if (AGE::Input::IsKeyPressed(AGE::Key::D)) {
-    cameraPos.x += m_CameraSpeed;
+    cameraPos.x += m_CameraSpeed * ts.Seconds();
   }
   if (AGE::Input::IsKeyPressed(AGE::Key::A)) {
-    cameraPos.x -= m_CameraSpeed;
+    cameraPos.x -= m_CameraSpeed * ts.Seconds();
   }
 
   m_Camera.SetPosition(cameraPos);
@@ -47,7 +47,7 @@ SandboxLayer::~SandboxLayer() {
   delete m_SquareVA;
 }
 
-SandboxLayer::SandboxLayer() : m_Camera(-1.6f, 1.6f, -0.9f, 0.9f), m_CameraSpeed{0.05f} {
+SandboxLayer::SandboxLayer() : m_Camera(-1.6f, 1.6f, -0.9f, 0.9f), m_CameraSpeed{5.0f} {
   AGE::RenderCommand::SetClearColor(glm::vec4{0.2f, 0.2f, 0.2f, 1.0f});
 
   auto layout = AGE::BufferLayout{

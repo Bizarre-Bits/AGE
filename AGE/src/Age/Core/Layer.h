@@ -7,16 +7,17 @@
 
 #include "Age/Core/Core.h"
 #include "Age/Events/Event.h"
+#include "Timestep.h"
 
 namespace AGE {
-  class  Layer {
+  class Layer {
   public:
     explicit Layer(const age_string_t& debugName = "Layer");
     virtual ~Layer();
 
     virtual void OnAttach() {}
     virtual void OnDetach() {}
-    virtual void OnUpdate() {}
+    virtual void OnUpdate(Timestep ts) {}
     virtual void OnEvent(Event& e) {}
 
     inline const age_string_t& Name() const { return m_DebugName; }

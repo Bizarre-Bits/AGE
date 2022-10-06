@@ -20,7 +20,7 @@ namespace AGE {
 
   class ImGuiLayer : public Layer {
   public:
-    ImGuiLayer();
+    ImGuiLayer(age_string_t name = "ImGui");
     ~ImGuiLayer() override;
 
     void OnAttach() override;

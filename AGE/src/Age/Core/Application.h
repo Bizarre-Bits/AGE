@@ -11,6 +11,7 @@
 #include "Age/Events/WindowEvent.h"
 #include "LayerStack.h"
 #include "Window.h"
+#include "Timestep.h"
 
 namespace AGE {
   class Application {
@@ -36,6 +37,8 @@ namespace AGE {
 
     bool       m_Running;
     LayerStack m_LayerStack;
+    Timestep   m_Timestep;
+    float      m_LastTime;
 
     static Application* s_Instance;
   };

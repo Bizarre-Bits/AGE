@@ -18,7 +18,7 @@ public:
   SandboxLayer();
   virtual ~SandboxLayer() override;
 
-  virtual void OnUpdate() override;
+  virtual void OnUpdate(AGE::Timestep ts) override;
 
 private:
   AGE::VertexArray* m_TriangleVA;
