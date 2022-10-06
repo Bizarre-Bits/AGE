@@ -10,12 +10,10 @@
 #include "Age/Debug/DebugLayer.h"
 #include "Age/ImGui/ImGuiLayer.h"
 
-#include <GLFW/glfw3.h>
-
 namespace AGE {
   Application* Application::s_Instance{nullptr};
 
-  Application::Application() : m_Running{true}, m_LayerStack(), m_LastTime{0} {
+  Application::Application() : m_Running{true}, m_LayerStack() {
     s_Instance = this;
 
     m_Window = Window::Create();
@@ -31,17 +29,16 @@ namespace AGE {
   }
 
   void Application::Run() {
+    m_Timer.Start();
     while (m_Running) {
-      auto time = (float)glfwGetTime();
-      m_Timestep = time - m_LastTime;
-      m_LastTime = time;
+      Timestep ts = m_Timer.DeltaTime();
 
       // TODO: That looks strange, should figure out a better solution.
       if (ImGuiLayer::IsInitialized)
         ImGuiLayer::Begin();
 
       for (Layer* layer: m_LayerStack)
-        layer->OnUpdate(m_Timestep);
+        layer->OnUpdate(ts);
 
       if (ImGuiLayer::IsInitialized)
         ImGuiLayer::End();

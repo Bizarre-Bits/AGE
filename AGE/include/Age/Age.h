@@ -8,7 +8,7 @@
 // Base systems
 #include "Age/Core/Application.h"
 #include "Age/Core/Log.h"
-#include "Age/Core/Timestep.h"
+#include "Age/Core/Timer.h"
 
 // Input handling
 #include "Age/Core/Input.h"

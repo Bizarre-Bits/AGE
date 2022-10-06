@@ -27,6 +27,7 @@ namespace AGE {
     Window* window = Application::Instance()->Window();
     ImGui::Text("MainWindow: %s (%i, %i)", window->Title().c_str(), (int)window->Width(), (int)window->Height());
     ImGui::Text("FPS: %f", fps);
+    ImGui::Text("Delta Time: %fs", ts.Seconds());
 
     m_FpsPlot.Render();
 
@@ -67,7 +68,7 @@ namespace AGE {
     ImGui::Text("Min FPS: %f", m_MinValue);
 
 
-    ImGui::SliderFloat("Refresh time in seconds", &RefreshTime, 0.0f, 5.0f);
+    ImGui::SliderFloat("Refresh Rate(sec)", &RefreshTime, 0.0f, 5.0f);
     ImGui::PlotLines(
         "FPS",
         m_Data.data(),
