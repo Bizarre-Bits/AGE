@@ -22,10 +22,12 @@
 
 //Renderer
 #include "Age/Renderer/Renderer.h"
+#include "Age/Renderer/RenderCommand.h"
 #include "Age/Renderer/VertexArray.h"
 #include "Age/Renderer/Buffer.h"
 #include "Age/Renderer/Shader.h"
 #include "Age/Renderer/Context.h"
+#include "Age/Renderer/OrthographicCamera.h"
 
 // Debug
 #include "Age/Debug/Assert.h"

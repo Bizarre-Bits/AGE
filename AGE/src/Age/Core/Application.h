@@ -11,9 +11,6 @@
 #include "Age/Events/WindowEvent.h"
 #include "LayerStack.h"
 #include "Window.h"
-#include "Age/Renderer/Buffer.h"
-#include "Age/Renderer/VertexArray.h"
-#include "Age/Renderer/Shader.h"
 
 namespace AGE {
   class Application {

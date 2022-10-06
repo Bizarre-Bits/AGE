@@ -24,6 +24,9 @@ private:
   AGE::VertexArray* m_TriangleVA;
   AGE::VertexArray* m_SquareVA;
   AGE::Shader     * m_Shader;
+  AGE::OrthographicCamera m_Camera;
+
+  float m_CameraSpeed;
 };
 
 
