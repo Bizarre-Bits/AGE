@@ -26,7 +26,10 @@ private:
   AGE::Shader     * m_Shader;
   AGE::OrthographicCamera m_Camera;
 
-  float m_CameraSpeed;
+  glm::vec3 m_TrianglePos;
+  float     m_CameraSpeed;
+  float     m_TriangleSpeed;
+  float m_TriangleRotation;
 };
 
 

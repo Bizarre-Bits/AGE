@@ -21,6 +21,7 @@
       <option name="ADD_BRIEF_TAG" value="true" />
     </Objective-C>
     <codeStyleSettings language="ObjectiveC">
+      <option name="RIGHT_MARGIN" value="80" />
       <option name="BLANK_LINES_BEFORE_IMPORTS" value="0" />
       <option name="BLANK_LINES_AFTER_IMPORTS" value="0" />
       <option name="BLANK_LINES_AROUND_METHOD" value="0" />
