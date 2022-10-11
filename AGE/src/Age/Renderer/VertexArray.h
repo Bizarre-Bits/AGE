@@ -12,17 +12,17 @@ namespace AGE {
   public:
     virtual ~VertexArray() {}
 
-    virtual void Bind() const = 0;
+    virtual void Bind() const   = 0;
     virtual void Unbind() const = 0;
 
-    virtual void AddVertexBuffer(VertexBuffer* vertexBuffer) = 0;
-    virtual void SetIndexBuffer(IndexBuffer* indexBuffer) = 0;
+    virtual void AddVertexBuffer(Ref<VertexBuffer> vertexBuffer) = 0;
+    virtual void SetIndexBuffer(Ref<AGE::IndexBuffer> indexBuffer)    = 0;
 
-    virtual std::vector<AGE::VertexBuffer*> VertexBuffers() const = 0;
-    virtual AGE::IndexBuffer* IndexBuffer() const = 0;
+    virtual std::vector<Ref<VertexBuffer>> VertexBuffers() const = 0;
+    virtual Ref<AGE::IndexBuffer> IndexBuffer() const    = 0;
 
     static VertexArray* Create();
   };
-} // AGE
+}// namespace AGE
 
-#endif //AGE_VERTEXARRAY_H
+#endif//AGE_VERTEXARRAY_H

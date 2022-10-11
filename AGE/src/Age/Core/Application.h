@@ -17,7 +17,7 @@ namespace AGE {
   class Application {
   public:
     Application();
-    virtual ~Application();
+    virtual ~Application() = default;
 
     virtual void Run();
 
@@ -26,14 +26,14 @@ namespace AGE {
     void PushLayer(Layer* layer);
     void PushOverlay(Layer* layer);
 
-    AGE::Window* Window();
+    Scope<AGE::Window>& Window();
 
     static Application* Instance();
 
   private:
     bool OnWindowClose(WindowCloseEvent& e);
 
-    class Window* m_Window;
+    Scope<AGE::Window> m_Window;
 
     bool       m_Running;
     LayerStack m_LayerStack;

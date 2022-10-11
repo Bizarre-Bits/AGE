@@ -16,16 +16,12 @@ namespace AGE {
   Application::Application() : m_Running{true}, m_LayerStack() {
     s_Instance = this;
 
-    m_Window = Window::Create();
+    m_Window.reset(Window::Create());
     m_Window->EventCallback(AGE_BIND_EVENT_FN(&Application::OnEvent));
 
 #ifdef DEBUG
     PushOverlay(new DebugLayer);
 #endif
-  }
-
-  Application::~Application() {
-    delete m_Window;
   }
 
   void Application::Run() {
@@ -78,7 +74,7 @@ namespace AGE {
     return s_Instance;
   }
 
-  Window* Application::Window() {
+  Scope<Window>& Application::Window() {
     return m_Window;
   }
 }// namespace AGE

@@ -19,16 +19,16 @@ namespace AGE {
     virtual void Bind() const override;
     virtual void Unbind() const override;
 
-    virtual void AddVertexBuffer(VertexBuffer* vertexBuffer) override;
-    virtual void SetIndexBuffer(AGE::IndexBuffer* indexBuffer) override;
+    virtual void AddVertexBuffer(Ref<VertexBuffer> vertexBuffer) override;
+    virtual void SetIndexBuffer(Ref<AGE::IndexBuffer> indexBuffer) override;
 
-    virtual std::vector<VertexBuffer*> VertexBuffers() const override;
-    virtual AGE::IndexBuffer* IndexBuffer() const override;
+    virtual std::vector<Ref<VertexBuffer>> VertexBuffers() const override;
+    virtual Ref<AGE::IndexBuffer> IndexBuffer() const override;
 
   private:
-    std::vector<VertexBuffer*> m_VertexBuffers;
+    std::vector<Ref<VertexBuffer>> m_VertexBuffers;
 
-    AGE::IndexBuffer* m_IndexBuffer;
+    Ref<AGE::IndexBuffer> m_IndexBuffer;
 
     uint32_t m_RenderID;
   };

@@ -19,13 +19,13 @@ namespace AGE {
 
   }
   void Renderer::Submit(
-      const VertexArray* va, const Shader* shader, const glm::mat4& transform
+      const Ref<VertexArray>& va, const Ref<Shader>& shader, const glm::mat4& transform
   ) {
-    dynamic_cast<const OpenGLShader*>(shader)->Bind();
-    dynamic_cast<const OpenGLShader*>(shader)->UploadUniformMat4(
+    std::dynamic_pointer_cast<const OpenGLShader>(shader)->Bind();
+    std::dynamic_pointer_cast<const OpenGLShader>(shader)->UploadUniformMat4(
         "u_ViewProjection", s_SceneData->ViewProjectionMatrix
     );
-    dynamic_cast<const OpenGLShader*>(shader)->UploadUniformMat4(
+    std::dynamic_pointer_cast<const OpenGLShader>(shader)->UploadUniformMat4(
         "u_Transform", transform
     );
     RenderCommand::DrawIndexed(va);

@@ -26,7 +26,7 @@ namespace AGE {
     glBindVertexArray(0);
   }
 
-  void OpenGLVertexArray::AddVertexBuffer(VertexBuffer* vertexBuffer) {
+  void OpenGLVertexArray::AddVertexBuffer(Ref<VertexBuffer> vertexBuffer) {
     AGE_CORE_ASSERT(!vertexBuffer->Layout().Elements().empty(), "Vertex buffer has no layout");
 
     glBindVertexArray(m_RenderID);
@@ -52,19 +52,19 @@ namespace AGE {
     vertexBuffer->Unbind();
   }
 
-  void OpenGLVertexArray::SetIndexBuffer(AGE::IndexBuffer* indexBuffer) {
+  void OpenGLVertexArray::SetIndexBuffer(Ref<AGE::IndexBuffer> indexBuffer) {
     glBindVertexArray(m_RenderID);
     indexBuffer->Bind();
 
-    m_IndexBuffer = (OpenGLIndexBuffer*)indexBuffer;
+    m_IndexBuffer = indexBuffer;
     glBindVertexArray(0);
   }
 
-  std::vector<VertexBuffer*> OpenGLVertexArray::VertexBuffers() const {
+  std::vector<Ref<VertexBuffer>> OpenGLVertexArray::VertexBuffers() const {
     return m_VertexBuffers;
   }
 
-  IndexBuffer* OpenGLVertexArray::IndexBuffer() const {
+  Ref<IndexBuffer> OpenGLVertexArray::IndexBuffer() const {
     return m_IndexBuffer;
   }
 } // AGE

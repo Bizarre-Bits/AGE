@@ -24,7 +24,7 @@ namespace AGE {
     }
 
     ImGui::Begin("Debug");
-    Window* window = Application::Instance()->Window();
+    Scope<Window>& window = Application::Instance()->Window();
     ImGui::Text("MainWindow: %s (%i, %i)", window->Title().c_str(), (int)window->Width(), (int)window->Height());
     ImGui::Text("FPS: %f", fps);
     ImGui::Text("Delta Time: %fs", ts.Seconds());

@@ -17,7 +17,7 @@ namespace AGE {
     s_RenderAPI->SetClearColor(color);
   }
 
-  void RenderCommand::DrawIndexed(const VertexArray* va) {
+  void RenderCommand::DrawIndexed(const Ref<VertexArray>& va) {
     s_RenderAPI->DrawIndexed(va);
   }
 } // AGE

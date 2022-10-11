@@ -16,7 +16,7 @@ namespace AGE {
     glClear(GL_COLOR_BUFFER_BIT);
   }
 
-  void OpenGLRenderAPI::DrawIndexed(const AGE::VertexArray* va) {
+  void OpenGLRenderAPI::DrawIndexed(const Ref<VertexArray>& va) {
     va->Bind();
     glDrawElements(GL_TRIANGLES, va->IndexBuffer()->Count(), GL_UNSIGNED_INT, nullptr);
   }

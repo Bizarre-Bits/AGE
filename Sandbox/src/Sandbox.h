@@ -21,18 +21,18 @@ public:
   virtual void OnUpdate(AGE::Timestep ts) override;
 
 private:
-  AGE::VertexArray* m_TriangleVA;
-  AGE::VertexArray* m_SquareVA;
-  AGE::Shader     * m_TriangleShader;
-  AGE::Shader     * m_SquareShader;
+  AGE::Ref<AGE::VertexArray> m_TriangleVA;
+  AGE::Ref<AGE::VertexArray> m_SquareVA;
+  AGE::Ref<AGE::Shader> m_TriangleShader;
+  AGE::Ref<AGE::Shader> m_SquareShader;
   AGE::OrthographicCamera m_Camera;
-  glm::vec4               m_SquareColor;
+  glm::vec4 m_SquareColor;
 
   glm::vec3 m_TrianglePos;
-  float     m_CameraSpeed;
-  float     m_TriangleSpeed;
-  float     m_TriangleRotation;
+  float m_CameraSpeed;
+  float m_TriangleSpeed;
+  float m_TriangleRotation;
 };
 
 
-#endif //AGE_SANDBOX_H
+#endif//AGE_SANDBOX_H

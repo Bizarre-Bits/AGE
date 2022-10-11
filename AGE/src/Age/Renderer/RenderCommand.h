@@ -15,7 +15,7 @@ namespace AGE {
     static void Clear();
     static void SetClearColor(const glm::vec4& color);
 
-    static void DrawIndexed(const VertexArray* va);
+    static void DrawIndexed(const Ref<VertexArray>& va);
   private:
     static RenderAPI* s_RenderAPI;
   };

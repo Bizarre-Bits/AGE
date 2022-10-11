@@ -54,9 +54,9 @@ namespace AGE {
   }
 
   void ImGuiLayer::End() {
-    ImGuiIO& io     = ImGui::GetIO();
-    Window * window = Application::Instance()->Window();
-    io.DisplaySize = ImVec2((float)window->Width(), (float)window->Height());
+    ImGuiIO& io          = ImGui::GetIO();
+    Scope<Window>& window = Application::Instance()->Window();
+    io.DisplaySize       = ImVec2((float)window->Width(), (float)window->Height());
 
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
