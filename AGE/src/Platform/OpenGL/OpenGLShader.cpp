@@ -9,7 +9,9 @@
 #include "Platform/OpenGL/OpenGLShader.h"
 
 namespace AGE {
-  OpenGLShader::OpenGLShader(const age_string_t& vertexSrc, const age_string_t& fragmentSrc) {
+  OpenGLShader::OpenGLShader(
+      const age_string_t& vertexSrc, const age_string_t& fragmentSrc
+  ) {
 
 
     // Create an empty vertex shader handle
@@ -34,7 +36,8 @@ namespace AGE {
       glGetShaderInfoLog(vertexShader, maxLength, &maxLength, &infoLog[0]);
 
       // Use the infoLog as you see fit.
-      AGE_CORE_ERROR("Failed to compile vertex shader:\n {0}", age_string_t(infoLog.begin(), infoLog.end() - 1));
+      AGE_CORE_ERROR("Failed to compile vertex shader:\n {0}",
+                     age_string_t(infoLog.begin(), infoLog.end() - 1));
     }
 
     // Create an empty fragment shader handle
@@ -58,7 +61,8 @@ namespace AGE {
       glGetShaderInfoLog(fragmentShader, maxLength, &maxLength, &infoLog[0]);
 
       // Use the infoLog as you see fit.
-      AGE_CORE_ERROR("Failed to compile fragment shader:\n {0}", age_string_t(infoLog.begin(), infoLog.end() - 1));
+      AGE_CORE_ERROR("Failed to compile fragment shader:\n {0}",
+                     age_string_t(infoLog.begin(), infoLog.end() - 1));
     }
 
     // Vertex and fragment shaders are successfully compiled.
@@ -91,7 +95,8 @@ namespace AGE {
       glDeleteShader(fragmentShader);
 
       // Use the infoLog as you see fit.
-      AGE_CORE_ERROR("Failed to link shader program:\n {0}", age_string_t(infoLog.begin(), infoLog.end() - 1));
+      AGE_CORE_ERROR("Failed to link shader program:\n {0}",
+                     age_string_t(infoLog.begin(), infoLog.end() - 1));
     }
 
 // Always detach shaders after a successful link.
@@ -103,17 +108,46 @@ namespace AGE {
 
   }
 
-  void OpenGLShader::UploadUniformMat4(const age_string_t& name, const glm::mat4& matrix) const {
-    GLint location = glGetUniformLocation(m_RendererID, name.c_str());
-    glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
-  }
-
   void OpenGLShader::Bind() const {
     glUseProgram(m_RendererID);
   }
 
   void OpenGLShader::Unbind() const {
     glUseProgram(0);
+  }
+
+  void OpenGLShader::UploadUniformFloat(const age_string_t& name, const float value) const {
+    GLint location = glGetUniformLocation(m_RendererID, name.c_str());
+    glUniform1f(location, value);
+  }
+
+  void OpenGLShader::UploadUniformFloat2(const age_string_t& name, const glm::vec2& vector) const {
+    GLint location = glGetUniformLocation(m_RendererID, name.c_str());
+    glUniform2f(location, vector.x, vector.y);
+  }
+
+  void OpenGLShader::UploadUniformFloat3(const age_string_t& name, const glm::vec3& vector) const {
+    GLint location = glGetUniformLocation(m_RendererID, name.c_str());
+    glUniform3f(location, vector.x, vector.y, vector.z);
+  }
+  void OpenGLShader::UploadUniformFloat4(const age_string_t& name, const glm::vec4& vector) const {
+    GLint location = glGetUniformLocation(m_RendererID, name.c_str());
+    glUniform4f(location, vector.x, vector.y, vector.z, vector.w);
+  }
+
+  void OpenGLShader::UploadUniformMat3(const age_string_t& name, const glm::mat3& matrix) const {
+    GLint location = glGetUniformLocation(m_RendererID, name.c_str());
+    glUniformMatrix3fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
+  }
+
+  void OpenGLShader::UploadUniformMat4(const age_string_t& name, const glm::mat4& matrix) const {
+    GLint location = glGetUniformLocation(m_RendererID, name.c_str());
+    glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
+  }
+
+  void OpenGLShader::UploadUniformInt(const age_string_t& name, const int value) const {
+    GLint location = glGetUniformLocation(m_RendererID, name.c_str());
+    glUniform1i(location, value);
   }
 
 }

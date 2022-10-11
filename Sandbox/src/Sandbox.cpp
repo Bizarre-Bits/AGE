@@ -5,6 +5,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "Sandbox.h"
+#include "Platform/OpenGL/OpenGLShader.h"
+#include "glm/gtc/type_ptr.hpp"
 
 AGE::Application* AGE::CreateApplication() {
   return new Sandbox;
@@ -19,6 +21,11 @@ Sandbox::~Sandbox() {}
 // Sandbox Layer
 
 void SandboxLayer::OnUpdate(AGE::Timestep ts) {
+
+  ImGui::Begin("Settings");
+  ImGui::ColorEdit3("Square Color", glm::value_ptr(m_SquareColor));
+  ImGui::End();
+
   glm::vec3 cameraPos = m_Camera.Position();
 
   if (AGE::Input::IsKeyPressed(AGE::Key::W)) {
@@ -58,12 +65,15 @@ void SandboxLayer::OnUpdate(AGE::Timestep ts) {
     for (int x = 0; x < 20; x++) {
       glm::vec3 pos(x * 0.11f, y * 0.11f, 0.0f);
       glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
-      AGE::Renderer::Submit(m_SquareVA, m_Shader, transform);
+      dynamic_cast<const AGE::OpenGLShader*>(m_SquareShader)->UploadUniformFloat4(
+          "u_Color", m_SquareColor
+      );
+      AGE::Renderer::Submit(m_SquareVA, m_SquareShader, transform);
     }
   }
 
   AGE::Renderer::Submit(
-      m_TriangleVA, m_Shader,
+      m_TriangleVA, m_TriangleShader,
       glm::translate(glm::mat4(1.0f), m_TrianglePos)
       * glm::rotate(
           glm::mat4(1.0f), glm::radians(m_TriangleRotation),
@@ -72,7 +82,7 @@ void SandboxLayer::OnUpdate(AGE::Timestep ts) {
 }
 
 SandboxLayer::~SandboxLayer() {
-  delete m_Shader;
+  delete m_TriangleShader;
   delete m_TriangleVA;
   delete m_SquareVA;
 }
@@ -80,13 +90,9 @@ SandboxLayer::~SandboxLayer() {
 SandboxLayer::SandboxLayer() : m_Camera(-1.6f, 1.6f, -0.9f, 0.9f),
                                m_CameraSpeed{5.0f},
                                m_TriangleSpeed(2.0f),
-                               m_TrianglePos(0.0f) {
+                               m_TrianglePos(0.0f),
+                               m_SquareColor{0.2, 0.3, 0.8, 1} {
   AGE::RenderCommand::SetClearColor(glm::vec4{0.2f, 0.2f, 0.2f, 1.0f});
-
-  auto layout = AGE::BufferLayout{
-      {"aPos", AGE::ShaderDataType::Float3},
-      {"aCol", AGE::ShaderDataType::Float4}
-  };
 
   {
     m_TriangleVA = AGE::VertexArray::Create();
@@ -105,8 +111,12 @@ SandboxLayer::SandboxLayer() : m_Camera(-1.6f, 1.6f, -0.9f, 0.9f),
     auto VB = AGE::VertexBuffer::Create(
         vertices, sizeof(vertices) / sizeof(float));
 
+
     VB->SetLayout(
-        layout
+        AGE::BufferLayout{
+            {"aPos", AGE::ShaderDataType::Float3},
+            {"aCol", AGE::ShaderDataType::Float4}
+        }
     );
 
     m_TriangleVA->AddVertexBuffer(VB);
@@ -122,26 +132,20 @@ SandboxLayer::SandboxLayer() : m_Camera(-1.6f, 1.6f, -0.9f, 0.9f),
   {
     m_SquareVA = AGE::VertexArray::Create();
 
-    float vertices[4 * 7]{
+    float vertices[4 * 3]{
         -0.5f, 0.5f, 0.0f,
-        0.1f, 0.6f, 0.1f, 1.0f,
 
         -0.5f, -0.5f, 0.0f,
-        0.1f, 0.1f, 0.6f, 1.0f,
 
         0.5f, -0.5f, 0.0f,
-        0.6f, 0.1f, 0.1f, 1.0f,
 
         0.5f, 0.5f, 0.0f,
-        0.1f, 0.6f, 0.1f, 1.0f,
     };
 
     auto VB = AGE::VertexBuffer::Create(
         vertices, sizeof(vertices) / sizeof(float));
 
-    VB->SetLayout(
-        layout
-    );
+    VB->SetLayout(AGE::BufferLayout{{"a_Pos", AGE::ShaderDataType::Float3}});
 
     m_SquareVA->AddVertexBuffer(VB);
 //
@@ -152,6 +156,7 @@ SandboxLayer::SandboxLayer() : m_Camera(-1.6f, 1.6f, -0.9f, 0.9f),
 
     m_SquareVA->SetIndexBuffer(IB);
   }
+
 
   age_string_t vertexSrc{R"(
        #version 330 core
@@ -170,7 +175,7 @@ SandboxLayer::SandboxLayer() : m_Camera(-1.6f, 1.6f, -0.9f, 0.9f),
         }
     )"};
 
-  age_string_t fragmentSrc{R"(
+  age_string_t triangleFrg{R"(
         #version 330 core
 
         layout(location = 0) out vec4 color;
@@ -182,5 +187,18 @@ SandboxLayer::SandboxLayer() : m_Camera(-1.6f, 1.6f, -0.9f, 0.9f),
     )"};
 
 
-  m_Shader = AGE::Shader::Create(vertexSrc, fragmentSrc);
+  m_TriangleShader = AGE::Shader::Create(vertexSrc, triangleFrg);
+
+  const age_string_t squareFrg{R"(
+    #version 330 core
+
+        layout(location = 0) out vec4 color;
+        uniform vec4 u_Color;
+
+        void main() {
+          color = u_Color;
+        }
+  )"};
+
+  m_SquareShader = AGE::Shader::Create(vertexSrc, squareFrg);
 }

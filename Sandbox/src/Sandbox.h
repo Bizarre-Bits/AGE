@@ -23,13 +23,15 @@ public:
 private:
   AGE::VertexArray* m_TriangleVA;
   AGE::VertexArray* m_SquareVA;
-  AGE::Shader     * m_Shader;
+  AGE::Shader     * m_TriangleShader;
+  AGE::Shader     * m_SquareShader;
   AGE::OrthographicCamera m_Camera;
+  glm::vec4               m_SquareColor;
 
   glm::vec3 m_TrianglePos;
   float     m_CameraSpeed;
   float     m_TriangleSpeed;
-  float m_TriangleRotation;
+  float     m_TriangleRotation;
 };
 
 
