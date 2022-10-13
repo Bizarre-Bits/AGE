@@ -70,7 +70,7 @@ SandboxLayer::SandboxLayer() : m_Camera(-1.6, 1.6, -0.9, 0.9) {
     uniform vec3 u_Color;
 
     void main() {
-      color = vec4(u_Color, 0.0);
+      color = vec4(u_Color, 1.0);
     }
   )"};
 
@@ -108,9 +108,9 @@ SandboxLayer::SandboxLayer() : m_Camera(-1.6, 1.6, -0.9, 0.9) {
 
   m_TextureShader = AGE::Ref<AGE::Shader>(AGE::Shader::Create(texVert, texFrag));
 
-  m_Texture = AGE::Texture2D::Create("assets/textures/Checkerboard.png");
-  m_TextureShader->Bind();
-  m_Texture->Bind();
+  m_CheckerBoardTex = AGE::Texture2D::Create("assets/textures/Checkerboard.png");
+  m_LetterATex      = AGE::Texture2D::Create("assets/textures/letter_a.png");
+
   std::dynamic_pointer_cast<AGE::OpenGLShader>(m_FlatColorShader)->UploadUniformInt(
       "u_Texture", 0
   );
@@ -134,17 +134,22 @@ void SandboxLayer::OnUpdate(AGE::Timestep ts) {
   glm::mat4 redTransform = glm::translate(glm::mat4(1.0f), glm::vec3(-0.25f, -0.25f, 0.0f))
                            * glm::scale(glm::mat4(1.0f), glm::vec3(0.5f));
 
+  m_FlatColorShader->Bind();
+  std::dynamic_pointer_cast<AGE::OpenGLShader>(m_FlatColorShader)->UploadUniformFloat3(
+      "u_Color", blueColor
+  );
   for (int y = 0; y < 20; y++) {
     for (int x = 0; x < 20; x++) {
       glm::vec3 pos(x * 0.06f, y * 0.06f, 0.0f);
       glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
-      std::dynamic_pointer_cast<AGE::OpenGLShader>(m_FlatColorShader)->UploadUniformFloat3(
-          "u_Color", blueColor
-      );
       AGE::Renderer::Submit(m_SquareVA, m_FlatColorShader, transform);
     }
   }
 
+  m_CheckerBoardTex->Bind();
+  AGE::Renderer::Submit(m_SquareVA, m_TextureShader, redTransform);
+
+  m_LetterATex->Bind();
   AGE::Renderer::Submit(m_SquareVA, m_TextureShader, redTransform);
 
   AGE::Renderer::EndScene();

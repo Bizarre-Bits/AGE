@@ -23,7 +23,7 @@ public:
 private:
   AGE::Ref<AGE::Shader>      m_FlatColorShader, m_TextureShader;
   AGE::Ref<AGE::VertexArray> m_SquareVA;
-  AGE::Ref<AGE::Texture2D>   m_Texture;
+  AGE::Ref<AGE::Texture2D>   m_CheckerBoardTex, m_LetterATex;
   AGE::OrthographicCamera    m_Camera;
 };
 

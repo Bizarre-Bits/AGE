@@ -9,6 +9,10 @@
 namespace AGE {
   RenderAPI* RenderCommand::s_RenderAPI{RenderAPI::Create()};
 
+  void RenderCommand::Init() {
+    s_RenderAPI->Init();
+  }
+
   void RenderCommand::Clear() {
     s_RenderAPI->Clear();
   }

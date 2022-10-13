@@ -8,6 +8,11 @@
 #include "OpenGLRenderAPI.h"
 
 namespace AGE {
+  void OpenGLRenderAPI::Init() {
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  }
+
   void OpenGLRenderAPI::SetClearColor(const glm::vec4& color) {
     glClearColor(color.r, color.g, color.b, color.a);
   }
@@ -16,7 +21,7 @@ namespace AGE {
     glClear(GL_COLOR_BUFFER_BIT);
   }
 
-  void OpenGLRenderAPI::DrawIndexed(const Ref<VertexArray>& va) {
+  void OpenGLRenderAPI::DrawIndexed(const Ref <VertexArray>& va) {
     va->Bind();
     glDrawElements(GL_TRIANGLES, va->IndexBuffer()->Count(), GL_UNSIGNED_INT, nullptr);
   }
