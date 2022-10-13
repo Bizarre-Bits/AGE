@@ -21,17 +21,10 @@ public:
   virtual void OnUpdate(AGE::Timestep ts) override;
 
 private:
-  AGE::Ref<AGE::VertexArray> m_TriangleVA;
+  AGE::Ref<AGE::Shader>      m_FlatColorShader, m_TextureShader;
   AGE::Ref<AGE::VertexArray> m_SquareVA;
-  AGE::Ref<AGE::Shader> m_TriangleShader;
-  AGE::Ref<AGE::Shader> m_SquareShader;
-  AGE::OrthographicCamera m_Camera;
-  glm::vec4 m_SquareColor;
-
-  glm::vec3 m_TrianglePos;
-  float m_CameraSpeed;
-  float m_TriangleSpeed;
-  float m_TriangleRotation;
+  AGE::Ref<AGE::Texture2D>   m_Texture;
+  AGE::OrthographicCamera    m_Camera;
 };
 
 

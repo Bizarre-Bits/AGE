@@ -5,9 +5,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED 20)
 
 add_library(age_core STATIC)
 
-target_include_directories(age_core INTERFACE include PUBLIC src vendor/imgui vendor/glm/)
+target_include_directories(age_core INTERFACE include PUBLIC src vendor/imgui vendor/glm/ vendor/stb_image)
 
-file(GLOB_RECURSE _AGE_CORE_SRCS src/agepch.h src/agepch.cpp src/Age/*.cpp src/Age/*.h)
+file(GLOB_RECURSE _AGE_CORE_SRCS src/agepch.h src/agepch.cpp src/Age/*.cpp src/Age/*.h vendor/stb_image/stb_image.cpp vendor/stb_image/stb_image.h)
 list(REMOVE_ITEM _AGE_CORE_SRCS ${REMOVE_CMAKE})
 
 file(GLOB _IMGUI_SRCS vendor/imgui/*.cpp vendor/imgui/*.h)
