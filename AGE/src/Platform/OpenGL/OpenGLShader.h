@@ -5,6 +5,9 @@
 #ifndef AGE_OPENGLSHADER_H
 #define AGE_OPENGLSHADER_H
 
+#include <unordered_map>
+
+#include "OpenGLPlatform.h"
 #include "Age/Core/Core.h"
 #include "Age/Renderer/Shader.h"
 
@@ -14,6 +17,7 @@ namespace AGE {
     OpenGLShader(
         const age_string_t& vertexSrc, const age_string_t& fragmentSrc
     );
+    OpenGLShader(const age_string_t filepath);
     ~OpenGLShader();
 
     virtual void Bind() const override;
@@ -28,6 +32,9 @@ namespace AGE {
     void UploadUniformMat3(const age_string_t& name, const glm::mat3& matrix) const;
 
     void UploadUniformInt(const age_string_t& name, const int value) const;
+
+  private:
+    void Compile(const std::unordered_map<GLenum, age_string_t>& shaderSrcs);
 
   private:
     unsigned int m_RendererID;

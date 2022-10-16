@@ -68,16 +68,11 @@ if (AGE_INCLUDE_OPENGL)
 
     target_sources(age_core PRIVATE ${_IMGUI_BE} ${_AGE_OPENGL_PLATFORM_SRCS})
 
-    target_include_directories(age_core PRIVATE vendor/GLFW/include vendor/GLAD/include vendor/imgui)
+    target_include_directories(age_core PUBLIC vendor/GLFW/include vendor/GLAD/include vendor/imgui vendor/GLAD/include)
 
     target_compile_definitions(age_core PUBLIC AGE_INCLUDE_OPENGL)
 endif ()
 
 target_compile_definitions(age_core PUBLIC AGE_RENDER_PLATFORM_${AGE_RENDER_PLATFORM})
 
-# Don't use precompiled header on windows, as it doesn't work. TODO: Make it work
-if(AGE_OS STREQUAL "LINUX")
-    message(STATUS "Use precompiled headers")
-    target_precompile_headers(age_core PUBLIC src/agepch.h)
-endif()
 

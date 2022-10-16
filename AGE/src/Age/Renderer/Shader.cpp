@@ -25,4 +25,15 @@ namespace AGE {
 #endif
     };
   }
+  Shader* Shader::Create(const age_string_t& filepath) {
+    switch (Renderer::GetAPI()) {
+      case RenderAPI::API::None: AGE_CORE_ASSERT(false, "Render API None is not supported yet");
+      case RenderAPI::API::OpenGL:
+#ifdef AGE_INCLUDE_OPENGL
+        return new OpenGLShader(filepath);
+#else
+        AGE_CORE_ASSERT(false, "OpenGL Render API is not included in the current compilation.");
+#endif
+    };
+  }
 }

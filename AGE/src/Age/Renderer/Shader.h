@@ -18,6 +18,7 @@ namespace AGE {
     virtual void Unbind() const = 0;
 
     static Shader* Create(const age_string_t& vertexSrc, const age_string_t& fragmentSrc);
+    static Shader* Create(const age_string_t& filepath);
   };
 
 } // AGE
