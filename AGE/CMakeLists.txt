@@ -12,7 +12,7 @@ list(REMOVE_ITEM _AGE_CORE_SRCS ${REMOVE_CMAKE})
 
 file(GLOB _IMGUI_SRCS vendor/imgui/*.cpp vendor/imgui/*.h)
 
-target_sources(age_core PRIVATE ${_AGE_CORE_SRCS} PUBLIC ${_IMGUI_SRCS})
+target_sources(age_core PRIVATE ${_AGE_CORE_SRCS} ${_IMGUI_SRCS})
 
 option(AGE_INCLUDE_OPENGL "If ON, OpenGL-specific implementations will be added to the project" ON)
 option(AGE_INCLUDE_VULCAN "If ON, Vulcan-specific implementations will be added to the project" OFF)
@@ -31,9 +31,11 @@ target_link_libraries(age_core PUBLIC spdlog glm)
 if (WIN32)
     target_compile_definitions(age_core PUBLIC AGE_OS_WINDOWS)
     message(STATUS "Windows platform")
+    set(AGE_OS "WINDOWS")
 elseif (UNIX AND NOT APPLE)
     target_compile_definitions(age_core PUBLIC AGE_OS_LINUX)
     message(STATUS "Linux platform")
+    set(AGE_OS "LINUX")
 endif ()
 
 if (${CMAKE_BUILD_TYPE} STREQUAL "Debug")
@@ -58,22 +60,24 @@ endif ()
 if (AGE_INCLUDE_OPENGL)
     message(STATUS "Including OpenGl")
     add_subdirectory(vendor/GLFW)
-    add_subdirectory(vendor/GLAD)
 
-    target_link_libraries(age_core PUBLIC glad glfw ${GLFW_LIBRARIES})
+    target_link_libraries(age_core PUBLIC glfw ${GLFW_LIBRARIES})
 
     file(GLOB _IMGUI_BE vendor/imgui/backends/imgui_impl_opengl3* vendor/imgui/backends/imgui_impl_glfw.*)
-    file(GLOB _AGE_OPENGL_PLATFORM_SRCS src/Platform/OpenGL/*)
+    file(GLOB _AGE_OPENGL_PLATFORM_SRCS src/Platform/OpenGL/* vendor/GLAD/src/glad.c)
 
-    target_sources(age_core PUBLIC ${_IMGUI_BE} ${_AGE_OPENGL_PLATFORM_SRCS})
+    target_sources(age_core PRIVATE ${_IMGUI_BE} ${_AGE_OPENGL_PLATFORM_SRCS})
 
-    target_include_directories(age_core PUBLIC vendor/GLFW/include vendor/GLAD/include vendor/imgui)
+    target_include_directories(age_core PRIVATE vendor/GLFW/include vendor/GLAD/include vendor/imgui)
 
     target_compile_definitions(age_core PUBLIC AGE_INCLUDE_OPENGL)
 endif ()
 
 target_compile_definitions(age_core PUBLIC AGE_RENDER_PLATFORM_${AGE_RENDER_PLATFORM})
 
-target_precompile_headers(age_core PRIVATE src/agepch.h)
-
+# Don't use precompiled header on windows, as it doesn't work. TODO: Make it work
+if(AGE_OS STREQUAL "LINUX")
+    message(STATUS "Use precompiled headers")
+    target_precompile_headers(age_core PUBLIC src/agepch.h)
+endif()
 

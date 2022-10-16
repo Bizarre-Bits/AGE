@@ -12,3 +12,7 @@ _deps
 
 cmake-build-debug
 cmake-build-release
+
+# VS generated files
+out/*
+.vs

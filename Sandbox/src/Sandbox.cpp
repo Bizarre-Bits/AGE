@@ -85,6 +85,7 @@ SandboxLayer::SandboxLayer() : m_Camera(-1.6f, 1.6f, -0.9f, 0.9f),
                                m_CameraSpeed{5.0f},
                                m_TriangleSpeed(2.0f),
                                m_TrianglePos(0.0f),
+                               m_TriangleRotation{0.0f},
                                m_SquareColor{0.2, 0.3, 0.8, 1} {
   AGE::RenderCommand::SetClearColor(glm::vec4{0.2f, 0.2f, 0.2f, 1.0f});
 
