@@ -57,6 +57,22 @@ endif ()
 # find vulcan
 # find directX
 
+
+########################################
+#     WTF!? SHOULD WORK BUT DOESN'T!   #
+########################################
+
+#if (DEFINED ENV{WAYLAND_DISPLAY})
+#    message(STATUS "Will be using Wayland")
+#    set(GLFW_BUILD_WAYLAND ON)
+#    set(GLFW_INCLUDE_WAYLAND ON)
+#
+#    set(GLFW_BUILD_X11 ON)
+#    set(GLFW_INCLUDE_X11 ON)
+#else ()
+#    set(AGE_INCLUDE_WAYLAND OFF)
+#endif ()
+
 if (AGE_INCLUDE_OPENGL)
     message(STATUS "Including OpenGl")
     add_subdirectory(vendor/GLFW)
@@ -74,5 +90,7 @@ if (AGE_INCLUDE_OPENGL)
 endif ()
 
 target_compile_definitions(age_core PUBLIC AGE_RENDER_PLATFORM_${AGE_RENDER_PLATFORM})
+
+#__GLX_VENDOR_LIBRARY_NAME=nvidia;__NV_PRIME_RENDER_OFFLOAD=1
 
 

@@ -21,7 +21,6 @@ Sandbox::~Sandbox() {}
 // Sandbox Layer
 
 SandboxLayer::SandboxLayer() : m_Camera(-1.6, 1.6, -0.9, 0.9) {
-
   m_SquareVA = AGE::Ref<AGE::VertexArray>(AGE::VertexArray::Create());
 
   float vertices[4 * 5]{

@@ -47,7 +47,9 @@ namespace AGE {
       glfwSetErrorCallback(GLFWErrorCallback);
     }
 
-    m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, props.Title.c_str(), NULL, NULL);
+    m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, props.Title.c_str(), NULL,
+                                NULL
+    );
     glfwSetWindowUserPointer(m_Window, &m_Data);
 
     m_Context = new OpenGLContext{m_Window};
@@ -72,7 +74,8 @@ namespace AGE {
 
           //TODO: I'm not even sure that this viewport resizing belongs here...
           glViewport(0, 0, width, height);
-        });
+        }
+    );
 
     glfwSetWindowCloseCallback(
         m_Window, [](GLFWwindow* window) {
@@ -80,7 +83,8 @@ namespace AGE {
 
           WindowCloseEvent event;
           data->EventCallback(event);
-        });
+        }
+    );
 
     glfwSetKeyCallback(
         m_Window, [](GLFWwindow* window, int keycode, int scancode, int action, int mods) {
@@ -103,7 +107,8 @@ namespace AGE {
             }
             default: break;
           }
-        });
+        }
+    );
 
     glfwSetMouseButtonCallback(
         m_Window, [](GLFWwindow* window, int button, int action, int mods) {
@@ -122,14 +127,16 @@ namespace AGE {
             }
             default: break;
           }
-        });
+        }
+    );
 
     glfwSetCharCallback(
         m_Window, [](GLFWwindow* window, unsigned int keycode) {
-          auto data = (WindowData*)glfwGetWindowUserPointer(window);
+          auto          data = (WindowData*)glfwGetWindowUserPointer(window);
           KeyTypedEvent event{static_cast<unsigned short>(keycode)};
           data->EventCallback(event);
-        });
+        }
+    );
 
     glfwSetCursorPosCallback(
         m_Window, [](GLFWwindow* window, double x, double y) {
@@ -137,7 +144,8 @@ namespace AGE {
 
           MouseMovedEvent event((float)x, (float)y);
           data->EventCallback(event);
-        });
+        }
+    );
 
     glfwSetScrollCallback(
         m_Window, [](GLFWwindow* window, double xOffset, double yOffset) {
@@ -145,7 +153,8 @@ namespace AGE {
 
           MouseScrolledEvent event((float)xOffset, (float)yOffset);
           data->EventCallback(event);
-        });
+        }
+    );
   }
 
   void OpenGLWindow::OnUpdate() {
