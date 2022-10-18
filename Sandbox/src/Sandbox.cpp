@@ -20,7 +20,7 @@ Sandbox::~Sandbox() {}
 
 // Sandbox Layer
 
-SandboxLayer::SandboxLayer() : m_Camera(-1.6, 1.6, -0.9, 0.9) {
+SandboxLayer::SandboxLayer() : m_CameraController(1280.0f / 720.0f), m_Camera(-1.6, 1.6, -0.9, 0.9) {
   m_SquareVA = AGE::Ref<AGE::VertexArray>(AGE::VertexArray::Create());
 
   float vertices[4 * 5]{
@@ -66,7 +66,10 @@ SandboxLayer::~SandboxLayer() {
 }
 
 void SandboxLayer::OnUpdate(AGE::Timestep ts) {
-  AGE::Renderer::BeginScene(m_Camera);
+  m_CameraController.OnUpdate(ts);
+
+  AGE::Renderer::BeginScene(m_CameraController.GetCamera());
+//  AGE::Renderer::BeginScene(m_Camera);
 
   AGE::RenderCommand::Clear();
 
@@ -102,4 +105,8 @@ void SandboxLayer::OnUpdate(AGE::Timestep ts) {
   AGE::Renderer::Submit(m_SquareVA, textureShader, redTransform);
 
   AGE::Renderer::EndScene();
+}
+
+void SandboxLayer::OnEvent(AGE::Event& e) {
+  m_CameraController.OnEvent(e);
 }

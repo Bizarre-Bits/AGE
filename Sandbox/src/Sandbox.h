@@ -19,12 +19,14 @@ public:
   virtual ~SandboxLayer() override;
 
   virtual void OnUpdate(AGE::Timestep ts) override;
+  virtual void OnEvent(AGE::Event& e) override;
 
 private:
-  AGE::ShaderLibrary         m_ShaderLibrary;
-  AGE::Ref<AGE::VertexArray> m_SquareVA;
-  AGE::Ref<AGE::Texture2D>   m_CheckerBoardTex, m_LetterATex;
-  AGE::OrthographicCamera    m_Camera;
+  AGE::ShaderLibrary                m_ShaderLibrary;
+  AGE::Ref<AGE::VertexArray>        m_SquareVA;
+  AGE::Ref<AGE::Texture2D>          m_CheckerBoardTex, m_LetterATex;
+  AGE::OrthographicCameraController m_CameraController;
+  AGE::OrthographicCamera           m_Camera;
 };
 
 

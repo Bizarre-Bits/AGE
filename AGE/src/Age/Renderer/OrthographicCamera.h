@@ -6,6 +6,7 @@
 #define AGE_ORTHOGRAPHICCAMERA_H
 
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 namespace AGE {
 
@@ -17,9 +18,14 @@ namespace AGE {
       m_Position = position;
       RecalculateViewMatrix();
     }
+
     inline void SetRotation(const float rotation) {
       m_Rotation = rotation;
       RecalculateViewMatrix();
+    }
+
+    inline void SetProjection(float left, float right, float bottom, float top) {
+      m_ProjectionMatrix = glm::ortho(left, right, bottom, top, -1.0f, 1.0f);
     }
 
     inline glm::vec3 Position() const { return m_Position; }
@@ -32,7 +38,7 @@ namespace AGE {
   private:
     void RecalculateViewMatrix();
 
-  private:
+  public:
     glm::mat4 m_ProjectionMatrix;
     glm::mat4 m_ViewMatrix;
     glm::mat4 m_ViewProjectionMatrix;

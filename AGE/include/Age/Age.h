@@ -30,6 +30,7 @@
 #include "Age/Renderer/Texture.h"
 #include "Age/Renderer/Context.h"
 #include "Age/Renderer/OrthographicCamera.h"
+#include "Age/Renderer/OrthographicCameraController.h"
 
 // Debug
 #include "Age/Debug/Assert.h"
