@@ -34,6 +34,9 @@ namespace AGE {
     void UploadUniformInt(const age_string_t& name, const int value) const;
 
   private:
+    age_string_t LoadShaderFile(const age_string_t& filepath) const;
+    GLuint StringToShaderType(const age_string_t& source) const;
+    std::unordered_map<GLenum, age_string_t> MapShaders(const age_string_t& shaderSrc);
     void Compile(const std::unordered_map<GLenum, age_string_t>& shaderSrcs);
 
   private:

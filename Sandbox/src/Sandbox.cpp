@@ -50,63 +50,8 @@ SandboxLayer::SandboxLayer() : m_Camera(-1.6, 1.6, -0.9, 0.9) {
 
   //Shaders
 
-  age_string_t flatVert{R"(
-    #version 330 core
-
-    layout (location = 0) in vec3 a_Pos;
-
-    uniform mat4 u_ViewProjection;
-    uniform mat4 u_Transform;
-
-    void main() {
-      gl_Position = u_ViewProjection * u_Transform * vec4(a_Pos, 1.0f);
-    }
-  )"};
-
-  age_string_t flatFrag{R"(
-    #version 330 core
-    out vec4 color;
-
-    uniform vec3 u_Color;
-
-    void main() {
-      color = vec4(u_Color, 1.0);
-    }
-  )"};
-
-  m_FlatColorShader = AGE::Ref<AGE::Shader>(AGE::Shader::Create(flatVert, flatFrag));
-
-  age_string_t texVert{R"(
-    #version 330 core
-
-    layout(location = 0) in vec3 a_Pos;
-    layout(location = 1) in vec2 a_TexCoord;
-
-    uniform mat4 u_ViewProjection;
-    uniform mat4 u_Transform;
-
-    out vec2 v_TexCoord;
-
-    void main() {
-      v_TexCoord = a_TexCoord;
-      gl_Position = u_ViewProjection * u_Transform * vec4(a_Pos, 1.0f);
-    }
-  )"};
-
-  age_string_t texFrag{R"(
-    #version 330 core
-
-    in vec2 v_TexCoord;
-    out vec4 f_Color;
-
-    uniform sampler2D u_Texture;
-
-    void main() {
-      f_Color = texture(u_Texture, v_TexCoord);
-    }
-  )"};
-
-  m_TextureShader = AGE::Ref<AGE::Shader>(AGE::Shader::Create(texVert, texFrag));
+  m_FlatColorShader = AGE::Ref<AGE::Shader>(AGE::Shader::Create("assets/shaders/FlatColor.glsl"));
+  m_TextureShader = AGE::Ref<AGE::Shader>(AGE::Shader::Create("assets/shaders/Texture.glsl"));
 
   m_CheckerBoardTex = AGE::Texture2D::Create("assets/textures/Checkerboard.png");
   m_LetterATex      = AGE::Texture2D::Create("assets/textures/letter_a.png");
@@ -114,6 +59,8 @@ SandboxLayer::SandboxLayer() : m_Camera(-1.6, 1.6, -0.9, 0.9) {
   std::dynamic_pointer_cast<AGE::OpenGLShader>(m_FlatColorShader)->UploadUniformInt(
       "u_Texture", 0
   );
+
+  AGE::Shader::Create("assets/shaders/FlatColor.glsl");
 }
 
 SandboxLayer::~SandboxLayer() {
