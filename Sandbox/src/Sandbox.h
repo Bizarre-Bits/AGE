@@ -21,7 +21,7 @@ public:
   virtual void OnUpdate(AGE::Timestep ts) override;
 
 private:
-  AGE::Ref<AGE::Shader>      m_FlatColorShader, m_TextureShader;
+  AGE::ShaderLibrary         m_ShaderLibrary;
   AGE::Ref<AGE::VertexArray> m_SquareVA;
   AGE::Ref<AGE::Texture2D>   m_CheckerBoardTex, m_LetterATex;
   AGE::OrthographicCamera    m_Camera;

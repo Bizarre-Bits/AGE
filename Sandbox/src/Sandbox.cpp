@@ -21,6 +21,7 @@ Sandbox::~Sandbox() {}
 // Sandbox Layer
 
 SandboxLayer::SandboxLayer() : m_Camera(-1.6, 1.6, -0.9, 0.9) {
+
   m_SquareVA = AGE::Ref<AGE::VertexArray>(AGE::VertexArray::Create());
 
   float vertices[4 * 5]{
@@ -50,17 +51,15 @@ SandboxLayer::SandboxLayer() : m_Camera(-1.6, 1.6, -0.9, 0.9) {
 
   //Shaders
 
-  m_FlatColorShader = AGE::Ref<AGE::Shader>(AGE::Shader::Create("assets/shaders/FlatColor.glsl"));
-  m_TextureShader = AGE::Ref<AGE::Shader>(AGE::Shader::Create("assets/shaders/Texture.glsl"));
+  auto flatColorShader = m_ShaderLibrary.Load("assets/shaders/FlatColor.glsl");
+  m_ShaderLibrary.Load("assets/shaders/Texture.glsl");
 
   m_CheckerBoardTex = AGE::Texture2D::Create("assets/textures/Checkerboard.png");
   m_LetterATex      = AGE::Texture2D::Create("assets/textures/letter_a.png");
 
-  std::dynamic_pointer_cast<AGE::OpenGLShader>(m_FlatColorShader)->UploadUniformInt(
+  std::dynamic_pointer_cast<AGE::OpenGLShader>(flatColorShader)->UploadUniformInt(
       "u_Texture", 0
   );
-
-  AGE::Shader::Create("assets/shaders/FlatColor.glsl");
 }
 
 SandboxLayer::~SandboxLayer() {
@@ -81,23 +80,27 @@ void SandboxLayer::OnUpdate(AGE::Timestep ts) {
   glm::mat4 redTransform = glm::translate(glm::mat4(1.0f), glm::vec3(-0.25f, -0.25f, 0.0f))
                            * glm::scale(glm::mat4(1.0f), glm::vec3(0.5f));
 
-  m_FlatColorShader->Bind();
-  std::dynamic_pointer_cast<AGE::OpenGLShader>(m_FlatColorShader)->UploadUniformFloat3(
+  auto flatColor = m_ShaderLibrary.Get("FlatColor");
+
+  flatColor->Bind();
+  std::dynamic_pointer_cast<AGE::OpenGLShader>(flatColor)->UploadUniformFloat3(
       "u_Color", blueColor
   );
   for (int y = 0; y < 20; y++) {
     for (int x = 0; x < 20; x++) {
       glm::vec3 pos(x * 0.06f, y * 0.06f, 0.0f);
       glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos) * scale;
-      AGE::Renderer::Submit(m_SquareVA, m_FlatColorShader, transform);
+      AGE::Renderer::Submit(m_SquareVA, flatColor, transform);
     }
   }
 
+  auto textureShader = m_ShaderLibrary.Get("Texture");
+
   m_CheckerBoardTex->Bind();
-  AGE::Renderer::Submit(m_SquareVA, m_TextureShader, redTransform);
+  AGE::Renderer::Submit(m_SquareVA, textureShader, redTransform);
 
   m_LetterATex->Bind();
-  AGE::Renderer::Submit(m_SquareVA, m_TextureShader, redTransform);
+  AGE::Renderer::Submit(m_SquareVA, textureShader, redTransform);
 
   AGE::Renderer::EndScene();
 }

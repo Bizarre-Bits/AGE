@@ -14,8 +14,8 @@
 
 namespace AGE {
   OpenGLShader::OpenGLShader(
-      const age_string_t& vertexSrc, const age_string_t& fragmentSrc
-  ) {
+      const age_string_t& name, const age_string_t& vertexSrc, const age_string_t& fragmentSrc
+  ) : m_Name(name) {
     std::unordered_map<GLenum, age_string_t> sources{std::pair{GL_VERTEX_SHADER, vertexSrc},
                                                      std::pair{GL_FRAGMENT_SHADER, fragmentSrc}};
     Compile(sources);
@@ -23,6 +23,13 @@ namespace AGE {
   OpenGLShader::OpenGLShader(const age_string_t filepath) {
     const age_string_t shader{LoadShaderFile(filepath)};
     Compile(MapShaders(shader));
+
+    auto lastSlash = filepath.find_last_of("/\\");
+    lastSlash = lastSlash == age_string_t::npos ? 0 : lastSlash + 1;
+    auto lastDot = filepath.rfind('.');
+    auto size    =
+             lastDot == age_string_t::npos ? filepath.size() - lastSlash : lastDot - lastSlash;
+    m_Name = filepath.substr(lastSlash, size);
   }
 
   OpenGLShader::~OpenGLShader() {

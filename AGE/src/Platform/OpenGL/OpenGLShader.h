@@ -15,7 +15,7 @@ namespace AGE {
   class OpenGLShader : public Shader {
   public:
     OpenGLShader(
-        const age_string_t& vertexSrc, const age_string_t& fragmentSrc
+        const age_string_t& name, const age_string_t& vertexSrc, const age_string_t& fragmentSrc
     );
     OpenGLShader(const age_string_t filepath);
     ~OpenGLShader();
@@ -33,6 +33,11 @@ namespace AGE {
 
     void UploadUniformInt(const age_string_t& name, const int value) const;
 
+    virtual inline const age_string_t& GetName() const override { return m_Name; }
+
+  protected:
+    virtual void SetName(const age_string_t& value) override { m_Name = value; }
+
   private:
     age_string_t LoadShaderFile(const age_string_t& filepath) const;
     GLuint StringToShaderType(const age_string_t& source) const;
@@ -41,6 +46,7 @@ namespace AGE {
 
   private:
     unsigned int m_RendererID;
+    age_string_t m_Name;
   };
 }
 
