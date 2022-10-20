@@ -33,6 +33,9 @@
 #else
   #define AGE_ASSERT(...)
   #define AGE_CORE_ASSERT(...)
+
+  #define AGE_CORE_ASSERT_FORMATTED(...)
+  #define AGE_ASSERT_FORMATTED(...)
 #endif
 
 #endif//AGE_ASSERT_H

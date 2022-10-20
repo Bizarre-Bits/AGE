@@ -35,7 +35,4 @@
 // Debug
 #include "Age/Debug/Assert.h"
 
-// Entry point
-#include "Age/Core/EntryPoint.h"
-
 #endif//AGE_AGE_H

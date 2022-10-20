@@ -6,6 +6,8 @@
 #define AGE_ENTRYPOINT_H
 
 #include "Age/Core/Core.h"
+#include "Age/Core/Log.h"
+#include "Age/Core/Application.h"
 
 extern AGE::Application* AGE::CreateApplication();
 
