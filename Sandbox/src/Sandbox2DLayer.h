@@ -15,15 +15,21 @@ public:
 
   virtual void OnUpdate(AGE::Timestep ts) override;
   virtual void OnEvent(AGE::Event& e) override;
-private:
-  void RenderImGui();
 
 private:
   AGE::OrthographicCameraController m_CameraController;
   AGE::Ref<AGE::Shader>             m_Shader;
-  AGE::Ref<AGE::Texture2D>   m_Texture;
-  glm::vec3                  m_BgColor{0.2f, 0.2f, 0.2f};
-  AGE::Ref<AGE::VertexArray> m_VAO;
+  AGE::Ref<AGE::Texture2D>          m_Texture;
+  AGE::Ref<AGE::VertexArray>        m_VAO;
+};
+
+class Sandbox2DUI : public AGE::ImGuiLayer {
+public:
+  virtual void OnUpdate(AGE::Timestep ts) override;
+  virtual void OnAttach() override;
+
+private:
+  glm::vec3 m_BgColor{0.2f, 0.2f, 0.2f};
 };
 
 
