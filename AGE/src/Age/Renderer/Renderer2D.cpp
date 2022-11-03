@@ -10,7 +10,7 @@
 namespace AGE {
   struct Renderer2DStorage {
     Ref<VertexArray> QuadVertexArray;
-    Ref<Shader>      FlatColorShader;
+    Ref<Shader>      Shader2D;
   };
 
   static Renderer2DStorage* s_Storage;
@@ -18,22 +18,22 @@ namespace AGE {
   void Renderer2D::Init() {
     s_Storage = new Renderer2DStorage;
 
-    s_Storage->FlatColorShader = AGE::Shader::Create("assets/shaders/FlatColor.glsl");
-
+    s_Storage->Shader2D = AGE::Shader::Create("assets/shaders/2dRendererShader.glsl");
 
     s_Storage->QuadVertexArray = AGE::VertexArray::Create();
 
     float vertices[4 * 5]{
-        -0.5f, 0.5f, 0.0f,
-        -0.5f, -0.5f, 0.0f,
-        0.5f, -0.5f, 0.0f,
-        0.5f, 0.5f, 0.0f
+        -0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
+        -0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+        0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+        0.5f, 0.5f, 0.0f, 1.0f, 1.0f
     };
 
     auto VBO = AGE::VertexBuffer::Create(vertices, sizeof(vertices) / sizeof(float));
 
     AGE::BufferLayout layout{
-        {"a_Pos", AGE::ShaderDataType::Float3},
+        {"a_Pos",      AGE::ShaderDataType::Float3},
+        {"a_TexCoord", AGE::ShaderDataType::Float2}
     };
 
     VBO->SetLayout(layout);
@@ -52,8 +52,8 @@ namespace AGE {
   }
 
   void Renderer2D::BeginScene(const OrthographicCamera& camera) {
-    s_Storage->FlatColorShader->Bind();
-    s_Storage->FlatColorShader->SetMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
+    s_Storage->Shader2D->Bind();
+    s_Storage->Shader2D->SetMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
   }
 
   void Renderer2D::EndScene() {
@@ -61,13 +61,52 @@ namespace AGE {
   }
 
   void Renderer2D::DrawQuad(const glm::vec2& pos, const glm::vec2& size, const glm::vec4& color) {
-    s_Storage->FlatColorShader->Bind();
-    s_Storage->QuadVertexArray->Bind();
+    DrawQuad(glm::vec3{pos, 0.0f}, size, color);
+  }
 
-    glm::mat4 transform = glm::translate(glm::mat4{1.0f}, {pos, 0.0f})
+  void Renderer2D::DrawQuad(const glm::vec3& pos, const glm::vec2& size, const glm::vec4& color) {
+    DrawQuad(pos, size, nullptr, color);
+  }
+
+  void Renderer2D::DrawQuad(
+      const glm::vec2& pos, const glm::vec2& size, const Ref<Texture2D>& texture
+  ) {
+    DrawQuad(glm::vec3(pos, 0.0f), size, texture);
+  }
+
+  void Renderer2D::DrawQuad(
+      const glm::vec3& pos, const glm::vec2& size, const Ref<Texture2D>& texture
+  ) {
+    DrawQuad(pos, size, texture, glm::vec4(1.0f));
+  }
+
+  void Renderer2D::DrawQuad(
+      const glm::vec2& pos, const glm::vec2& size, const Ref<Texture2D>& texture,
+      const glm::vec4& color
+  ) {
+    DrawQuad(glm::vec3(pos, 0.0f), size, texture, color);
+  }
+
+  void Renderer2D::DrawQuad(
+      const glm::vec3& pos, const glm::vec2& size, const Ref<Texture2D>& texture,
+      const glm::vec4& color
+  ) {
+    s_Storage->Shader2D->Bind();
+
+    glm::mat4 transform = glm::translate(glm::mat4{1.0f}, pos)
                           * glm::scale(glm::mat4{1.0f}, {size, 1.0f});
-    s_Storage->FlatColorShader->SetFloat4("u_Color", color);
-    s_Storage->FlatColorShader->SetMat4("u_Transform", transform);
+
+    if (texture) {
+      texture->Bind(1);
+      s_Storage->Shader2D->SetInt("u_Texture", 1);
+      s_Storage->Shader2D->SetInt("u_isTexture", 1);
+    } else {
+      s_Storage->Shader2D->SetInt("u_Texture", 0);
+      s_Storage->Shader2D->SetInt("u_isTexture", 0);
+    }
+
+    s_Storage->Shader2D->SetFloat4("u_Color", color);
+    s_Storage->Shader2D->SetMat4("u_Transform", transform);
 
     RenderCommand::DrawIndexed(s_Storage->QuadVertexArray);
   }

@@ -18,9 +18,7 @@ public:
 
 private:
   AGE::OrthographicCameraController m_CameraController;
-  AGE::Ref<AGE::Shader>             m_Shader;
   AGE::Ref<AGE::Texture2D>          m_Texture;
-  AGE::Ref<AGE::VertexArray>        m_VAO;
 };
 
 class Sandbox2DUI : public AGE::ImGuiLayer {

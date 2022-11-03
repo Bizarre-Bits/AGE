@@ -6,11 +6,10 @@
 #include "Platform/OpenGL/OpenGLShader.h"
 #include "Age/Age.h"
 
-#include <cmath>
-
 #include "glm/gtc/type_ptr.hpp"
 
 Sandbox2DLayer::Sandbox2DLayer() : m_CameraController(1280.0f / 720.0f) {
+  m_Texture = AGE::Texture2D::Create("assets/textures/creeper-face.png");
 }
 
 
@@ -28,7 +27,13 @@ void Sandbox2DLayer::OnUpdate(AGE::Timestep ts) {
   AGE::RenderCommand::Clear();
   AGE::Renderer2D::BeginScene(m_CameraController.GetCamera());
 
-  AGE::Renderer2D::DrawQuad(glm::vec2{0.0f}, glm::vec2{0.5f}, glm::vec4{glm::vec3{0.5f}, 1.0f});
+  AGE::Renderer2D::DrawQuad(
+      glm::vec2{-0.5f, 0.0f}, glm::vec2{0.4f}, m_Texture
+  );
+
+  AGE::Renderer2D::DrawQuad(
+      glm::vec2{0.5f, 0.0f}, glm::vec2{0.4f}, m_Texture, {1.0f, 1.0f, 5.0f, 1.0f}
+  );
 
   AGE::Renderer2D::EndScene();
 }
