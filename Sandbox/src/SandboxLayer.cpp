@@ -40,7 +40,7 @@ SandboxLayer::SandboxLayer() : m_CameraController(1280.0f / 720.0f), m_Camera(-1
   m_CheckerBoardTex = AGE::Texture2D::Create("assets/textures/Checkerboard.png");
   m_LetterATex      = AGE::Texture2D::Create("assets/textures/letter_a.png");
 
-  std::dynamic_pointer_cast<AGE::OpenGLShader>(flatColorShader)->UploadUniformInt(
+  flatColorShader->SetInt(
       "u_Texture", 0
   );
 }
@@ -51,7 +51,6 @@ void SandboxLayer::OnUpdate(AGE::Timestep ts) {
   m_CameraController.OnUpdate(ts);
 
   AGE::Renderer::BeginScene(m_CameraController.GetCamera());
-//  AGE::Renderer::BeginScene(m_Camera);
 
   AGE::RenderCommand::Clear();
 
@@ -67,7 +66,7 @@ void SandboxLayer::OnUpdate(AGE::Timestep ts) {
   auto flatColor = m_ShaderLibrary.Get("FlatColor");
 
   flatColor->Bind();
-  std::dynamic_pointer_cast<AGE::OpenGLShader>(flatColor)->UploadUniformFloat3(
+  flatColor->SetFloat3(
       "u_Color", blueColor
   );
   for (int y = 0; y < 20; y++) {

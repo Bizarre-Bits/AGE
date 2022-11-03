@@ -26,8 +26,9 @@ namespace AGE {
       default: {
         AGE_CORE_ASSERT(false,
                         "Could not create a Vertex Array, as there is no RendererAPI selected");
-        throw;
       }
     }
+
+    return nullptr;
   }
 } // AGE

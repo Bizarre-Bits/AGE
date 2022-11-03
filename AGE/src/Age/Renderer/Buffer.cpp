@@ -51,9 +51,10 @@ namespace AGE {
       default: {
         AGE_CORE_ASSERT(false,
                         "Could not create a vertex buffer, as there is no RendererAPI selected");
-        throw;
       }
     }
+
+    return nullptr;
   }
 
   Ref<IndexBuffer> IndexBuffer::Create(uint32_t* indices, uint32_t count) {
@@ -68,9 +69,10 @@ namespace AGE {
       default: {
         AGE_CORE_ASSERT(false,
                         "Could not create an Index Buffer, as there is no RendererAPI selected")
-        throw;
       }
     }
+
+    return nullptr;
   }
 
   uint32_t shader_data_size(ShaderDataType type) {

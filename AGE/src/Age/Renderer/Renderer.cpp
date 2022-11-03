@@ -6,7 +6,6 @@
 #include "Renderer.h"
 #include "RenderCommand.h"
 #include "Shader.h"
-#include "Platform/OpenGL/OpenGLShader.h"
 
 namespace AGE {
   Renderer::SceneData* Renderer::s_SceneData{new Renderer::SceneData};
@@ -26,11 +25,11 @@ namespace AGE {
   void Renderer::Submit(
       const Ref<VertexArray>& va, const Ref<Shader>& shader, const glm::mat4& transform
   ) {
-    std::dynamic_pointer_cast<const OpenGLShader>(shader)->Bind();
-    std::dynamic_pointer_cast<const OpenGLShader>(shader)->UploadUniformMat4(
+    shader->Bind();
+    shader->SetMat4(
         "u_ViewProjection", s_SceneData->ViewProjectionMatrix
     );
-    std::dynamic_pointer_cast<const OpenGLShader>(shader)->UploadUniformMat4(
+    shader->SetMat4(
         "u_Transform", transform
     );
     RenderCommand::DrawIndexed(va);

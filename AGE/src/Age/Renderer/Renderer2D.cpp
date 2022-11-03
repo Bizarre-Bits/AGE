@@ -66,7 +66,7 @@ namespace AGE {
 
     glm::mat4 transform = glm::translate(glm::mat4{1.0f}, {pos, 0.0f})
                           * glm::scale(glm::mat4{1.0f}, {size, 1.0f});
-    s_Storage->FlatColorShader->SetVec4("u_Color", color);
+    s_Storage->FlatColorShader->SetFloat4("u_Color", color);
     s_Storage->FlatColorShader->SetMat4("u_Transform", transform);
 
     RenderCommand::DrawIndexed(s_Storage->QuadVertexArray);

@@ -14,7 +14,7 @@
 #endif
 
 namespace AGE {
-  Ref <Texture2D> Texture2D::Create(const age_string_t& path) {
+  Ref<Texture2D> Texture2D::Create(const age_string_t& path) {
     switch (Renderer::GetAPI()) {
       case RenderAPI::API::None: AGE_CORE_ASSERT(false, "RendererAPI::None is not supported");
       case RenderAPI::API::OpenGL:
@@ -28,5 +28,7 @@ namespace AGE {
                         "Could not create a Vertex Array, as there is no RendererAPI selected");
       }
     }
+
+    return nullptr;
   }
 }

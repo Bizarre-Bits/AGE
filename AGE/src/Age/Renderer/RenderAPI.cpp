@@ -23,6 +23,12 @@ namespace AGE {
 #else
         AGE_CORE_ASSERT(false, "OpenGL is not included into the current compilation");
 #endif
+      default: {
+        AGE_CORE_ASSERT(false,
+                        "Could not create a RenderAPI object, as there is no RendererAPI selected");
+      }
     }
+
+    return nullptr;
   }
 } // AGE

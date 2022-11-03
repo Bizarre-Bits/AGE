@@ -25,7 +25,13 @@ namespace AGE {
 #else
         AGE_CORE_ASSERT(false, "OpenGL Render API is not included in the current compilation.");
 #endif
+      default: {
+        AGE_CORE_ASSERT(false,
+                        "Could not create a Shader, as there is no RendererAPI selected");
+      }
     };
+
+    return nullptr;
   }
 
   Ref<Shader> Shader::Create(const age_string_t& filepath) {
@@ -37,7 +43,13 @@ namespace AGE {
 #else
         AGE_CORE_ASSERT(false, "OpenGL Render API is not included in the current compilation.");
 #endif
+      default: {
+        AGE_CORE_ASSERT(false,
+                        "Could not create a Shader, as there is no RendererAPI selected");
+      }
     };
+
+    return nullptr;
   }
 
   // ShaderLibrary
