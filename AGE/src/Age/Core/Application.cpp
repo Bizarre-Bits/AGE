@@ -10,6 +10,7 @@
 #include "Age/Debug/DebugLayer.h"
 #include "Age/ImGui/ImGuiLayer.h"
 #include "Age/Renderer/Renderer.h"
+#include "Age/Renderer/Renderer2D.h"
 
 namespace AGE {
   Application* Application::s_Instance{nullptr};
@@ -21,6 +22,7 @@ namespace AGE {
     m_Window->EventCallback(AGE_BIND_EVENT_FN(&Application::OnEvent));
 
     Renderer::Init();
+    Renderer2D::Init();
 
 #ifdef DEBUG
     PushOverlay(new DebugLayer);
@@ -77,7 +79,11 @@ namespace AGE {
     return s_Instance;
   }
 
-  Scope <Window>& Application::Window() {
+  Scope<Window>& Application::Window() {
     return m_Window;
+  }
+
+  Timestep Application::Uptime() {
+    return m_Timer.Uptime();
   }
 }// namespace AGE

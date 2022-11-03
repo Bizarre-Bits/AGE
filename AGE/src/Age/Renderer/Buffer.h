@@ -91,7 +91,7 @@ namespace AGE {
 
     virtual uint32_t Count() const = 0;
 
-    static VertexBuffer* Create(float* vertices, uint32_t count);
+    static Ref<VertexBuffer> Create(float* vertices, uint32_t count);
   };
 
   class IndexBuffer {
@@ -103,7 +103,7 @@ namespace AGE {
 
     virtual uint32_t Count() const = 0;
 
-    static IndexBuffer* Create(uint32_t* indices, uint32_t count);
+    static Ref<IndexBuffer> Create(uint32_t* indices, uint32_t count);
   };
 }
 

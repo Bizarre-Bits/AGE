@@ -30,6 +30,8 @@ namespace AGE {
 
     static Application* Instance();
 
+    Timestep Uptime();
+
   private:
     bool OnWindowClose(WindowCloseEvent& e);
 

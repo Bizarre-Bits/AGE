@@ -191,4 +191,12 @@ namespace AGE {
 
   }
 
+  void OpenGLShader::SetMat4(const age_string_t& name, const glm::mat4& value) {
+    UploadUniformMat4(name, value);
+  }
+
+  void OpenGLShader::SetVec4(const age_string_t& name, const glm::vec4& value) {
+    UploadUniformFloat4(name, value);
+  }
+
 }

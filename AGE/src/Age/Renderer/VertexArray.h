@@ -21,7 +21,7 @@ namespace AGE {
     virtual std::vector<Ref<VertexBuffer>> VertexBuffers() const = 0;
     virtual Ref<AGE::IndexBuffer> IndexBuffer() const    = 0;
 
-    static VertexArray* Create();
+    static Ref<VertexArray> Create();
   };
 }// namespace AGE
 

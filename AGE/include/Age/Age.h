@@ -32,6 +32,8 @@
 #include "Age/Renderer/OrthographicCamera.h"
 #include "Age/Renderer/OrthographicCameraController.h"
 
+#include "Age/Renderer/Renderer2D.h"
+
 // Debug
 #include "Age/Debug/Assert.h"
 

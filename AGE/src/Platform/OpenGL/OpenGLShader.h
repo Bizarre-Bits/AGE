@@ -23,6 +23,9 @@ namespace AGE {
     virtual void Bind() const override;
     virtual void Unbind() const override;
 
+    virtual void SetMat4(const age_string_t& name, const glm::mat4& value) override;
+    virtual void SetVec4(const age_string_t& name, const glm::vec4& value) override;
+
     void UploadUniformFloat(const age_string_t& name, const float value) const;
     void UploadUniformFloat2(const age_string_t& name, const glm::vec2& vector) const;
     void UploadUniformFloat3(const age_string_t& name, const glm::vec3& vector) const;

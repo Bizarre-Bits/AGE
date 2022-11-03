@@ -5,9 +5,10 @@
 #ifndef AGE_SHADER_H
 #define AGE_SHADER_H
 
-#include "Age/Core/Core.h"
-
 #include <glm/glm.hpp>
+#include <unordered_map>
+
+#include "Age/Core/Core.h"
 
 namespace AGE {
 
@@ -17,6 +18,9 @@ namespace AGE {
 
     virtual void Bind() const = 0;
     virtual void Unbind() const = 0;
+
+    virtual void SetMat4(const age_string_t& name, const glm::mat4& value) = 0;
+    virtual void SetVec4(const age_string_t& name, const glm::vec4& value) = 0;
 
     virtual const age_string_t& GetName() const = 0;
 
@@ -35,13 +39,13 @@ namespace AGE {
 
   class ShaderLibrary {
   public:
-    void Add(const Ref <Shader>& shader);
+    void Add(const Ref<Shader>& shader);
 
-    Ref <Shader> Load(const age_string_t& filepath);
-    Ref <Shader> Load(const age_string_t& name, const age_string_t& filepath);
-    Ref <Shader> Get(const age_string_t& name);
+    Ref<Shader> Load(const age_string_t& filepath);
+    Ref<Shader> Load(const age_string_t& name, const age_string_t& filepath);
+    Ref<Shader> Get(const age_string_t& name);
   private:
-    std::unordered_map<age_string_t, Ref < Shader>> m_Shaders;
+    std::unordered_map<age_string_t, Ref<Shader>> m_Shaders;
   };
 
 } // AGE
