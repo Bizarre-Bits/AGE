@@ -11,6 +11,8 @@ namespace AGE {
   void OpenGLRenderAPI::Init() {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    glEnable(GL_DEPTH_TEST);
   }
 
   void OpenGLRenderAPI::SetClearColor(const glm::vec4& color) {
@@ -18,7 +20,7 @@ namespace AGE {
   }
 
   void OpenGLRenderAPI::Clear() {
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   }
 
   void OpenGLRenderAPI::DrawIndexed(const Ref <VertexArray>& va) {

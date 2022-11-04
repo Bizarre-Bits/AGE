@@ -9,7 +9,8 @@
 #include "glm/gtc/type_ptr.hpp"
 
 Sandbox2DLayer::Sandbox2DLayer() : m_CameraController(1280.0f / 720.0f) {
-  m_Texture = AGE::Texture2D::Create("assets/textures/creeper-face.png");
+  m_CreeperFaceTex  = AGE::Texture2D::Create("assets/textures/creeper-face.png");
+  m_CheckerboardTex = AGE::Texture2D::Create("assets/textures/Checkerboard.png");
 }
 
 
@@ -28,12 +29,18 @@ void Sandbox2DLayer::OnUpdate(AGE::Timestep ts) {
   AGE::Renderer2D::BeginScene(m_CameraController.GetCamera());
 
   AGE::Renderer2D::DrawQuad(
-      glm::vec2{-0.5f, 0.0f}, glm::vec2{0.4f}, m_Texture
+      glm::vec2{0.0f, 0.5f}, glm::vec2{0.4f}, m_CreeperFaceTex, {1.0f, 1.0f, 5.0f, 1.0f}
   );
 
   AGE::Renderer2D::DrawQuad(
-      glm::vec2{0.5f, 0.0f}, glm::vec2{0.4f}, m_Texture, {1.0f, 1.0f, 5.0f, 1.0f}
+      glm::vec2{0.5f, -0.5f}, glm::vec2{0.4f}, m_CreeperFaceTex
   );
+
+  AGE::Renderer2D::DrawQuad(
+      glm::vec2{-0.5f, -0.5f}, glm::vec2{0.4f}, {0.6f, 0.2f, 0.8f, 1.0f}
+  );
+
+  AGE::Renderer2D::DrawQuad(glm::vec3{0.0f, 0.0f, -0.1f}, glm::vec2{10.0f}, m_CheckerboardTex);
 
   AGE::Renderer2D::EndScene();
 }
