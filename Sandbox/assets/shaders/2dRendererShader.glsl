@@ -22,12 +22,7 @@ out vec4 f_Color;
 
 uniform sampler2D u_Texture;
 uniform vec4 u_Color;
-uniform bool u_isTexture;
 
 void main() {
-    if(u_isTexture){
-        f_Color = texture(u_Texture, v_TexCoord) * u_Color;
-    } else {
-        f_Color = u_Color;
-    }
+    f_Color = texture(u_Texture, v_TexCoord) * u_Color;
 }

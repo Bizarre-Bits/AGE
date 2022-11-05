@@ -91,6 +91,11 @@ endif ()
 
 target_compile_definitions(age_core PUBLIC AGE_RENDER_PLATFORM_${AGE_RENDER_PLATFORM})
 
+file(REMOVE_RECURSE ${CMAKE_BINARY_DIR}/core_assets)
+
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/core_assets
+        DESTINATION ${CMAKE_BINARY_DIR})
+
 #__GLX_VENDOR_LIBRARY_NAME=nvidia;__NV_PRIME_RENDER_OFFLOAD=1
 
 

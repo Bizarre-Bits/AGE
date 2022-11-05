@@ -11,6 +11,7 @@ namespace AGE {
   struct Renderer2DStorage {
     Ref<VertexArray> QuadVertexArray;
     Ref<Shader>      Shader2D;
+    Ref<Texture2D>   UnitTexture;
   };
 
   static Renderer2DStorage* s_Storage;
@@ -18,23 +19,21 @@ namespace AGE {
   void Renderer2D::Init() {
     s_Storage = new Renderer2DStorage;
 
-    s_Storage->Shader2D = AGE::Shader::Create("assets/shaders/2dRendererShader.glsl");
+    s_Storage->Shader2D    = AGE::Shader::Create("assets/shaders/2dRendererShader.glsl");
+    s_Storage->UnitTexture = AGE::Texture2D::Create(1, 1);
+
+    uint8_t data[]{255, 255, 255, 255};
+    s_Storage->UnitTexture->SetData(data, sizeof(data));
 
     s_Storage->QuadVertexArray = AGE::VertexArray::Create();
 
-    float vertices[4 * 5]{
-        -0.5f, 0.5f, 0.0f, 0.0f, 1.0f,
-        -0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
-        0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
-        0.5f, 0.5f, 0.0f, 1.0f, 1.0f
-    };
+    float vertices[4 * 5]{-0.5f, 0.5f, 0.0f, 0.0f, 1.0f, -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 0.5f,
+                          -0.5f, 0.0f, 1.0f, 0.0f, 0.5f, 0.5f, 0.0f, 1.0f, 1.0f};
 
     auto VBO = AGE::VertexBuffer::Create(vertices, sizeof(vertices) / sizeof(float));
 
-    AGE::BufferLayout layout{
-        {"a_Pos",      AGE::ShaderDataType::Float3},
-        {"a_TexCoord", AGE::ShaderDataType::Float2}
-    };
+    AGE::BufferLayout layout{{"a_Pos",      AGE::ShaderDataType::Float3},
+                             {"a_TexCoord", AGE::ShaderDataType::Float2}};
 
     VBO->SetLayout(layout);
 
@@ -96,16 +95,25 @@ namespace AGE {
     glm::mat4 transform = glm::translate(glm::mat4{1.0f}, pos)
                           * glm::scale(glm::mat4{1.0f}, {size, 1.0f});
 
-    if (texture) {
-      texture->Bind(1);
-      s_Storage->Shader2D->SetInt("u_Texture", 1);
-      s_Storage->Shader2D->SetInt("u_isTexture", 1);
+    bool isTexCorrect = false;
+
+    if (!texture) {
+      const Ref<Texture2D>& unitTex = s_Storage->UnitTexture;
+      unitTex->Bind();
+      s_Storage->Shader2D->SetInt("u_Texture", (int)unitTex->Slot());
+      isTexCorrect = true;
     } else {
-      s_Storage->Shader2D->SetInt("u_Texture", 0);
-      s_Storage->Shader2D->SetInt("u_isTexture", 0);
+      texture->Bind();
+      s_Storage->Shader2D->SetInt("u_Texture", (int)texture->Slot());
+      isTexCorrect = texture->IsCorrect();
     }
 
-    s_Storage->Shader2D->SetFloat4("u_Color", color);
+    if (isTexCorrect) {
+      s_Storage->Shader2D->SetFloat4("u_Color", color);
+    } else {
+      s_Storage->Shader2D->SetFloat4("u_Color", glm::vec4{1.0f});
+    }
+
     s_Storage->Shader2D->SetMat4("u_Transform", transform);
 
     RenderCommand::DrawIndexed(s_Storage->QuadVertexArray);

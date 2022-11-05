@@ -7,7 +7,7 @@
       <option name="INDENT_INSIDE_CODE_BLOCK" value="2" />
       <option name="INDENT_PREPROCESSOR_DIRECTIVE" value="2" />
       <option name="KEEP_STRUCTURES_IN_ONE_LINE" value="true" />
-      <option name="KEEP_CASE_EXPRESSIONS_IN_ONE_LINE" value="true" />
+      <option name="KEEP_NESTED_NAMESPACES_IN_ONE_LINE" value="true" />
       <option name="FUNCTION_PARAMETERS_NEW_LINE_AFTER_LPAR" value="true" />
       <option name="FUNCTION_PARAMETERS_NEW_LINE_BEFORE_RPAR" value="true" />
       <option name="FUNCTION_CALL_ARGUMENTS_NEW_LINE_AFTER_LPAR" value="true" />
