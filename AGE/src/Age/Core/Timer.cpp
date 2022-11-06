@@ -8,7 +8,8 @@
 
 namespace AGE {
   Timer::timepoint_t Timer::Start() {
-    m_Start = clock_t::now();
+    m_Start    = clock_t::now();
+    m_LastTime = m_Start;
     return m_Start;
   }
 

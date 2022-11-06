@@ -7,6 +7,7 @@
 #include "Age/Age.h"
 
 #include "glm/gtc/type_ptr.hpp"
+#include "Age/Debug/Profiler.h"
 
 Sandbox2DLayer::Sandbox2DLayer() : m_CameraController(1280.0f / 720.0f) {
   m_CreeperFaceTex  = AGE::Texture2D::Create("assets/textures/creeper-face.png");
@@ -23,29 +24,39 @@ void Sandbox2DLayer::OnDetach() {
 }
 
 void Sandbox2DLayer::OnUpdate(AGE::Timestep ts) {
+  AGE_PROFILER_SCOPE("Sandbox2DLayer::OnUpdate");
 
   m_CameraController.OnUpdate(ts);
 
   AGE::RenderCommand::Clear();
   AGE::Renderer2D::BeginScene(m_CameraController.GetCamera());
 
-  AGE::Renderer2D::DrawQuad(
-      glm::vec2{0.6f, 0.0f}, glm::vec2{0.4f}, m_CreeperFaceTex, {1.0f, 1.0f, 5.0f, 1.0f}
-  );
+  {
+    AGE_PROFILER_SCOPE("Sandbox2DLayer Rendering");
+    AGE::Renderer2D::DrawQuad(
+        glm::vec2{0.6f, 0.0f}, glm::vec2{0.4f}, m_CreeperFaceTex, {1.0f, 1.0f, 5.0f, 1.0f}
+    );
 
-  AGE::Renderer2D::DrawQuad(
-      glm::vec2{-0.6f, 0.0f}, glm::vec2{0.4f}, m_CreeperFaceTex
-  );
+    AGE::Renderer2D::DrawQuad(
+        glm::vec2{-0.6f, 0.0f}, glm::vec2{0.4f}, m_CreeperFaceTex
+    );
 
-  AGE::Renderer2D::DrawQuad(
-      glm::vec2{0.0f, 0.6f}, glm::vec2{0.4f}, {0.6f, 0.2f, 0.8f, 1.0f}
-  );
+    AGE::Renderer2D::DrawQuad(
+        glm::vec2{0.0f, 0.6f}, glm::vec2{0.4f}, {0.6f, 0.2f, 0.8f, 1.0f}
+    );
 
-  AGE::Renderer2D::DrawQuad(
-      glm::vec2{0.0f, -0.6f}, glm::vec2{0.4f}, m_IncorrectTex
-  );
+    AGE::Renderer2D::DrawQuad(
+        glm::vec2{0.0f, -0.6f}, glm::vec2{0.4f}, m_IncorrectTex
+    );
 
-  AGE::Renderer2D::DrawQuad(glm::vec3{0.0f, 0.0f, -0.1f}, glm::vec2{10.0f}, m_CheckerboardTex);
+    AGE::Renderer2D::DrawQuad(glm::vec3{0.0f, 0.0f, -0.1f}, glm::vec2{10.0f}, m_CheckerboardTex);
+  }
+  ImGui::Begin("Profile");
+  for (auto el: AGE::s_ProfileResults) {
+    ImGui::Text("%.3fms %s", el.Duration, el.Name);
+  }
+  AGE_RESET_PROFILER();
+  ImGui::End();
 
   AGE::Renderer2D::EndScene();
 }
