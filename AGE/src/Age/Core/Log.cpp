@@ -13,6 +13,8 @@ namespace AGE {
 	std::shared_ptr<spdlog::logger> Log::s_ClientLogger;
 
 	void Log::Init() {
+    AGE_PROFILE_FUNCTION();
+
 		spdlog::set_pattern("%^[%T] %n |%l|: %v%$");
 		s_CoreLogger = spdlog::stdout_color_mt("Engine");
 		s_CoreLogger->set_level(spdlog::level::trace);

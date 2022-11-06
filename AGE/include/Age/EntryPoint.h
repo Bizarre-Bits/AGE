@@ -13,10 +13,11 @@
 extern AGE::Application* AGE::CreateApplication();
 
 int main(int argc, char** argv) {
+  AGE_PROFILE_BEGIN_SESSION("Startup", "age_profile_startup.json");
+
   AGE::Log::Init();
   AGE_CORE_TRACE("Initialized logging");
 
-  AGE_PROFILE_BEGIN_SESSION("Startup", "age_profile_startup.json");
   auto app = AGE::CreateApplication();
   AGE_PROFILE_END_SESSION();
 

@@ -18,6 +18,7 @@ namespace AGE {
                                                                                 GL_RGBA8
                                                                             ),
                                                                             m_DataFormat(GL_RGBA) {
+    AGE_PROFILE_FUNCTION();
 
     glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
     glTextureStorage2D(m_RendererID, 1, m_InternalFormat, m_Width, m_Height);
@@ -30,6 +31,8 @@ namespace AGE {
                                                                m_isBound{false},
                                                                m_InternalFormat(0),
                                                                m_DataFormat(0) {
+    AGE_PROFILE_FUNCTION();
+
     int width, height, channels;
     stbi_set_flip_vertically_on_load(1);
     stbi_uc* data = stbi_load(path.c_str(), &width, &height, &channels, 0);
@@ -67,6 +70,8 @@ namespace AGE {
   }
 
   void OpenGLTexture2D::SetData(void* data, uint32_t size) {
+    AGE_PROFILE_FUNCTION();
+
     uint32_t bytesPerPixel{0};
     switch (m_DataFormat) {
       case GL_RGBA:
@@ -91,16 +96,22 @@ namespace AGE {
   }
 
   OpenGLTexture2D::~OpenGLTexture2D() {
+    AGE_PROFILE_FUNCTION();
+
     glDeleteTextures(1, &m_RendererID);
   }
 
   void OpenGLTexture2D::Bind(uint32_t slot) const {
+    AGE_PROFILE_FUNCTION();
+
     glBindTextureUnit(slot, m_RendererID);
     m_Slot    = slot;
     m_isBound = true;
   }
 
   void OpenGLTexture2D::Unbind() const {
+    AGE_PROFILE_FUNCTION();
+
     if (!m_isBound) {
       AGE_CORE_WARN("Trying to unbind a texture that is not bound!");
       return;
@@ -110,14 +121,20 @@ namespace AGE {
   }
 
   bool OpenGLTexture2D::IsCorrect() const {
+    AGE_PROFILE_FUNCTION();
+
     return m_isCorrect;
   }
 
   uint32_t OpenGLTexture2D::Slot() const {
+    AGE_PROFILE_FUNCTION();
+
     return m_Slot;
   }
 
   void OpenGLTexture2D::SetErrorTexture() {
+    AGE_PROFILE_FUNCTION();
+
     m_Height         = m_Width = 4;
     m_DataFormat     = GL_RGBA;
     m_InternalFormat = GL_RGBA8;

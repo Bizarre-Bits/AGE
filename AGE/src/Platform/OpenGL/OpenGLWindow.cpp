@@ -17,22 +17,32 @@ namespace AGE {
   bool OpenGLWindow::s_GLFWInitialized{false};
 
   void GLFWErrorCallback(int error, const char* description) {
+    AGE_PROFILE_FUNCTION();
+
     AGE_CORE_ERROR("GLFW Error ({0}): {1}", error, description);
   }
 
   Window* Window::Create(const AGE::WindowProps& props) {
+    AGE_PROFILE_FUNCTION();
+
     return new OpenGLWindow(props);
   }
 
   OpenGLWindow::OpenGLWindow(const WindowProps& props) {
+    AGE_PROFILE_FUNCTION();
+
     Init(props);
   }
 
   OpenGLWindow::~OpenGLWindow() {
+    AGE_PROFILE_FUNCTION();
+
     Destroy();
   }
 
   void OpenGLWindow::Init(const WindowProps& props) {
+    AGE_PROFILE_FUNCTION();
+
     m_Data.Title  = props.Title;
     m_Data.Width  = props.Width;
     m_Data.Height = props.Height;
@@ -158,12 +168,18 @@ namespace AGE {
   }
 
   void OpenGLWindow::OnUpdate() {
+    AGE_PROFILE_FUNCTION();
+
     glfwPollEvents();
 
     m_Context->SwapBuffers();
   }
 
   void OpenGLWindow::SetVSync(bool enabled) {
+    AGE_PROFILE_FUNCTION();
+    AGE_PROFILE_FUNCTION();
+
+
     if (enabled) {
       glfwSwapInterval(1);
     } else {
@@ -173,20 +189,30 @@ namespace AGE {
   }
 
   bool OpenGLWindow::VSync() const {
+    AGE_PROFILE_FUNCTION();
+
     return m_Data.VSync;
   }
 
   void OpenGLWindow::EventCallback(const Window::EventCallbackFn& callback) {
+    AGE_PROFILE_FUNCTION();
+
     m_Data.EventCallback = callback;
   }
 
   void OpenGLWindow::Destroy() {
+    AGE_PROFILE_FUNCTION();
+
     glfwDestroyWindow(m_Window);
   }
   void* OpenGLWindow::NativeWindow() const {
+    AGE_PROFILE_FUNCTION();
+
     return m_Window;
   }
   void OpenGLWindow::Clear() {
+    AGE_PROFILE_FUNCTION();
+
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   }
 }// namespace AGE

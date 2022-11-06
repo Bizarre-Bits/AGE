@@ -11,22 +11,32 @@
 
 namespace AGE {
   OpenGLVertexArray::OpenGLVertexArray() {
+    AGE_PROFILE_FUNCTION();
+
     glGenVertexArrays(1, &m_RenderID);
   }
 
   OpenGLVertexArray::~OpenGLVertexArray() {
+    AGE_PROFILE_FUNCTION();
+
     glDeleteVertexArrays(1, &m_RenderID);
   }
 
   void OpenGLVertexArray::Bind() const {
+    AGE_PROFILE_FUNCTION();
+
     glBindVertexArray(m_RenderID);
   }
 
   void OpenGLVertexArray::Unbind() const {
+    AGE_PROFILE_FUNCTION();
+
     glBindVertexArray(0);
   }
 
   void OpenGLVertexArray::AddVertexBuffer(Ref<VertexBuffer> vertexBuffer) {
+    AGE_PROFILE_FUNCTION();
+
     AGE_CORE_ASSERT(!vertexBuffer->Layout().Elements().empty(), "Vertex buffer has no layout");
 
     glBindVertexArray(m_RenderID);
@@ -53,6 +63,8 @@ namespace AGE {
   }
 
   void OpenGLVertexArray::SetIndexBuffer(Ref<AGE::IndexBuffer> indexBuffer) {
+    AGE_PROFILE_FUNCTION();
+
     glBindVertexArray(m_RenderID);
     indexBuffer->Bind();
 
@@ -61,10 +73,14 @@ namespace AGE {
   }
 
   std::vector<Ref<VertexBuffer>> OpenGLVertexArray::VertexBuffers() const {
+    AGE_PROFILE_FUNCTION();
+
     return m_VertexBuffers;
   }
 
   Ref<IndexBuffer> OpenGLVertexArray::IndexBuffer() const {
+    AGE_PROFILE_FUNCTION();
+
     return m_IndexBuffer;
   }
 } // AGE

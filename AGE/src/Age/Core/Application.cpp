@@ -16,6 +16,8 @@ namespace AGE {
   Application* Application::s_Instance{nullptr};
 
   Application::Application() : m_Running{true}, m_LayerStack() {
+    AGE_PROFILE_FUNCTION();
+
     s_Instance = this;
 
     m_Window.reset(Window::Create());
@@ -30,8 +32,12 @@ namespace AGE {
   }
 
   void Application::Run() {
+    AGE_PROFILE_FUNCTION();
+
     m_Timer.Start();
     while (m_Running) {
+      AGE_PROFILE_SCOPE("RunLoop");
+
       Timestep ts = m_Timer.DeltaTime();
 
       // TODO: That looks strange, should figure out a better solution.
@@ -50,6 +56,8 @@ namespace AGE {
   }
 
   void Application::OnEvent(Event& e) {
+    AGE_PROFILE_FUNCTION();
+
     EventDispatcher dispatcher(e);
     dispatcher.Dispatch<WindowCloseEvent>(AGE_BIND_EVENT_FN(&Application::OnWindowClose));
 
@@ -60,30 +68,42 @@ namespace AGE {
   }
 
   bool Application::OnWindowClose(WindowCloseEvent& e) {
+    AGE_PROFILE_FUNCTION();
+
     m_Running = false;
     return true;
   }
 
   void Application::PushLayer(Layer* layer) {
+    AGE_PROFILE_FUNCTION();
+
     m_LayerStack.PushLayer(layer);
     layer->OnAttach();
   }
 
   void Application::PushOverlay(Layer* layer) {
+    AGE_PROFILE_FUNCTION();
+
     m_LayerStack.PushOverlay(layer);
     layer->OnAttach();
   }
 
   Application* Application::Instance() {
+    AGE_PROFILE_FUNCTION();
+
     AGE_ASSERT(s_Instance);
     return s_Instance;
   }
 
   Scope<Window>& Application::Window() {
+    AGE_PROFILE_FUNCTION();
+
     return m_Window;
   }
 
   Timestep Application::Uptime() {
+    AGE_PROFILE_FUNCTION();
+
     return m_Timer.Uptime();
   }
 }// namespace AGE

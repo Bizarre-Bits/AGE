@@ -7,6 +7,8 @@
 #include "Shader.h"
 #include "RenderCommand.h"
 
+#include "Age/Debug/Instrumentor.h"
+
 namespace AGE {
   struct Renderer2DStorage {
     Ref<VertexArray> QuadVertexArray;
@@ -17,6 +19,8 @@ namespace AGE {
   static Renderer2DStorage* s_Storage;
 
   void Renderer2D::Init() {
+    AGE_PROFILE_FUNCTION();
+
     s_Storage = new Renderer2DStorage;
 
     s_Storage->Shader2D    = AGE::Shader::Create("assets/shaders/2dRendererShader.glsl");
@@ -47,35 +51,47 @@ namespace AGE {
   }
 
   void Renderer2D::ShutDown() {
+    AGE_PROFILE_FUNCTION();
+
     delete s_Storage;
   }
 
   void Renderer2D::BeginScene(const OrthographicCamera& camera) {
+    AGE_PROFILE_FUNCTION();
+
     s_Storage->Shader2D->Bind();
     s_Storage->Shader2D->SetMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
   }
 
   void Renderer2D::EndScene() {
-
+    AGE_PROFILE_FUNCTION();
   }
 
   void Renderer2D::DrawQuad(const glm::vec2& pos, const glm::vec2& size, const glm::vec4& color) {
+    AGE_PROFILE_FUNCTION();
+
     DrawQuad(glm::vec3{pos, 0.0f}, size, color);
   }
 
   void Renderer2D::DrawQuad(const glm::vec3& pos, const glm::vec2& size, const glm::vec4& color) {
+    AGE_PROFILE_FUNCTION();
+
     DrawQuad(pos, size, nullptr, color);
   }
 
   void Renderer2D::DrawQuad(
       const glm::vec2& pos, const glm::vec2& size, const Ref<Texture2D>& texture
   ) {
+    AGE_PROFILE_FUNCTION();
+
     DrawQuad(glm::vec3(pos, 0.0f), size, texture);
   }
 
   void Renderer2D::DrawQuad(
       const glm::vec3& pos, const glm::vec2& size, const Ref<Texture2D>& texture
   ) {
+    AGE_PROFILE_FUNCTION();
+
     DrawQuad(pos, size, texture, glm::vec4(1.0f));
   }
 
@@ -83,6 +99,8 @@ namespace AGE {
       const glm::vec2& pos, const glm::vec2& size, const Ref<Texture2D>& texture,
       const glm::vec4& color
   ) {
+    AGE_PROFILE_FUNCTION();
+
     DrawQuad(glm::vec3(pos, 0.0f), size, texture, color);
   }
 
@@ -90,6 +108,8 @@ namespace AGE {
       const glm::vec3& pos, const glm::vec2& size, const Ref<Texture2D>& texture,
       const glm::vec4& color
   ) {
+    AGE_PROFILE_FUNCTION();
+
     s_Storage->Shader2D->Bind();
 
     glm::mat4 transform = glm::translate(glm::mat4{1.0f}, pos)

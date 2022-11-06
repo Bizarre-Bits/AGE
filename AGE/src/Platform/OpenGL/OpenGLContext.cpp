@@ -13,6 +13,8 @@ namespace AGE {
   OpenGLContext::OpenGLContext(GLFWwindow* windowHandle) : m_WindowHandle(windowHandle) {}
 
   void OpenGLContext::Init() {
+    AGE_PROFILE_FUNCTION();
+
     glfwMakeContextCurrent(m_WindowHandle);
 
     int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
@@ -26,6 +28,8 @@ namespace AGE {
   }
 
   void OpenGLContext::SwapBuffers() {
+    AGE_PROFILE_FUNCTION();
+
     glfwSwapBuffers(m_WindowHandle);
   }
 }// namespace AGE

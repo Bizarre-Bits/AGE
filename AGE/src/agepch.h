@@ -24,6 +24,7 @@
 #include "spdlog/spdlog.h"
 
 #include "Age/Core/Log.h"
+#include "Age/Debug/Instrumentor.h"
 
 #ifdef AGE_PLATFORM_WINDOWS
   #include <Windows.h>

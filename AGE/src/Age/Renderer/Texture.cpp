@@ -15,6 +15,8 @@
 
 namespace AGE {
   Ref<Texture2D> Texture2D::Create(const age_string_t& path) {
+    AGE_PROFILE_FUNCTION();
+
     switch (Renderer::GetAPI()) {
       case RenderAPI::API::None: AGE_CORE_ASSERT(false, "RendererAPI::None is not supported");
       case RenderAPI::API::OpenGL:
@@ -33,6 +35,8 @@ namespace AGE {
   }
 
   Ref<Texture2D> Texture2D::Create(const uint32_t width, const uint32_t height) {
+    AGE_PROFILE_FUNCTION();
+
     switch (Renderer::GetAPI()) {
       case RenderAPI::API::None: AGE_CORE_ASSERT(false, "RendererAPI::None is not supported");
       case RenderAPI::API::OpenGL:

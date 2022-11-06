@@ -16,6 +16,7 @@ namespace AGE {
   }
 
   void OrthographicCameraController::OnUpdate(Timestep ts) {
+    AGE_PROFILE_FUNCTION();
 
     if (Input::IsKeyPressed(Key::A)) {
       m_CameraPosition.x -= cos(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * ts;
@@ -53,6 +54,7 @@ namespace AGE {
   }
 
   void OrthographicCameraController::OnEvent(Event& e) {
+    AGE_PROFILE_FUNCTION();
 
     EventDispatcher dispatcher(e);
     dispatcher.Dispatch<MouseScrolledEvent>(
@@ -62,6 +64,8 @@ namespace AGE {
   }
 
   void OrthographicCameraController::OnResize(float width, float height) {
+    AGE_PROFILE_FUNCTION();
+
     m_AspectRatio = width / height;
     m_Camera.SetProjection(
         -m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel
@@ -69,6 +73,7 @@ namespace AGE {
   }
 
   bool OrthographicCameraController::OnMouseScrolled(MouseScrolledEvent& e) {
+    AGE_PROFILE_FUNCTION();
 
     m_ZoomLevel -= e.YOffset() * 0.25f;
     m_ZoomLevel = std::max(m_ZoomLevel, 0.25f);
@@ -79,6 +84,7 @@ namespace AGE {
   }
 
   bool OrthographicCameraController::OnWindowResized(WindowResizeEvent& e) {
+    AGE_PROFILE_FUNCTION();
 
     OnResize((float)e.Width(), (float)e.Height());
     return false;

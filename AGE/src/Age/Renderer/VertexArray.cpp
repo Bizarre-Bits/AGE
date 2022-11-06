@@ -15,6 +15,8 @@
 
 namespace AGE {
   Ref<VertexArray> VertexArray::Create() {
+    AGE_PROFILE_FUNCTION();
+
     switch (Renderer::GetAPI()) {
       case RenderAPI::API::None: AGE_CORE_ASSERT(false, "RendererAPI::None is not supported");
       case RenderAPI::API::OpenGL:

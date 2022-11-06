@@ -14,6 +14,8 @@ namespace AGE {
   DebugLayer::DebugLayer() : ImGuiLayer("Debug Layer") {}
 
   void DebugLayer::OnUpdate(Timestep ts) {
+    AGE_PROFILE_FUNCTION();
+
     float fps = 1000.0f / ts.Milliseconds();
 
     m_FpsPlot.LastUpdate += ts.Seconds();
@@ -39,10 +41,14 @@ namespace AGE {
   // FPS Plot
 
   FpsPlot::FpsPlot() {
+    AGE_PROFILE_FUNCTION();
+
     m_Data.fill(0.0f);
   }
 
   void FpsPlot::InsertNewFps(float fps) {
+    AGE_PROFILE_FUNCTION();
+
     if (fps > m_MaxValue) {
       m_MaxValue = fps;
     }
@@ -63,6 +69,8 @@ namespace AGE {
   }
 
   void FpsPlot::Render() {
+    AGE_PROFILE_FUNCTION();
+
     float scaleMax = *std::max_element(m_Data.begin(), m_Data.end());
     ImGui::Text("Max FPS: %f", m_MaxValue);
     ImGui::Text("Min FPS: %f", m_MinValue);

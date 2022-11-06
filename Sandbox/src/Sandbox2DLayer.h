@@ -10,8 +10,6 @@
 class Sandbox2DLayer : public AGE::Layer {
 public:
   Sandbox2DLayer();
-  virtual void OnAttach() override;
-  virtual void OnDetach() override;
 
   virtual void OnUpdate(AGE::Timestep ts) override;
   virtual void OnEvent(AGE::Event& e) override;

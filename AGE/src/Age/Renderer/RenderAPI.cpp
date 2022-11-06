@@ -15,6 +15,8 @@ namespace AGE {
   RenderAPI::API RenderAPI::s_API{API::OpenGL};
 
   RenderAPI* RenderAPI::Create() {
+    AGE_PROFILE_FUNCTION();
+
     switch (s_API) {
       case API::None: AGE_CORE_ASSERT(false, "API::None is not supported yet.");
       case API::OpenGL:

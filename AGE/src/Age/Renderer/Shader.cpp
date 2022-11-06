@@ -17,6 +17,8 @@ namespace AGE {
   Ref<Shader> Shader::Create(
       const age_string_t& name, const age_string_t& vertexSrc, const age_string_t& fragmentSrc
   ) {
+    AGE_PROFILE_FUNCTION();
+
     switch (Renderer::GetAPI()) {
       case RenderAPI::API::None: AGE_CORE_ASSERT(false, "Render API None is not supported yet");
       case RenderAPI::API::OpenGL:
@@ -35,6 +37,8 @@ namespace AGE {
   }
 
   Ref<Shader> Shader::Create(const age_string_t& filepath) {
+    AGE_PROFILE_FUNCTION();
+
     switch (Renderer::GetAPI()) {
       case RenderAPI::API::None: AGE_CORE_ASSERT(false, "Render API None is not supported yet");
       case RenderAPI::API::OpenGL:
@@ -55,6 +59,8 @@ namespace AGE {
   // ShaderLibrary
 
   void ShaderLibrary::Add(const Ref<Shader>& shader) {
+    AGE_PROFILE_FUNCTION();
+
     const age_string_t& name = shader->GetName();
     AGE_CORE_ASSERT_FORMATTED(m_Shaders.find(name) == m_Shaders.end(),
                               "Shader '{0}' already exists!", name);
@@ -62,12 +68,16 @@ namespace AGE {
   }
 
   Ref<Shader> ShaderLibrary::Load(const age_string_t& filepath) {
+    AGE_PROFILE_FUNCTION();
+
     Ref<Shader> shader = Shader::Create(filepath);
     Add(shader);
     return shader;
   }
 
   Ref<Shader> ShaderLibrary::Load(const age_string_t& name, const age_string_t& filepath) {
+    AGE_PROFILE_FUNCTION();
+
     Ref<Shader> shader = Load(filepath);
     shader->SetName(name);
     Add(shader);
@@ -75,6 +85,8 @@ namespace AGE {
   }
 
   Ref<Shader> ShaderLibrary::Get(const age_string_t& name) {
+    AGE_PROFILE_FUNCTION();
+
     AGE_CORE_ASSERT_FORMATTED(m_Shaders.find(name) != m_Shaders.end(),
                               "Shader '{0}' does not exist", name);
     return m_Shaders[name];

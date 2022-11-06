@@ -10,18 +10,26 @@ namespace AGE {
   RenderAPI* RenderCommand::s_RenderAPI{RenderAPI::Create()};
 
   void RenderCommand::Init() {
+    AGE_PROFILE_FUNCTION();
+
     s_RenderAPI->Init();
   }
 
   void RenderCommand::Clear() {
+    AGE_PROFILE_FUNCTION();
+
     s_RenderAPI->Clear();
   }
 
   void RenderCommand::SetClearColor(const glm::vec4& color) {
+    AGE_PROFILE_FUNCTION();
+
     s_RenderAPI->SetClearColor(color);
   }
 
   void RenderCommand::DrawIndexed(const Ref<VertexArray>& va) {
+    AGE_PROFILE_FUNCTION();
+
     s_RenderAPI->DrawIndexed(va);
   }
 } // AGE
