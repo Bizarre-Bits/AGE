@@ -17,9 +17,13 @@
   #else
     #error "Platform does not support debug breaks yet"
   #endif
-  #define AGE_ENABLE_ASSERTS
+
+  #define AGE_ENABLE_ASSERTS 1
+  #define AGE_PROFILE 1
 #else
   #define AGE_DEBUG_BREAK()
+  #define AGE_ENABLE_ASSERTS 0
+  #define AGE_PROFILE 0
 #endif
 
 #define AGE_EXPAND_MACRO(x) x

@@ -36,5 +36,6 @@
 
 // Debug
 #include "Age/Debug/Assert.h"
+#include "Age/Debug/Instrumentor.h"
 
 #endif//AGE_AGE_H

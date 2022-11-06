@@ -8,6 +8,7 @@
 #include "Age/Core/Core.h"
 #include "Age/Core/Log.h"
 #include "Age/Core/Application.h"
+#include "Age/Debug/Instrumentor.h"
 
 extern AGE::Application* AGE::CreateApplication();
 
@@ -15,12 +16,18 @@ int main(int argc, char** argv) {
   AGE::Log::Init();
   AGE_CORE_TRACE("Initialized logging");
 
+  AGE_PROFILE_BEGIN_SESSION("Startup", "age_profile_startup.json");
   auto app = AGE::CreateApplication();
+  AGE_PROFILE_END_SESSION();
 
+  AGE_PROFILE_BEGIN_SESSION("Runtime", "age_profile_runtime.json");
   app->Run();
-  delete app;
+  AGE_PROFILE_END_SESSION();
 
+  AGE_PROFILE_BEGIN_SESSION("Shutdown", "age_profile_shutdown.json");
+  delete app;
   AGE_CORE_TRACE("App is terminated");
+  AGE_PROFILE_END_SESSION();
 }
 
 #endif//AGE_ENTRYPOINT_H

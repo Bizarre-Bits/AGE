@@ -7,7 +7,6 @@
 #include "Age/Age.h"
 
 #include "glm/gtc/type_ptr.hpp"
-#include "Age/Debug/Profiler.h"
 
 Sandbox2DLayer::Sandbox2DLayer() : m_CameraController(1280.0f / 720.0f) {
   m_CreeperFaceTex  = AGE::Texture2D::Create("assets/textures/creeper-face.png");
@@ -24,7 +23,7 @@ void Sandbox2DLayer::OnDetach() {
 }
 
 void Sandbox2DLayer::OnUpdate(AGE::Timestep ts) {
-  AGE_PROFILER_SCOPE("Sandbox2DLayer::OnUpdate");
+  AGE_PROFILE_FUNCTION();
 
   m_CameraController.OnUpdate(ts);
 
@@ -32,7 +31,7 @@ void Sandbox2DLayer::OnUpdate(AGE::Timestep ts) {
   AGE::Renderer2D::BeginScene(m_CameraController.GetCamera());
 
   {
-    AGE_PROFILER_SCOPE("Sandbox2DLayer Rendering");
+    AGE_PROFILE_SCOPE("Sandbox2D Render");
     AGE::Renderer2D::DrawQuad(
         glm::vec2{0.6f, 0.0f}, glm::vec2{0.4f}, m_CreeperFaceTex, {1.0f, 1.0f, 5.0f, 1.0f}
     );
@@ -51,12 +50,6 @@ void Sandbox2DLayer::OnUpdate(AGE::Timestep ts) {
 
     AGE::Renderer2D::DrawQuad(glm::vec3{0.0f, 0.0f, -0.1f}, glm::vec2{10.0f}, m_CheckerboardTex);
   }
-  ImGui::Begin("Profile");
-  for (auto el: AGE::s_ProfileResults) {
-    ImGui::Text("%.3fms %s", el.Duration, el.Name);
-  }
-  AGE_RESET_PROFILER();
-  ImGui::End();
 
   AGE::Renderer2D::EndScene();
 }
