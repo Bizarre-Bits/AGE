@@ -24,24 +24,15 @@ void Sandbox2DLayer::OnUpdate(AGE::Timestep ts) {
   AGE::RenderCommand::Clear();
   AGE::Renderer2D::BeginScene(m_CameraController.GetCamera());
 
-  AGE::Renderer2D::DrawQuad(
-      glm::vec2{0.6f, 0.0f}, glm::vec2{0.4f}, m_CreeperFaceTex, {1.0f, 1.0f, 5.0f, 1.0f}
-  );
+  int sq{100};
 
-  AGE::Renderer2D::DrawQuad(
-      glm::vec2{-0.6f, 0.0f}, glm::vec2{0.4f}, m_CreeperFaceTex
-  );
-
-  AGE::Renderer2D::DrawQuad(
-      glm::vec2{0.0f, 0.6f}, glm::vec2{0.4f}, {0.6f, 0.2f, 0.8f, 1.0f}
-  );
-
-  AGE::Renderer2D::DrawQuad(
-      glm::vec2{0.0f, -0.6f}, glm::vec2{0.4f}, m_IncorrectTex
-  );
-
-  AGE::Renderer2D::DrawQuad(glm::vec3{0.0f, 0.0f, -0.1f}, glm::vec2{10.0f}, m_CheckerboardTex);
-
+  for(int x{-sq}; x <= sq; x++) {
+    for(int y{-sq}; y <= sq; y++) {
+      float clampx{(float)x / 100.0f + 0.5f};
+      float clampy{(float)y / 100.0f + 0.5f};
+      AGE::Renderer2D::DrawQuad(glm::vec3{(float)x * 0.1f, (float)y * 0.1f, 0.0f}, glm::vec2{0.09f}, glm::vec4{clampx, clampy, 1.0f, 1.0f});
+    }
+  }
 
   AGE::Renderer2D::EndScene();
 }

@@ -200,7 +200,8 @@ namespace AGE {
 											   ::AGE::InstrumentorTimer timer##line(fixedName##line.Data)
   #define AGE_PROFILE_SCOPE_LINE(name, line) AGE_PROFILE_SCOPE_LINE2(name, line)
   #define AGE_PROFILE_SCOPE(name) AGE_PROFILE_SCOPE_LINE(name, __LINE__)
-  #define AGE_PROFILE_FUNCTION() AGE_PROFILE_SCOPE(AGE_FUNC_SIG)
+  #define AGE_PROFILE_FUNCTION()
+//  #define AGE_PROFILE_FUNCTION() AGE_PROFILE_SCOPE(AGE_FUNC_SIG)
 #else
   #define AGE_PROFILE_BEGIN_SESSION(name, filepath)
 	#define AGE_PROFILE_END_SESSION()

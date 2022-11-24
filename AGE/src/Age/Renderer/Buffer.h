@@ -86,12 +86,15 @@ namespace AGE {
     virtual void SetLayout(const BufferLayout& layout) = 0;
     virtual const BufferLayout& Layout() const = 0;
 
+    virtual void SetData(void* data, uint32_t size) = 0;
+
     virtual void Bind() const = 0;
     virtual void Unbind() const = 0;
 
     virtual uint32_t Count() const = 0;
 
-    static Ref<VertexBuffer> Create(float* vertices, uint32_t count);
+    static Ref <VertexBuffer> Create(float* vertices, uint32_t count);
+    static Ref <VertexBuffer> Create(uint32_t size);
   };
 
   class IndexBuffer {

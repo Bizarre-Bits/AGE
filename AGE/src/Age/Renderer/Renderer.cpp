@@ -38,7 +38,7 @@ namespace AGE {
     shader->SetMat4(
         "u_Transform", transform
     );
-    RenderCommand::DrawIndexed(va);
+    RenderCommand::DrawIndexed(va, 0);
   }
 
 

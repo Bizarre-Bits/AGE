@@ -20,6 +20,10 @@ namespace AGE {
     static void BeginScene(const OrthographicCamera& camera);
     static void EndScene();
 
+    static void StartBatch();
+    static void NextBatch();
+    static void Flush();
+
     // Primitives
     static void DrawQuad(const glm::vec2& pos, const glm::vec2& size, const glm::vec4& color);
     static void DrawQuad(const glm::vec3& pos, const glm::vec2& size, const glm::vec4& color);

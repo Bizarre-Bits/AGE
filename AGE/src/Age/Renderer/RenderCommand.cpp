@@ -27,9 +27,9 @@ namespace AGE {
     s_RenderAPI->SetClearColor(color);
   }
 
-  void RenderCommand::DrawIndexed(const Ref<VertexArray>& va) {
+  void RenderCommand::DrawIndexed(const Ref <VertexArray>& va, uint32_t count) {
     AGE_PROFILE_FUNCTION();
 
-    s_RenderAPI->DrawIndexed(va);
+    s_RenderAPI->DrawIndexed(va, count);
   }
 } // AGE

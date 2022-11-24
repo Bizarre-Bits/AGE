@@ -17,6 +17,7 @@ namespace AGE {
 
   class OpenGLVertexBuffer : public VertexBuffer {
   public:
+    OpenGLVertexBuffer(uint32_t size);
     OpenGLVertexBuffer(float* vertices, uint32_t count);
     virtual ~OpenGLVertexBuffer() override;
 
@@ -27,6 +28,7 @@ namespace AGE {
     virtual void Unbind() const override;
 
     virtual uint32_t Count() const override;
+    virtual void SetData(void* data, uint32_t size) override;
 
   private:
     uint32_t m_RenderID{};
