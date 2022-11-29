@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="172.25548mm"
+   height="187.59021mm"
+   viewBox="0 0 172.25548 187.59021"
+   version="1.1"
+   id="svg5"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs2" />
+  <g
+     id="layer1"
+     transform="matrix(0.52946937,0,0,0.52946937,7.6397357,-13.399112)"
+     style="display:inline">
+    <g
+       id="g3116"
+       transform="matrix(0.66743925,0,0,0.66743925,77.888581,22.043574)"
+       style="opacity:1;fill:#999999">
+      <path
+         id="path3112"
+         style="display:inline;fill:#999999;fill-opacity:1;stroke-width:11.7408"
+         d="m -78.349221,62.749835 19.04122,38.212635 7.411532,14.87142 21.260032,7.91184 29.6219498,11.02151 v 0.002 l 178.8587772,66.55686 20.35428,7.57334 14.60918,5.43636 6.05012,-12.14114 69.49171,-139.444682 H 271.02873 L 204.19847,196.85858 183.77351,189.42659 246.90265,62.749835 H 231.71692 L 170.92004,184.74905 9.8731196,126.13936 -21.71842,62.749835 H -36.904157 L -8.6789594,119.38807 -38.153981,108.66041 -61.032089,62.749835 Z m 36.309998,72.863635 8.622299,17.30226 21.260031,7.91183 29.62195,11.02152 147.681983,54.95692 20.35242,7.57335 14.61104,5.43635 5.92365,-11.8882 -14.60918,-5.43637 L 171.07069,214.9178 8.8427583,154.54869 -20.779192,143.5253 Z m 18.479544,37.08184 7.519404,15.08716 21.2600306,7.91184 29.6200914,11.02151 18.643211,6.93727 48.559022,18.07037 38.3577,14.27256 12.80883,4.76681 20.35243,7.57334 14.61104,5.43823 5.16482,-10.36686 -14.61104,-5.43636 -20.35242,-7.57334 L 27.322302,191.63052 -2.2996478,180.60715 Z M -6.1848903,207.56206 104.99925,430.67056 181.39847,277.36623 166.78743,271.928 104.99925,395.91727 15.077,215.47389 Z m 50.8838413,18.9352 60.300299,121.00419 41.43576,-83.14678 -12.80883,-4.76682 -28.62693,57.44356 -41.658947,-83.59687 z" />
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;font-size:97.2156px;font-family:Montserrat;-inkscape-font-specification:'Montserrat Light';opacity:1;fill:#999999;fill-opacity:1;stroke:none;stroke-width:30.619;stroke-dasharray:none;stroke-opacity:1"
+         x="-138.51057"
+         y="516.37567"
+         id="text3487"><tspan
+           id="tspan3485"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:97.2156px;font-family:Montserrat;-inkscape-font-specification:Montserrat;stroke-width:30.619"
+           x="-138.51057"
+           y="516.37567">AGEngine</tspan></text>
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:300;font-stretch:normal;font-size:161.623px;font-family:Montserrat;-inkscape-font-specification:'Montserrat Light';opacity:1;fill:#999999;fill-opacity:1;stroke:none;stroke-width:22.9073;stroke-dasharray:none;stroke-opacity:1"
+         x="45.199463"
+         y="119.31808"
+         id="text3979"><tspan
+           id="tspan3977"
+           style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:161.623px;font-family:Montserrat;-inkscape-font-specification:'Montserrat Medium';stroke-width:22.9072"
+           x="45.199463"
+           y="119.31808">G</tspan></text>
+    </g>
+  </g>
+</svg>
