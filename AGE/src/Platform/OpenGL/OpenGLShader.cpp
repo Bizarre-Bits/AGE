@@ -257,4 +257,11 @@ namespace AGE {
     UploadUniformInt(name, value);
   }
 
+  void OpenGLShader::SetIntArray(const age_string_t& name, const int* values, uint32_t count) {
+    AGE_PROFILE_FUNCTION();
+
+    int location = glGetUniformLocation(m_RendererID, name.c_str());
+    glUniform1iv(location, count, values);
+  }
+
 }

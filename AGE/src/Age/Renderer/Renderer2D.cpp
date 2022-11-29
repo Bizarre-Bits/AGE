@@ -14,12 +14,14 @@ namespace AGE {
     glm::vec3 Pos;
     glm::vec4 Color;
     glm::vec2 TexCoord;
+    float     TexIndex;
   };
 
-  struct Renderer2DStorage {
-    const uint32_t MaxQuads    = 10'000;
-    const uint32_t MaxVertices = MaxQuads * 4;
-    const uint32_t MaxIndices  = MaxQuads * 6;
+  struct Renderer2DData {
+    const uint32_t        MaxQuads        = 10'000;
+    const uint32_t        MaxVertices     = MaxQuads * 4;
+    const uint32_t        MaxIndices      = MaxQuads * 6;
+    static const uint32_t MaxTextureSlots = 32;
 
     Ref<VertexArray>  QuadVertexArray;
     Ref<VertexBuffer> QuadVertexBuffer;
@@ -30,9 +32,12 @@ namespace AGE {
     QuadVertex* QuadVertexBufferPtr  = nullptr;
 
     uint32_t QuadIndexCount = 0;
+
+    std::array<Ref<Texture2D>, MaxTextureSlots> TextureSlots;
+    uint32_t                                    TextureSlotIndex = 1; //0 - Unit Texture;
   };
 
-  static Renderer2DStorage s_Data;
+  static Renderer2DData s_Data;
 
   void Renderer2D::Init() {
     AGE_PROFILE_FUNCTION();
@@ -49,7 +54,9 @@ namespace AGE {
     s_Data.QuadVertexBuffer = VertexBuffer::Create(4 * sizeof(QuadVertex));
     AGE::BufferLayout layout{{"a_Pos",      AGE::ShaderDataType::Float3},
                              {"a_Color",    AGE::ShaderDataType::Float4},
-                             {"a_TexCoord", AGE::ShaderDataType::Float2}};
+                             {"a_TexCoord", AGE::ShaderDataType::Float2},
+                             {"a_TexIndex", AGE::ShaderDataType::Float}};
+
     s_Data.QuadVertexBuffer->SetLayout(layout);
     s_Data.QuadVertexArray->AddVertexBuffer(s_Data.QuadVertexBuffer);
 
@@ -70,6 +77,14 @@ namespace AGE {
     s_Data.QuadVertexArray->SetIndexBuffer(IB);
 
     s_Data.QuadVertexBufferBase = new QuadVertex[s_Data.MaxVertices];
+    s_Data.TextureSlots[0] = s_Data.UnitTexture;
+
+    int      samplers[Renderer2DData::MaxTextureSlots];
+    for (int i{0}; i < Renderer2DData::MaxTextureSlots; i++)
+      samplers[i] = i;
+
+    s_Data.Shader2D->Bind();
+    s_Data.Shader2D->SetIntArray("u_Textures", samplers, Renderer2DData::MaxTextureSlots);
   }
 
   void Renderer2D::ShutDown() {
@@ -95,6 +110,8 @@ namespace AGE {
   void Renderer2D::StartBatch() {
     s_Data.QuadIndexCount      = 0;
     s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
+
+    s_Data.TextureSlotIndex = 1;
   }
 
   void Renderer2D::NextBatch() {
@@ -110,8 +127,10 @@ namespace AGE {
     s_Data.QuadVertexBuffer->SetData(s_Data.QuadVertexBufferBase, dataSize);
 
     s_Data.Shader2D->Bind();
+    for (uint32_t i{0}; i < s_Data.TextureSlotIndex; i++) {
+      s_Data.TextureSlots[i]->Bind(i);
+    }
     RenderCommand::DrawIndexed(s_Data.QuadVertexArray, s_Data.QuadIndexCount);
-
   }
 
   void Renderer2D::DrawQuad(const glm::vec2& pos, const glm::vec2& size, const glm::vec4& color) {
@@ -157,7 +176,24 @@ namespace AGE {
   ) {
     AGE_PROFILE_FUNCTION();
 
-    if(s_Data.QuadIndexCount >= s_Data.MaxIndices)
+    int textureIndex = 0;
+
+    if (texture != nullptr) {
+      for (int i{0}; i < s_Data.TextureSlotIndex; i++) {
+        if (*s_Data.TextureSlots[i].get() == *texture.get()) {
+          textureIndex = i;
+          break;
+        }
+      }
+
+      if (textureIndex == 0) {
+        textureIndex = (int)s_Data.TextureSlotIndex;
+        s_Data.TextureSlots[textureIndex] = texture;
+        s_Data.TextureSlotIndex++;
+      }
+    }
+
+    if (s_Data.QuadIndexCount >= s_Data.MaxIndices)
       NextBatch();
 
     glm::vec2 halfSize{size * 0.5f};
@@ -165,28 +201,32 @@ namespace AGE {
     *s_Data.QuadVertexBufferPtr = QuadVertex{
         {pos.x - halfSize.x, pos.y + halfSize.y, pos.z},
         color,
-        {0.0f, 0.0f}
+        {1.0f, 1.0f},
+        (float)textureIndex
     };
     s_Data.QuadVertexBufferPtr++;
 
     *s_Data.QuadVertexBufferPtr = QuadVertex{
         {pos.x + halfSize.x, pos.y + halfSize.y, pos.z},
         color,
-        {1.0f, 0.0f}
+        {0.0f, 1.0f},
+        (float)textureIndex
     };
     s_Data.QuadVertexBufferPtr++;
 
     *s_Data.QuadVertexBufferPtr = QuadVertex{
         {pos.x + halfSize.x, pos.y - halfSize.y, pos.z},
         color,
-        {1.0f, 1.0f}
+        {0.0f, 0.0f},
+        (float)textureIndex
     };
     s_Data.QuadVertexBufferPtr++;
 
     *s_Data.QuadVertexBufferPtr = QuadVertex{
         {pos.x - halfSize.x, pos.y - halfSize.y, pos.z},
         color,
-        {0.0f, 1.0f}
+        {1.0f, 0.0f},
+        (float)textureIndex
     };
     s_Data.QuadVertexBufferPtr++;
 

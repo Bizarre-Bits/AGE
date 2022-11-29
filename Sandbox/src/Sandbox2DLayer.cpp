@@ -26,13 +26,28 @@ void Sandbox2DLayer::OnUpdate(AGE::Timestep ts) {
 
   int sq{100};
 
-  for(int x{-sq}; x <= sq; x++) {
-    for(int y{-sq}; y <= sq; y++) {
-      float clampx{(float)x / 100.0f + 0.5f};
-      float clampy{(float)y / 100.0f + 0.5f};
-      AGE::Renderer2D::DrawQuad(glm::vec3{(float)x * 0.1f, (float)y * 0.1f, 0.0f}, glm::vec2{0.09f}, glm::vec4{clampx, clampy, 1.0f, 1.0f});
+  static float time{0};
+
+  time += ts;
+
+  for (int x{-sq}; x <= sq; x++) {
+    for (int y{-sq}; y <= sq; y++) {
+      float clampx{(float)x / (float)sq};
+      float clampy{(float)y / (float)sq};
+
+      float distance = glm::length(glm::vec2(clampx, clampy));
+      float green = 0.0f;
+
+      glm::vec3 col{distance};
+
+      AGE::Renderer2D::DrawQuad(
+          glm::vec3{(float)x * 0.01f, (float)y * 0.01f, 0.0f}, glm::vec2{0.01f},
+          {col, 1.0f}
+      );
     }
   }
+
+//  AGE::Renderer2D::DrawQuad(glm::vec3{0.0f, 0.0f, 1.0f}, glm::vec2{0.09f}, m_CreeperFaceTex, glm::vec4{1.0f, 1.0f, 1.0f, 1.0f});
 
   AGE::Renderer2D::EndScene();
 }

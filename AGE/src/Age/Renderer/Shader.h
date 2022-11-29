@@ -20,11 +20,14 @@ namespace AGE {
     virtual void Unbind() const = 0;
 
     virtual void SetMat4(const age_string_t& name, const glm::mat4& value) = 0;
+
     virtual void SetFloat4(const age_string_t& name, const glm::vec4& value) = 0;
     virtual void SetFloat3(const age_string_t& name, const glm::vec3& value) = 0;
     virtual void SetFloat2(const age_string_t& name, const glm::vec2& value) = 0;
     virtual void SetFloat(const age_string_t& name, const float value) = 0;
+
     virtual void SetInt(const age_string_t& name, const int value) = 0;
+    virtual void SetIntArray(const age_string_t& name, const int* values, uint32_t count) = 0;
 
     virtual const age_string_t& GetName() const = 0;
 

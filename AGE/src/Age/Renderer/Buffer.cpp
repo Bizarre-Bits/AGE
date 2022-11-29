@@ -112,7 +112,7 @@ namespace AGE {
   uint32_t shader_data_size(ShaderDataType type) {
     AGE_PROFILE_FUNCTION();
 
-    uint8_t dataType       = (uint8_t)type & 0b111'00000;
+    uint8_t dataType       = ((uint8_t)type & 0b111'00000) >> 5;
     uint8_t componentCount = (uint8_t)type & 0b000'11111;
 
     switch (dataType) {

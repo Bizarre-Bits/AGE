@@ -19,12 +19,17 @@ namespace AGE {
 
     virtual inline uint32_t GetWidth() const override { return m_Width; }
     virtual inline uint32_t GetHeight() const override { return m_Height; }
+    virtual inline uint32_t ID() const override { return m_RendererID; }
 
     virtual void Bind(uint32_t slot = 0) const override;
     virtual void Unbind() const override;
 
     virtual bool IsCorrect() const override;
     virtual uint32_t Slot() const override;
+
+    virtual inline bool operator==(const Texture2D& other) const override {
+      return m_RendererID == ((OpenGLTexture2D&)other).m_RendererID;
+    }
 
   private:
     uint32_t     m_Height, m_Width;
