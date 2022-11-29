@@ -24,30 +24,19 @@ void Sandbox2DLayer::OnUpdate(AGE::Timestep ts) {
   AGE::RenderCommand::Clear();
   AGE::Renderer2D::BeginScene(m_CameraController.GetCamera());
 
-  int sq{100};
-
-  static float time{0};
-
-  time += ts;
+  int sq{2};
 
   for (int x{-sq}; x <= sq; x++) {
     for (int y{-sq}; y <= sq; y++) {
       float clampx{(float)x / (float)sq};
       float clampy{(float)y / (float)sq};
 
-      float distance = glm::length(glm::vec2(clampx, clampy));
-      float green = 0.0f;
-
-      glm::vec3 col{distance};
-
       AGE::Renderer2D::DrawQuad(
-          glm::vec3{(float)x * 0.01f, (float)y * 0.01f, 0.0f}, glm::vec2{0.01f},
-          {col, 1.0f}
+          glm::vec3{(float)x * 0.25f, (float)y * 0.25f, 0.0f}, glm::vec2{0.24f}, m_CheckerboardTex,
+          1.0f + glm::abs(clampx * clampy)
       );
     }
   }
-
-//  AGE::Renderer2D::DrawQuad(glm::vec3{0.0f, 0.0f, 1.0f}, glm::vec2{0.09f}, m_CreeperFaceTex, glm::vec4{1.0f, 1.0f, 1.0f, 1.0f});
 
   AGE::Renderer2D::EndScene();
 }

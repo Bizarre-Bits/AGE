@@ -15,6 +15,7 @@ namespace AGE {
     glm::vec4 Color;
     glm::vec2 TexCoord;
     float     TexIndex;
+    float     TillingFactor;
   };
 
   struct Renderer2DData {
@@ -52,10 +53,11 @@ namespace AGE {
 
 
     s_Data.QuadVertexBuffer = VertexBuffer::Create(4 * sizeof(QuadVertex));
-    AGE::BufferLayout layout{{"a_Pos",      AGE::ShaderDataType::Float3},
-                             {"a_Color",    AGE::ShaderDataType::Float4},
-                             {"a_TexCoord", AGE::ShaderDataType::Float2},
-                             {"a_TexIndex", AGE::ShaderDataType::Float}};
+    AGE::BufferLayout layout{{"a_Pos",           AGE::ShaderDataType::Float3},
+                             {"a_Color",         AGE::ShaderDataType::Float4},
+                             {"a_TexCoord",      AGE::ShaderDataType::Float2},
+                             {"a_TexIndex",      AGE::ShaderDataType::Float},
+                             {"a_TillingFactor", AGE::ShaderDataType::Float}};
 
     s_Data.QuadVertexBuffer->SetLayout(layout);
     s_Data.QuadVertexArray->AddVertexBuffer(s_Data.QuadVertexBuffer);
@@ -146,19 +148,21 @@ namespace AGE {
   }
 
   void Renderer2D::DrawQuad(
-      const glm::vec2& pos, const glm::vec2& size, const Ref<Texture2D>& texture
+      const glm::vec2& pos, const glm::vec2& size, const Ref <Texture2D>& texture,
+      const float tillingFactor
   ) {
     AGE_PROFILE_FUNCTION();
 
-    DrawQuad(glm::vec3(pos, 0.0f), size, texture);
+    DrawQuad(glm::vec3(pos, 0.0f), size, texture, tillingFactor);
   }
 
   void Renderer2D::DrawQuad(
-      const glm::vec3& pos, const glm::vec2& size, const Ref<Texture2D>& texture
+      const glm::vec3& pos, const glm::vec2& size, const Ref <Texture2D>& texture,
+      const float tillingFactor
   ) {
     AGE_PROFILE_FUNCTION();
 
-    DrawQuad(pos, size, texture, glm::vec4(1.0f));
+    DrawQuad(pos, size, texture, glm::vec4(1.0f), tillingFactor);
   }
 
   void Renderer2D::DrawQuad(
@@ -171,8 +175,8 @@ namespace AGE {
   }
 
   void Renderer2D::DrawQuad(
-      const glm::vec3& pos, const glm::vec2& size, const Ref<Texture2D>& texture,
-      const glm::vec4& color
+      const glm::vec3& pos, const glm::vec2& size, const Ref <Texture2D>& texture,
+      const glm::vec4& color, const float tillingFactor
   ) {
     AGE_PROFILE_FUNCTION();
 
@@ -202,7 +206,8 @@ namespace AGE {
         {pos.x - halfSize.x, pos.y + halfSize.y, pos.z},
         color,
         {1.0f, 1.0f},
-        (float)textureIndex
+        (float)textureIndex,
+        tillingFactor
     };
     s_Data.QuadVertexBufferPtr++;
 
@@ -210,7 +215,8 @@ namespace AGE {
         {pos.x + halfSize.x, pos.y + halfSize.y, pos.z},
         color,
         {0.0f, 1.0f},
-        (float)textureIndex
+        (float)textureIndex,
+        tillingFactor
     };
     s_Data.QuadVertexBufferPtr++;
 
@@ -218,7 +224,8 @@ namespace AGE {
         {pos.x + halfSize.x, pos.y - halfSize.y, pos.z},
         color,
         {0.0f, 0.0f},
-        (float)textureIndex
+        (float)textureIndex,
+        tillingFactor
     };
     s_Data.QuadVertexBufferPtr++;
 
@@ -226,7 +233,8 @@ namespace AGE {
         {pos.x - halfSize.x, pos.y - halfSize.y, pos.z},
         color,
         {1.0f, 0.0f},
-        (float)textureIndex
+        (float)textureIndex,
+        tillingFactor
     };
     s_Data.QuadVertexBufferPtr++;
 
