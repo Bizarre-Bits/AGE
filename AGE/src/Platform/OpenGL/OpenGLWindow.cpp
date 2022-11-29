@@ -4,6 +4,8 @@
 
 #include "agepch.h"
 
+#include <stb_image.h>
+
 #include "Platform/OpenGL/OpenGLWindow.h"
 
 #include "Age/Debug/Assert.h"
@@ -69,6 +71,13 @@ namespace AGE {
 
     SetVSync(true);
 
+    GLFWimage windowIcon;
+    windowIcon.pixels = stbi_load(
+        "assets/icons/age_logo.png", &windowIcon.width, &windowIcon.height, 0, 4
+    );
+    glfwSetWindowIcon(m_Window, 1, &windowIcon);
+    stbi_image_free(windowIcon.pixels);
+
     AGE_CORE_TRACE("Created Window \"{0}\" ({1}, {2})", props.Title, props.Width, props.Height);
 
     // Set GLFW callbacks
@@ -115,7 +124,8 @@ namespace AGE {
               data->EventCallback(event);
               break;
             }
-            default: break;
+            default:
+              break;
           }
         }
     );
@@ -135,7 +145,8 @@ namespace AGE {
               data->EventCallback(event);
               break;
             }
-            default: break;
+            default:
+              break;
           }
         }
     );
