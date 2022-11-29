@@ -1,6 +1,9 @@
-[AGE logo](./age_logo_256.svg)
 
 # AGE: Anxious Game Engine
+
+<div align="center"><img  src="./age_logo_256.svg" height="500"/></div>
+
+****
 
 A game engine written in C++ just for fun and education. 
 With it I'm learning concepts and practces underlying the creation of a game engine and some concepts related to github.
