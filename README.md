@@ -1,3 +1,5 @@
+[AGE logo](./age_logo_256.svg)
+
 # AGE: Anxious Game Engine
 
 A game engine written in C++ just for fun and education. 
