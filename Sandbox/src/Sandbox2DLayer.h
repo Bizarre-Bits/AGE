@@ -19,6 +19,7 @@ private:
   AGE::Ref<AGE::Texture2D>          m_CreeperFaceTex;
   AGE::Ref<AGE::Texture2D>          m_CheckerboardTex;
   AGE::Ref<AGE::Texture2D>          m_IncorrectTex;
+  AGE::Ref<AGE::Texture2D>          m_GearTex;
 };
 
 class Sandbox2DUI : public AGE::ImGuiLayer {

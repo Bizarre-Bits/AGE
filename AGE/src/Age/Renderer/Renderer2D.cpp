@@ -36,6 +36,8 @@ namespace AGE {
 
     std::array<Ref<Texture2D>, MaxTextureSlots> TextureSlots;
     uint32_t                                    TextureSlotIndex = 1; //0 - Unit Texture;
+
+    glm::vec4 QuadVertexPositions[4];
   };
 
   static Renderer2DData s_Data;
@@ -87,6 +89,11 @@ namespace AGE {
 
     s_Data.Shader2D->Bind();
     s_Data.Shader2D->SetIntArray("u_Textures", samplers, Renderer2DData::MaxTextureSlots);
+
+    s_Data.QuadVertexPositions[0] = {-0.5f, 0.5f, 0.0f, 1.0f};
+    s_Data.QuadVertexPositions[1] = {0.5f, 0.5f, 0.0f, 1.0f};
+    s_Data.QuadVertexPositions[2] = {0.5f, -0.5f, 0.0f, 1.0f};
+    s_Data.QuadVertexPositions[3] = {-0.5f, -0.5f, 0.0f, 1.0f};
   }
 
   void Renderer2D::ShutDown() {
@@ -135,6 +142,9 @@ namespace AGE {
     RenderCommand::DrawIndexed(s_Data.QuadVertexArray, s_Data.QuadIndexCount);
   }
 
+// /////////////////////////////////////////////////////////////////////////////////////////////////
+//                                        DRAW QUAD                                               //
+// /////////////////////////////////////////////////////////////////////////////////////////////////
   void Renderer2D::DrawQuad(const glm::vec2& pos, const glm::vec2& size, const glm::vec4& color) {
     AGE_PROFILE_FUNCTION();
 
@@ -148,7 +158,7 @@ namespace AGE {
   }
 
   void Renderer2D::DrawQuad(
-      const glm::vec2& pos, const glm::vec2& size, const Ref <Texture2D>& texture,
+      const glm::vec2& pos, const glm::vec2& size, const Ref<Texture2D>& texture,
       const float tillingFactor
   ) {
     AGE_PROFILE_FUNCTION();
@@ -157,7 +167,7 @@ namespace AGE {
   }
 
   void Renderer2D::DrawQuad(
-      const glm::vec3& pos, const glm::vec2& size, const Ref <Texture2D>& texture,
+      const glm::vec3& pos, const glm::vec2& size, const Ref<Texture2D>& texture,
       const float tillingFactor
   ) {
     AGE_PROFILE_FUNCTION();
@@ -175,27 +185,12 @@ namespace AGE {
   }
 
   void Renderer2D::DrawQuad(
-      const glm::vec3& pos, const glm::vec2& size, const Ref <Texture2D>& texture,
+      const glm::vec3& pos, const glm::vec2& size, const Ref<Texture2D>& texture,
       const glm::vec4& color, const float tillingFactor
   ) {
     AGE_PROFILE_FUNCTION();
 
-    int textureIndex = 0;
-
-    if (texture != nullptr) {
-      for (int i{0}; i < s_Data.TextureSlotIndex; i++) {
-        if (*s_Data.TextureSlots[i].get() == *texture.get()) {
-          textureIndex = i;
-          break;
-        }
-      }
-
-      if (textureIndex == 0) {
-        textureIndex = (int)s_Data.TextureSlotIndex;
-        s_Data.TextureSlots[textureIndex] = texture;
-        s_Data.TextureSlotIndex++;
-      }
-    }
+    int textureIndex = FindTextureIndex(texture);
 
     if (s_Data.QuadIndexCount >= s_Data.MaxIndices)
       NextBatch();
@@ -239,6 +234,81 @@ namespace AGE {
     s_Data.QuadVertexBufferPtr++;
 
     s_Data.QuadIndexCount += 6;
+  }
+
+  int Renderer2D::FindTextureIndex(const Ref <Texture2D>& texture) {
+    int textureIndex = 0;
+
+    if (texture != nullptr) {
+      for (int i{0}; i < s_Data.TextureSlotIndex; i++) {
+        if (*s_Data.TextureSlots[i].get() == *texture.get()) {
+          textureIndex = i;
+          break;
+        }
+      }
+
+      if (textureIndex == 0) {
+        textureIndex = (int)s_Data.TextureSlotIndex;
+        s_Data.TextureSlots[textureIndex] = texture;
+        s_Data.TextureSlotIndex++;
+      }
+    }
+    return textureIndex;
+  }
+
+
+// /////////////////////////////////////////////////////////////////////////////////////////////////
+//                                        DRAW ROTATED QUAD                                       //
+// /////////////////////////////////////////////////////////////////////////////////////////////////
+  void Renderer2D::DrawRotatedQuad(
+      const glm::vec3& pos, const glm::vec2& size, float rotation, const Ref<Texture2D>& texture,
+      const glm::vec4& color, float tillingFactor
+  ) {
+    glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos)
+                          * glm::rotate(glm::mat4(1.0f), glm::radians(rotation), {0.0f, 0.0f, 1.0f})
+                          * glm::scale(glm::mat4(1.0f), {size.x, size.y, 0.0f});
+
+    int textureIndex = FindTextureIndex(texture);
+
+
+    *s_Data.QuadVertexBufferPtr = QuadVertex{
+        transform * s_Data.QuadVertexPositions[0],
+        color,
+        {1.0f, 1.0f},
+        (float)textureIndex,
+        tillingFactor
+    };
+    s_Data.QuadVertexBufferPtr++;
+
+    *s_Data.QuadVertexBufferPtr = QuadVertex{
+        transform * s_Data.QuadVertexPositions[1],
+        color,
+        {0.0f, 1.0f},
+        (float)textureIndex,
+        tillingFactor
+    };
+    s_Data.QuadVertexBufferPtr++;
+
+    *s_Data.QuadVertexBufferPtr = QuadVertex{
+        transform * s_Data.QuadVertexPositions[2],
+        color,
+        {0.0f, 0.0f},
+        (float)textureIndex,
+        tillingFactor
+    };
+    s_Data.QuadVertexBufferPtr++;
+
+    *s_Data.QuadVertexBufferPtr = QuadVertex{
+        transform * s_Data.QuadVertexPositions[3],
+        color,
+        {1.0f, 0.0f},
+        (float)textureIndex,
+        tillingFactor
+    };
+    s_Data.QuadVertexBufferPtr++;
+
+    s_Data.QuadIndexCount += 6;
 
   }
+
 } // AGE

@@ -14,6 +14,7 @@ Sandbox2DLayer::Sandbox2DLayer() : m_CameraController(1280.0f / 720.0f) {
   m_CreeperFaceTex  = AGE::Texture2D::Create("assets/textures/creeper-face.png");
   m_IncorrectTex    = AGE::Texture2D::Create("wrong/path/to.png");
   m_CheckerboardTex = AGE::Texture2D::Create("assets/textures/Checkerboard.png");
+  m_GearTex         = AGE::Texture2D::Create("assets/textures/gear-sprite.png");
 }
 
 void Sandbox2DLayer::OnUpdate(AGE::Timestep ts) {
@@ -26,16 +27,41 @@ void Sandbox2DLayer::OnUpdate(AGE::Timestep ts) {
 
   int sq{2};
 
+  struct posRot {
+    glm::vec3 pos;
+    float     rot{0};
+  };
+
+  int    posLen = (sq * 2 + 1) * (sq * 2 + 1);
+  posRot posArr[posLen];
+  posRot* posPtr{posArr};
+
   for (int x{-sq}; x <= sq; x++) {
     for (int y{-sq}; y <= sq; y++) {
+      static float time{0};
+      time += ts;
+
       float clampx{(float)x / (float)sq};
       float clampy{(float)y / (float)sq};
 
-      AGE::Renderer2D::DrawQuad(
-          glm::vec3{(float)x * 0.25f, (float)y * 0.25f, 0.0f}, glm::vec2{0.24f}, m_CheckerboardTex,
-          1.0f + glm::abs(clampx * clampy)
-      );
+      posPtr->pos = glm::vec3{(float)x * 0.40f, (float)y * 0.40f, ((float)(x * y)) / 10.0f};
+      posPtr->rot = clampx * clampy * 10.0f * time;
+      posPtr++;
     }
+  }
+
+  std::sort(
+      posArr, posArr + posLen, [](posRot a, posRot b) {
+        return a.pos.z < b.pos.z;
+      }
+  );
+
+  for (auto it{posArr}; it < posArr + posLen; it++) {
+    AGE::Renderer2D::DrawRotatedQuad(
+        it->pos, glm::vec2{0.40f},
+        it->rot,
+        m_GearTex, glm::vec4{1.0f}, 1.0f
+    );
   }
 
   AGE::Renderer2D::EndScene();
