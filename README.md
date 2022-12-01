@@ -1,5 +1,5 @@
 
-# AGE: Anxious Game Engine
+# AGE: Another Game Engine
 
 <div align="center"><img  src="./age_logo_text.svg" height="500"/></div>
 
