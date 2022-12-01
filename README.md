@@ -1,16 +1,16 @@
 # AGE: Another Game Engine
-<div align="center"><img  src="./age_logo_text.svg" height="500"/></div>
+<div align="center"><img alt="AGE logo" src="./age_logo_text.svg" height="500"/></div>
 
 <div align="center">
 <p>
-  <img src="https://img.shields.io/static/v1?label=Platforms&message=Linux&color=1aa943&style=flat-square">
-  <img src="https://img.shields.io/static/v1?label=Version&message=0.0.0pre&color=red&style=flat-square">
+  <img alt="Supported platforms" src="https://img.shields.io/static/v1?label=Platforms&message=Linux&color=1aa943&style=flat-square">
+  <img alt="Version" src="https://img.shields.io/static/v1?label=Version&message=0.0.0pre&color=red&style=flat-square">
 </p>
-<p><img src="https://img.shields.io/static/v1?label=Licence&message=Apache%202.0&color=1aa943&style=flat-square"></p>
+<p><img alt="Licence" src="https://img.shields.io/static/v1?label=Licence&message=Apache%202.0&color=1aa943&style=flat-square"></p>
   <p>
-    <img src="https://img.shields.io/static/v1?label=C%2b%2b&message=23&color=00599C&style=flat-square">
-    <img src="https://img.shields.io/static/v1?label=CMake&message=3.7&color=064F8C&style=flat-square">
-    <img src="https://img.shields.io/static/v1?label=OpenGL&message=4.6&color=5586A4&style=flat-square">
+    <img alt="C++ version" src="https://img.shields.io/static/v1?label=C%2b%2b&message=23&color=00599C&style=flat-square">
+    <img alt="CMake version" src="https://img.shields.io/static/v1?label=CMake&message=3.7&color=064F8C&style=flat-square">
+    <img alt="OpenGL version" src="https://img.shields.io/static/v1?label=OpenGL&message=4.6&color=5586A4&style=flat-square">
   </p>
 </div>
 
