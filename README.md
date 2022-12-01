@@ -1,14 +1,22 @@
+# AGE: Another Game Engine
+<div align="center"><img  src="./age_logo_text.svg" height="500"/></div>
 
-# AGE: Anxious Game Engine
-
-<div align="center"><img  src="./age_logo_128.svg" height="500"/></div>
-
-****
+<div align="center">
+<p>
+  <img src="https://img.shields.io/static/v1?label=Platforms&message=Linux&color=1aa943&style=flat-square">
+  <img src="https://img.shields.io/static/v1?label=Version&message=0.0.0pre&color=red&style=flat-square">
+</p>
+<p><img src="https://img.shields.io/static/v1?label=Licence&message=Apache%202.0&color=1aa943&style=flat-square"></p>
+  <p>
+    <img src="https://img.shields.io/static/v1?label=C%2b%2b&message=23&color=00599C&style=flat-square">
+    <img src="https://img.shields.io/static/v1?label=CMake&message=3.7&color=064F8C&style=flat-square">
+    <img src="https://img.shields.io/static/v1?label=OpenGL&message=4.6&color=5586A4&style=flat-square">
+  </p>
+</div>
 
 A game engine written in C++ just for fun and education. 
 With it I'm learning concepts and practces underlying the creation of a game engine and some concepts related to github.
 
-For more up to date version of source code check [Dev branch](https://github.com/nightingazer/AGE/tree/dev),
 and for some info on project's future and some roadmap you can check [AGEngine project](https://github.com/users/nightingazer/projects/1)
 
 Highly inspired by [Yan Chernikov's](https://github.com/TheCherno) [Hazel Engine](https://github.com/TheCherno/Hazel), thanks to him for his wonderfull series on the matter.
