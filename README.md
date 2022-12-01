@@ -1,7 +1,7 @@
 
 # AGE: Anxious Game Engine
 
-<div align="center"><img  src="./age_logo_128.svg" height="500"/></div>
+<div align="center"><img  src="./age_logo_text.svg" height="500"/></div>
 
 ****
 
