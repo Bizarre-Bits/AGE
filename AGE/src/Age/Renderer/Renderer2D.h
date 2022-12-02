@@ -51,6 +51,16 @@ namespace AGE {
         const glm::vec4& color, float tillingFactor = 1.0f
     );
 
+//    struct Statistics {
+//      uint32_t DrawCalls = 0;
+//      uint32_t QuadCount = 0;
+//
+//      uint32_t TotalVertexCount() { return QuadCount * 4; }
+//      uint32_t TotalIndexCount() { return QuadCount * 6; }
+//    };
+//
+//    Statistics Stats();
+
   private:
     static int FindTextureIndex(const Ref<Texture2D>& texture);
   };

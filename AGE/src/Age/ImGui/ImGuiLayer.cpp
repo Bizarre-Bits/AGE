@@ -18,9 +18,6 @@ namespace AGE {
 
   ImGuiLayer::ImGuiLayer(age_string_t name) : Layer(name) {}
 
-  ImGuiLayer::~ImGuiLayer() {
-  }
-
   void ImGuiLayer::OnAttach() {
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();

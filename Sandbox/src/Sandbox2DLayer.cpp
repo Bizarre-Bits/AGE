@@ -27,6 +27,13 @@ void Sandbox2DLayer::OnUpdate(AGE::Timestep ts) {
 
   int sq{2};
 
+  static float globalRotationDeg{0.0f};
+  globalRotationDeg += 45.0f * ts;
+
+  glm::mat4 transform = glm::rotate(
+      glm::mat4(1.0f), glm::radians(globalRotationDeg), glm::vec3{0.0f, 0.0f, 1.0f}
+  );
+
   struct posRot {
     glm::vec3 pos;
     float     rot{0};
@@ -44,25 +51,52 @@ void Sandbox2DLayer::OnUpdate(AGE::Timestep ts) {
       float clampx{(float)x / (float)sq};
       float clampy{(float)y / (float)sq};
 
-      posPtr->pos = glm::vec3{(float)x * 0.40f, (float)y * 0.40f, ((float)(x * y)) / 10.0f};
-      posPtr->rot = clampx * clampy * 10.0f * time;
+      if (x == 0 && y == 0) {
+        continue;
+      }
+
+
+      glm::vec4 modelPos{glm::vec3{
+          (float)x * 0.40f,
+          (float)y * 0.40f,
+          ((float)(x * y)) / 10.0f},
+                         1.0f};
+      glm::vec4 transformedPos{transform * modelPos};
+      glm::vec3 pos{transformedPos.x, transformedPos.y, transformedPos.z};
+
+      posPtr->pos = pos;
+      posPtr->rot = clampx * clampy * 10.0f * time + globalRotationDeg;
       posPtr++;
     }
   }
 
   std::sort(
-      posArr, posArr + posLen, [](posRot a, posRot b) {
-        return a.pos.z < b.pos.z;
+      posArr, posArr
+              + posLen, [](
+          posRot a, posRot
+      b
+      ) {
+        return a.pos.z < b.pos.
+            z;
       }
   );
 
-  for (auto it{posArr}; it < posArr + posLen; it++) {
+  for (
+      auto it{posArr};
+      it < posArr +
+           posLen;
+      it++) {
     AGE::Renderer2D::DrawRotatedQuad(
-        it->pos, glm::vec2{0.40f},
+        it->pos,
+        glm::vec2{0.40f},
         it->rot,
-        m_GearTex, glm::vec4{1.0f}, 1.0f
+        m_GearTex,
+        glm::vec4{1.0f},
+        1.0f
     );
   }
+
+  AGE::Renderer2D::DrawQuad(glm::vec3{0.0f, 0.0f, 0.0f}, glm::vec2{0.4f}, m_GearTex);
 
   AGE::Renderer2D::EndScene();
 }

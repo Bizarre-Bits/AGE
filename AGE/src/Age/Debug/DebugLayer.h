@@ -15,12 +15,12 @@ namespace AGE {
     void InsertNewFps(float fps);
     void Render();
 
-    float LastUpdate{0};
-    float RefreshTime{0.25f};
+    float LastUpdateSeconds{0};
+    float RefreshTimeSeconds{0.25f};
 
   private:
     std::array<float, 60> m_Data;
-    std::size_t           m_LastInsertIndex{0};
+    std::size_t           m_NextIndex{0};
     float                 m_MaxValue{0};
     float                 m_MinValue{FLT_MAX};
   };

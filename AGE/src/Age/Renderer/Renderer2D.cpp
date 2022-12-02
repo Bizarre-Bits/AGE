@@ -236,7 +236,7 @@ namespace AGE {
     s_Data.QuadIndexCount += 6;
   }
 
-  int Renderer2D::FindTextureIndex(const Ref <Texture2D>& texture) {
+  int Renderer2D::FindTextureIndex(const Ref<Texture2D>& texture) {
     int textureIndex = 0;
 
     if (texture != nullptr) {
