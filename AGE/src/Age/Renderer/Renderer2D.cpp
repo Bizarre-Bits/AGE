@@ -107,7 +107,7 @@ namespace AGE {
     AGE_PROFILE_FUNCTION();
 
     s_Data.Shader2D->Bind();
-    s_Data.Shader2D->SetMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
+    s_Data.Shader2D->SetMat4("u_ViewProjection", camera.ViewProjectionMatrix());
 
     StartBatch();
   }

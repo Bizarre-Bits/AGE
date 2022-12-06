@@ -19,7 +19,7 @@ namespace AGE {
   void Renderer::BeginScene(OrthographicCamera& camera) {
     AGE_PROFILE_FUNCTION();
 
-    s_SceneData->ViewProjectionMatrix = camera.GetViewProjectionMatrix();
+    s_SceneData->ViewProjectionMatrix = camera.ViewProjectionMatrix();
   }
 
   void Renderer::EndScene() {

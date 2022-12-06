@@ -60,7 +60,7 @@ namespace AGE {
 
   class  EventDispatcher {
   public:
-    EventDispatcher(Event& event) : event_{event} {}
+    EventDispatcher(Event& event) : m_Event{event} {}
 
     /**
 		 * @brief Dispatches event
@@ -72,8 +72,8 @@ namespace AGE {
 		 */
     template<typename E, typename F>
     bool Dispatch(const F& func) {
-      if (event_.EventType() == E::StaticType()) {
-        event_.Handled |= func(static_cast<E&>(event_));
+      if (m_Event.EventType() == E::StaticType()) {
+        m_Event.Handled |= func(static_cast<E&>(m_Event));
         return true;
       }
 
@@ -81,7 +81,7 @@ namespace AGE {
     }
 
   private:
-    Event& event_;
+    Event& m_Event;
   };
 
    inline std::ostream& operator<<(std::ostream& os, const Event& e) {
