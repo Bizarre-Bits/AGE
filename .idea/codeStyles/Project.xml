@@ -1,5 +1,7 @@
 <component name="ProjectCodeStyleConfiguration">
   <code_scheme name="Project" version="173">
+    <option name="RIGHT_MARGIN" value="160" />
+    <option name="FORMATTER_TAGS_ENABLED" value="true" />
     <Objective-C>
       <option name="INDENT_NAMESPACE_MEMBERS" value="2" />
       <option name="INDENT_C_STRUCT_MEMBERS" value="2" />
@@ -65,7 +67,7 @@
       </rules>
     </Objective-C-extensions>
     <codeStyleSettings language="ObjectiveC">
-      <option name="RIGHT_MARGIN" value="100" />
+      <option name="RIGHT_MARGIN" value="160" />
       <option name="BLANK_LINES_BEFORE_IMPORTS" value="0" />
       <option name="BLANK_LINES_AFTER_IMPORTS" value="0" />
       <option name="BLANK_LINES_AROUND_METHOD" value="0" />
@@ -77,7 +79,7 @@
       <option name="BINARY_OPERATION_SIGN_ON_NEXT_LINE" value="true" />
       <option name="PLACE_ASSIGNMENT_SIGN_ON_NEXT_LINE" value="true" />
       <option name="ENUM_CONSTANTS_WRAP" value="1" />
-      <option name="SOFT_MARGINS" value="100" />
+      <option name="SOFT_MARGINS" value="160" />
       <indentOptions>
         <option name="INDENT_SIZE" value="2" />
         <option name="CONTINUATION_INDENT_SIZE" value="4" />

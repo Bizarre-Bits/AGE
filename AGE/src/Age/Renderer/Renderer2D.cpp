@@ -2,12 +2,12 @@
 // Created by alex on 18.10.22.
 //
 
+#include "agepch.h"
+
 #include "Renderer2D.h"
 #include "VertexArray.h"
 #include "Shader.h"
 #include "RenderCommand.h"
-
-#include "Age/Debug/Instrumentor.h"
 
 namespace AGE {
   struct QuadVertex {
@@ -38,6 +38,8 @@ namespace AGE {
     uint32_t                                    TextureSlotIndex = 1; //0 - Unit Texture;
 
     glm::vec4 QuadVertexPositions[4];
+
+    Renderer2D::Statistics Stats;
   };
 
   static Renderer2DData s_Data;
@@ -140,11 +142,16 @@ namespace AGE {
       s_Data.TextureSlots[i]->Bind(i);
     }
     RenderCommand::DrawIndexed(s_Data.QuadVertexArray, s_Data.QuadIndexCount);
+
+    s_Data.Stats.DrawCalls++;
   }
+
+#pragma region DrawQuad
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 //                                        DRAW QUAD                                               //
 // /////////////////////////////////////////////////////////////////////////////////////////////////
+
   void Renderer2D::DrawQuad(const glm::vec2& pos, const glm::vec2& size, const glm::vec4& color) {
     AGE_PROFILE_FUNCTION();
 
@@ -192,6 +199,12 @@ namespace AGE {
 
     int textureIndex = FindTextureIndex(texture);
 
+    // Reset color to white if texture is corrupted to properly display error texture
+    glm::vec4 vertexColor{color};
+    if (!texture->IsCorrect()) {
+      vertexColor = {1.0f, 1.0f, 1.0f, 1.0f};
+    }
+
     if (s_Data.QuadIndexCount >= s_Data.MaxIndices)
       NextBatch();
 
@@ -199,7 +212,7 @@ namespace AGE {
 
     *s_Data.QuadVertexBufferPtr = QuadVertex{
         {pos.x - halfSize.x, pos.y + halfSize.y, pos.z},
-        color,
+        vertexColor,
         {1.0f, 1.0f},
         (float)textureIndex,
         tillingFactor
@@ -208,7 +221,7 @@ namespace AGE {
 
     *s_Data.QuadVertexBufferPtr = QuadVertex{
         {pos.x + halfSize.x, pos.y + halfSize.y, pos.z},
-        color,
+        vertexColor,
         {0.0f, 1.0f},
         (float)textureIndex,
         tillingFactor
@@ -217,7 +230,7 @@ namespace AGE {
 
     *s_Data.QuadVertexBufferPtr = QuadVertex{
         {pos.x + halfSize.x, pos.y - halfSize.y, pos.z},
-        color,
+        vertexColor,
         {0.0f, 0.0f},
         (float)textureIndex,
         tillingFactor
@@ -226,7 +239,7 @@ namespace AGE {
 
     *s_Data.QuadVertexBufferPtr = QuadVertex{
         {pos.x - halfSize.x, pos.y - halfSize.y, pos.z},
-        color,
+        vertexColor,
         {1.0f, 0.0f},
         (float)textureIndex,
         tillingFactor
@@ -234,6 +247,7 @@ namespace AGE {
     s_Data.QuadVertexBufferPtr++;
 
     s_Data.QuadIndexCount += 6;
+    s_Data.Stats.QuadCount++;
   }
 
   int Renderer2D::FindTextureIndex(const Ref<Texture2D>& texture) {
@@ -256,16 +270,40 @@ namespace AGE {
     return textureIndex;
   }
 
+#pragma endregion
+
+#pragma region DrawRotatedQuad
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 //                                        DRAW ROTATED QUAD                                       //
 // /////////////////////////////////////////////////////////////////////////////////////////////////
+
+  void Renderer2D::DrawRotatedQuad(const glm::vec2& pos, const glm::vec2& size, const float rotation, const glm::vec4& color) {
+    DrawRotatedQuad(glm::vec3{pos, 0.0f}, size, rotation, nullptr, color, 1.0f);
+  }
+
+  void Renderer2D::DrawRotatedQuad(const glm::vec3& pos, const glm::vec2& size, const float rotation, const glm::vec4& color) {
+    DrawRotatedQuad(pos, size, rotation, nullptr, color, 1.0f);
+  }
+
+  void Renderer2D::DrawRotatedQuad(const glm::vec2& pos, const glm::vec2& size, const float rotation, const Ref<Texture2D>& texture, float tillingFactor) {
+    DrawRotatedQuad(glm::vec3{pos, 0.0f}, size, rotation, nullptr, glm::vec4{1.0f}, 1.0f);
+  }
+
+  void Renderer2D::DrawRotatedQuad(const glm::vec3& pos, const glm::vec2& size, const float rotation, const Ref<Texture2D>& texture, float tillingFactor) {
+    DrawRotatedQuad(pos, size, rotation, nullptr, glm::vec4{1.0f}, 1.0f);
+  }
+
+  void Renderer2D::DrawRotatedQuad(const glm::vec2& pos, const glm::vec2& size, const float rotation, const Ref<Texture2D>& texture, const glm::vec4& color) {
+    DrawRotatedQuad(glm::vec3{pos, 0.0f}, size, rotation, nullptr, glm::vec4{1.0f}, 1.0f);
+  }
+
   void Renderer2D::DrawRotatedQuad(
-      const glm::vec3& pos, const glm::vec2& size, float rotation, const Ref<Texture2D>& texture,
+      const glm::vec3& pos, const glm::vec2& size, const float rotationDeg, const Ref<Texture2D>& texture,
       const glm::vec4& color, float tillingFactor
   ) {
     glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos)
-                          * glm::rotate(glm::mat4(1.0f), glm::radians(rotation), {0.0f, 0.0f, 1.0f})
+                          * glm::rotate(glm::mat4(1.0f), glm::radians(rotationDeg), {0.0f, 0.0f, 1.0f})
                           * glm::scale(glm::mat4(1.0f), {size.x, size.y, 0.0f});
 
     int textureIndex = FindTextureIndex(texture);
@@ -308,7 +346,21 @@ namespace AGE {
     s_Data.QuadVertexBufferPtr++;
 
     s_Data.QuadIndexCount += 6;
-
+    s_Data.Stats.QuadCount++;
   }
+
+#pragma endregion
+
+#pragma region Statistics
+
+  Renderer2D::Statistics Renderer2D::Stats() {
+    return s_Data.Stats;
+  }
+
+  void Renderer2D::ResetStats() {
+    memset(&s_Data.Stats, 0, sizeof(Renderer2D::Statistics));
+  }
+
+#pragma endregion
 
 } // AGE

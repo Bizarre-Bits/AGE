@@ -4,8 +4,6 @@
 
 #include "agepch.h"
 
-#include "Age/Debug/Assert.h"
-
 #include "VertexArray.h"
 #include "Renderer.h"
 

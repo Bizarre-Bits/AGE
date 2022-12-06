@@ -2,15 +2,12 @@
 // Created by alex on 08.09.22.
 //
 #include "agepch.h"
+#include "OpenGLPlatform.h"
 
-#include <unordered_map>
 #include <fstream>
-
 #include <glm/gtc/type_ptr.hpp>
 
-#include "Platform/OpenGL/OpenGLPlatform.h"
-#include "Platform/OpenGL/OpenGLShader.h"
-#include "Age/Debug/Assert.h"
+#include "OpenGLShader.h"
 
 namespace AGE {
   OpenGLShader::OpenGLShader(

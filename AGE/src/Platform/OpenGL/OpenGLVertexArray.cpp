@@ -5,8 +5,6 @@
 #include "agepch.h"
 
 #include "OpenGLPlatform.h"
-#include "Age/Debug/Assert.h"
-
 #include "OpenGLVertexArray.h"
 
 namespace AGE {

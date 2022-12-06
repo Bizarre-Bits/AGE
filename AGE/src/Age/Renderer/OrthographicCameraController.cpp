@@ -2,6 +2,8 @@
 // Created by alex on 18.10.22.
 //
 
+#include "agepch.h"
+
 #include "OrthographicCameraController.h"
 #include <glm/trigonometric.hpp>
 

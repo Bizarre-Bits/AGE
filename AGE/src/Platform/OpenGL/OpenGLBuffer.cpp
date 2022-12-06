@@ -6,7 +6,6 @@
 #include "Platform/OpenGL/OpenGLPlatform.h"
 
 #include "OpenGLBuffer.h"
-#include "Age/Debug/Assert.h"
 
 namespace AGE {
 

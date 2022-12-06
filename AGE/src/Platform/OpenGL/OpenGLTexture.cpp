@@ -9,7 +9,6 @@
 
 #include "OpenGLPlatform.h"
 #include "OpenGLTexture.h"
-#include "Age/Debug/Assert.h"
 
 namespace AGE {
   OpenGLTexture2D::OpenGLTexture2D(const uint32_t width, uint32_t height) : m_Width(width),

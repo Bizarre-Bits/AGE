@@ -6,7 +6,6 @@
 
 #include "Texture.h"
 #include "Renderer.h"
-#include "Age/Debug/Assert.h"
 
 #ifdef AGE_INCLUDE_OPENGL
   #include "Platform/OpenGL/OpenGLTexture.h"

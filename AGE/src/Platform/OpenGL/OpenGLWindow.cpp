@@ -4,11 +4,10 @@
 
 #include "agepch.h"
 
+#include "OpenGLWindow.h"
+
 #include <stb_image.h>
 
-#include "Platform/OpenGL/OpenGLWindow.h"
-
-#include "Age/Debug/Assert.h"
 #include "Age/Events/KeyEvent.h"
 #include "Age/Events/MouseEvent.h"
 #include "Age/Events/WindowEvent.h"

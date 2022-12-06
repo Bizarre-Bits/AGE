@@ -3,8 +3,8 @@
 //
 
 #include "agepch.h"
-
 #include "OpenGLPlatform.h"
+
 #include "OpenGLRenderAPI.h"
 
 namespace AGE {
