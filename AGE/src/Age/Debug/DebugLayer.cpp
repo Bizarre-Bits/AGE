@@ -16,20 +16,30 @@ namespace AGE {
   void DebugLayer::OnUpdate(Timestep ts) {
     AGE_PROFILE_FUNCTION();
 
-    float fps = 1000.0f / ts.Milliseconds();
+    constexpr float fpsTextUpdateThresholdSeconds{0.1f};
+    static float lastFpsUpdateSeconds{0.0f};
+    static float lastFps{1000.0f / ts.Milliseconds()};
 
-    m_FpsPlot.LastUpdate += ts.Seconds();
+    lastFpsUpdateSeconds += ts;
+    if(lastFpsUpdateSeconds >= fpsTextUpdateThresholdSeconds) {
+      lastFpsUpdateSeconds = 0.0f;
+      lastFps = 1000.0f / ts.Milliseconds();
+    }
 
-    if (m_FpsPlot.LastUpdate >= m_FpsPlot.RefreshTime) {
-      m_FpsPlot.LastUpdate = 0;
-      m_FpsPlot.InsertNewFps(fps);
+    m_FpsPlot.LastUpdateSeconds += ts.Seconds();
+
+    if (m_FpsPlot.LastUpdateSeconds >= m_FpsPlot.RefreshTimeSeconds) {
+      m_FpsPlot.LastUpdateSeconds = 0;
+      m_FpsPlot.InsertNewFps(1000.0f / ts.Milliseconds());
     }
 
     ImGui::Begin("Debug");
     Scope<Window>& window = Application::Instance()->Window();
-    ImGui::Text("MainWindow: %s (%i, %i)", window->Title().c_str(), (int)window->Width(), (int)window->Height());
-    ImGui::Text("FPS: %f", fps);
-    ImGui::Text("Delta Time: %fs", ts.Seconds());
+    ImGui::Text(
+        "MainWindow: %s (%i, %i)", window->Title().c_str(), (int)window->Width(),
+        (int)window->Height());
+    ImGui::Text("FPS: %.2f", lastFps);
+    ImGui::Text("Delta Time: %.2fms", ts.Milliseconds());
 
     m_FpsPlot.Render();
 
@@ -56,15 +66,15 @@ namespace AGE {
       m_MinValue = fps;
     }
 
-    if (m_LastInsertIndex >= m_Data.max_size()) {
+    if (m_NextIndex >= m_Data.max_size()) {
       for (std::size_t i = 0; i < m_Data.max_size() - 1; i++) {
         m_Data[i] = m_Data[i + 1];
       }
 
       m_Data[m_Data.max_size() - 1] = fps;
     } else {
-      m_Data[m_LastInsertIndex] = fps;
-      m_LastInsertIndex++;
+      m_Data[m_NextIndex] = fps;
+      m_NextIndex++;
     }
   }
 
@@ -72,11 +82,11 @@ namespace AGE {
     AGE_PROFILE_FUNCTION();
 
     float scaleMax = *std::max_element(m_Data.begin(), m_Data.end());
-    ImGui::Text("Max FPS: %f", m_MaxValue);
-    ImGui::Text("Min FPS: %f", m_MinValue);
+    ImGui::Text("Max FPS: %.2f", m_MaxValue);
+    ImGui::Text("Min FPS: %.2f", m_MinValue);
 
 
-    ImGui::SliderFloat("Refresh Rate(sec)", &RefreshTime, 0.0f, 5.0f);
+    ImGui::SliderFloat("Refresh Rate(sec)", &RefreshTimeSeconds, 0.0f, 5.0f);
     ImGui::PlotLines(
         "FPS",
         m_Data.data(),

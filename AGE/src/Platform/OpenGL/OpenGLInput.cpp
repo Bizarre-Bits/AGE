@@ -3,7 +3,6 @@
 //
 
 #include "agepch.h"
-
 #include "Platform/OpenGL/OpenGLPlatform.h"
 
 #include "Age/Core/Application.h"

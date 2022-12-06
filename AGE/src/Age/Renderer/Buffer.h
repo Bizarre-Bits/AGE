@@ -40,8 +40,8 @@ namespace AGE {
   uint32_t shader_data_size(ShaderDataType type);
 
   /**
-   * @brief Converts ShaderDataType objects to corresponding ShaderDataType but with only one component.
-   * For example, Float4 will be converted to Float.
+   * @brief Extracts a base type data from the ShaderDataType.
+   * @details Removes data about count of elements in ShaderDataType. For example Float4 input will return Float.
    * @param type - type to be converted
    * @return The same ShaderDataType but with one component.
    */

@@ -31,9 +31,9 @@ namespace AGE {
     inline glm::vec3 Position() const { return m_Position; }
     inline float Rotation() const { return m_Rotation; }
 
-    inline const glm::mat4& GetProjectionMatrix() const { return m_ProjectionMatrix; }
-    inline const glm::mat4& GetViewMatrix() const { return m_ViewMatrix; }
-    inline const glm::mat4& GetViewProjectionMatrix() const { return m_ViewProjectionMatrix; }
+    inline const glm::mat4& ProjectionMatrix() const { return m_ProjectionMatrix; }
+    inline const glm::mat4& ViewMatrix() const { return m_ViewMatrix; }
+    inline const glm::mat4& ViewProjectionMatrix() const { return m_ViewProjectionMatrix; }
 
   private:
     void RecalculateViewMatrix();

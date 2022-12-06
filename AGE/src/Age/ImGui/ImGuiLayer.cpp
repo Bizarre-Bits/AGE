@@ -10,16 +10,12 @@
 #include "Age/ImGui/ImGuiLayer.h"
 
 #include "Age/Core/Application.h"
-#include "Age/Core/Input.h"
 
 
 namespace AGE {
   bool ImGuiLayer::IsInitialized{false};
 
   ImGuiLayer::ImGuiLayer(age_string_t name) : Layer(name) {}
-
-  ImGuiLayer::~ImGuiLayer() {
-  }
 
   void ImGuiLayer::OnAttach() {
     IMGUI_CHECKVERSION();

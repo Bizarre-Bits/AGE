@@ -6,7 +6,6 @@
 
 #include "Application.h"
 
-#include "Age/Debug/Assert.h"
 #include "Age/Debug/DebugLayer.h"
 #include "Age/ImGui/ImGuiLayer.h"
 #include "Age/Renderer/Renderer.h"

@@ -21,7 +21,7 @@ namespace AGE {
   class ImGuiLayer : public Layer {
   public:
     ImGuiLayer(age_string_t name = "ImGui");
-    ~ImGuiLayer() override;
+    ~ImGuiLayer() override = default;
 
     void OnAttach() override;
     void OnDetach() override;

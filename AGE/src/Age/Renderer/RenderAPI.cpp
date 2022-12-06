@@ -4,7 +4,6 @@
 
 #include "agepch.h"
 
-#include "Age/Debug/Assert.h"
 #include "RenderAPI.h"
 
 #ifdef AGE_INCLUDE_OPENGL

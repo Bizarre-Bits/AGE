@@ -26,16 +26,16 @@ namespace AGE {
     void PushLayer(Layer* layer);
     void PushOverlay(Layer* layer);
 
-    Scope<AGE::Window>& Window();
+    Scope <AGE::Window>& Window();
+    Timestep Uptime();
 
     static Application* Instance();
-
-    Timestep Uptime();
 
   private:
     bool OnWindowClose(WindowCloseEvent& e);
 
-    Scope<AGE::Window> m_Window;
+  private:
+    Scope <AGE::Window> m_Window;
 
     bool       m_Running;
     LayerStack m_LayerStack;
