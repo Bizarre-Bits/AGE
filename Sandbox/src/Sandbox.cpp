@@ -13,7 +13,7 @@ AGE::Application* AGE::CreateApplication() {
 
 Sandbox::Sandbox() : AGE::Application() {
   PushLayer(new Sandbox2DLayer);
-  PushOverlay(new Sandbox2DUI);
+//  PushOverlay(new Sandbox2DUI);
 }
 
 Sandbox::~Sandbox() {}

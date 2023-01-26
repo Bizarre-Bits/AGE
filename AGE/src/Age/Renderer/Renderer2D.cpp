@@ -201,7 +201,7 @@ namespace AGE {
 
     // Reset color to white if texture is corrupted to properly display error texture
     glm::vec4 vertexColor{color};
-    if (!texture->IsCorrect()) {
+    if (texture && !texture->IsCorrect()) {
       vertexColor = {1.0f, 1.0f, 1.0f, 1.0f};
     }
 
@@ -278,24 +278,24 @@ namespace AGE {
 //                                        DRAW ROTATED QUAD                                       //
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
-  void Renderer2D::DrawRotatedQuad(const glm::vec2& pos, const glm::vec2& size, const float rotation, const glm::vec4& color) {
-    DrawRotatedQuad(glm::vec3{pos, 0.0f}, size, rotation, nullptr, color, 1.0f);
+  void Renderer2D::DrawRotatedQuad(const glm::vec2& pos, const glm::vec2& size, const float rotationDeg, const glm::vec4& color) {
+    DrawRotatedQuad(glm::vec3{pos, 0.0f}, size, rotationDeg, nullptr, color, 1.0f);
   }
 
-  void Renderer2D::DrawRotatedQuad(const glm::vec3& pos, const glm::vec2& size, const float rotation, const glm::vec4& color) {
-    DrawRotatedQuad(pos, size, rotation, nullptr, color, 1.0f);
+  void Renderer2D::DrawRotatedQuad(const glm::vec3& pos, const glm::vec2& size, const float rotationDeg, const glm::vec4& color) {
+    DrawRotatedQuad(pos, size, rotationDeg, nullptr, color, 1.0f);
   }
 
-  void Renderer2D::DrawRotatedQuad(const glm::vec2& pos, const glm::vec2& size, const float rotation, const Ref<Texture2D>& texture, float tillingFactor) {
-    DrawRotatedQuad(glm::vec3{pos, 0.0f}, size, rotation, nullptr, glm::vec4{1.0f}, 1.0f);
+  void Renderer2D::DrawRotatedQuad(const glm::vec2& pos, const glm::vec2& size, const float rotationDeg, const Ref<Texture2D>& texture, float tillingFactor) {
+    DrawRotatedQuad(glm::vec3{pos, 0.0f}, size, rotationDeg, nullptr, glm::vec4{1.0f}, 1.0f);
   }
 
-  void Renderer2D::DrawRotatedQuad(const glm::vec3& pos, const glm::vec2& size, const float rotation, const Ref<Texture2D>& texture, float tillingFactor) {
-    DrawRotatedQuad(pos, size, rotation, nullptr, glm::vec4{1.0f}, 1.0f);
+  void Renderer2D::DrawRotatedQuad(const glm::vec3& pos, const glm::vec2& size, const float rotationDeg, const Ref<Texture2D>& texture, float tillingFactor) {
+    DrawRotatedQuad(pos, size, rotationDeg, nullptr, glm::vec4{1.0f}, 1.0f);
   }
 
-  void Renderer2D::DrawRotatedQuad(const glm::vec2& pos, const glm::vec2& size, const float rotation, const Ref<Texture2D>& texture, const glm::vec4& color) {
-    DrawRotatedQuad(glm::vec3{pos, 0.0f}, size, rotation, nullptr, glm::vec4{1.0f}, 1.0f);
+  void Renderer2D::DrawRotatedQuad(const glm::vec2& pos, const glm::vec2& size, const float rotationDeg, const Ref<Texture2D>& texture, const glm::vec4& color) {
+    DrawRotatedQuad(glm::vec3{pos, 0.0f}, size, rotationDeg, nullptr, glm::vec4{1.0f}, 1.0f);
   }
 
   void Renderer2D::DrawRotatedQuad(

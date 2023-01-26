@@ -6,6 +6,7 @@
 #define AGE_SANDBOX2DLAYER_H
 
 #include "Age/Age.h"
+#include "Particle.h"
 
 class Sandbox2DLayer : public AGE::Layer {
 public:
@@ -20,6 +21,7 @@ private:
   AGE::Ref<AGE::Texture2D>          m_CheckerboardTex;
   AGE::Ref<AGE::Texture2D>          m_IncorrectTex;
   AGE::Ref<AGE::Texture2D>          m_GearTex;
+  ParticleSystem                    m_Particles;
 };
 
 class Sandbox2DUI : public AGE::ImGuiLayer {
