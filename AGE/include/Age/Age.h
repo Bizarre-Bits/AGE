@@ -10,6 +10,9 @@
 #include "Age/Core/Log.h"
 #include "Age/Core/Timer.h"
 
+// Utils
+#include "Age/Utils/Random.h"
+
 // Input handling
 #include "Age/Core/Input.h"
 #include "Age/Core/KeyCodes.h"

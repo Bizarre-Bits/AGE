@@ -12,9 +12,12 @@
 
 namespace AGE {
   OrthographicCameraController::OrthographicCameraController(float aspectRatio, bool rotation)
-      : m_AspectRatio(aspectRatio), m_Camera(
-      -m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel
-  ), m_Rotation(rotation) {
+      : m_AspectRatio(aspectRatio), m_ZoomLevel{1.0f},
+        m_Bounds{-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel},
+        m_Camera(
+            -m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel
+        ),
+        m_Rotation(rotation) {
   }
 
   void OrthographicCameraController::OnUpdate(Timestep ts) {
@@ -79,9 +82,8 @@ namespace AGE {
 
     m_ZoomLevel -= e.YOffset() * 0.25f;
     m_ZoomLevel = std::max(m_ZoomLevel, 0.25f);
-    m_Camera.SetProjection(
-        -m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel
-    );
+    m_Bounds    = {-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel};
+    m_Camera.SetProjection(m_Bounds.Left, m_Bounds.Right, m_Bounds.Bottom, m_Bounds.Top);
     return false;
   }
 

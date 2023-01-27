@@ -17,8 +17,16 @@
 namespace AGE {
 
   class OrthographicCameraController {
+    struct CameraBounds {
+      float Left, Right;
+      float Bottom, Top;
+
+      [[nodiscard]] inline float Width() const { return Right - Left; }
+      [[nodiscard]] inline float Height() const { return Top - Bottom; }
+    };
+
   public:
-    OrthographicCameraController(float aspectRatio, bool rotation = false);
+    explicit OrthographicCameraController(float aspectRatio, bool rotation = false);
 
     void OnUpdate(Timestep ts);
     void OnEvent(Event& e);
@@ -30,6 +38,7 @@ namespace AGE {
 
     float ZoomLevel() const { return m_ZoomLevel; }
     void SetZoomLevel(float level) { m_ZoomLevel = level; }
+    [[nodiscard]] inline CameraBounds Bounds() const { return m_Bounds; }
 
   private:
     bool OnMouseScrolled(MouseScrolledEvent& e);
@@ -39,6 +48,7 @@ namespace AGE {
     float              m_AspectRatio;
     float              m_ZoomLevel = 1.0f;
     OrthographicCamera m_Camera;
+    CameraBounds       m_Bounds;
 
     bool m_Rotation;
 

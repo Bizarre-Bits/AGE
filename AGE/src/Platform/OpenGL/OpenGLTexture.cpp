@@ -16,7 +16,8 @@ namespace AGE {
                                                                             m_InternalFormat(
                                                                                 GL_RGBA8
                                                                             ),
-                                                                            m_DataFormat(GL_RGBA) {
+                                                                            m_DataFormat(GL_RGBA),
+                                                                            m_isCorrect{true} {
     AGE_PROFILE_FUNCTION();
 
     glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
@@ -29,7 +30,8 @@ namespace AGE {
   OpenGLTexture2D::OpenGLTexture2D(const age_string_t& path) : m_Path(path), m_Slot{0},
                                                                m_isBound{false},
                                                                m_InternalFormat(0),
-                                                               m_DataFormat(0) {
+                                                               m_DataFormat(0),
+                                                               m_isCorrect{true} {
     AGE_PROFILE_FUNCTION();
 
     int width, height, channels;
