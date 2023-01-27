@@ -17,11 +17,7 @@ public:
 
 private:
   AGE::OrthographicCameraController m_CameraController;
-  AGE::Ref<AGE::Texture2D>          m_CreeperFaceTex;
-  AGE::Ref<AGE::Texture2D>          m_CheckerboardTex;
-  AGE::Ref<AGE::Texture2D>          m_IncorrectTex;
-  AGE::Ref<AGE::Texture2D>          m_GearTex;
-  ParticleSystem                    m_Particles;
+  AGE::Ref<AGE::Texture2D>          m_SpriteSheet;
 };
 
 class Sandbox2DUI : public AGE::ImGuiLayer {

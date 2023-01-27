@@ -199,6 +199,14 @@ namespace AGE {
 
     int textureIndex = FindTextureIndex(texture);
 
+    int texWidth = texture->Width();
+    int texHeight = texture->Height();
+
+    float tileSizeU = (float)16 / (float)texWidth;
+    float tileSieV = (float)16 / (float)texHeight;
+    float xOffset = tileSizeU * 1;
+    float yOffset = tileSieV * 0;
+
     // Reset color to white if texture is corrupted to properly display error texture
     glm::vec4 vertexColor{color};
     if (texture && !texture->IsCorrect()) {
@@ -213,7 +221,7 @@ namespace AGE {
     *s_Data.QuadVertexBufferPtr = QuadVertex{
         {pos.x - halfSize.x, pos.y + halfSize.y, pos.z},
         vertexColor,
-        {1.0f, 1.0f},
+        {0.0f + xOffset, 1.0f - yOffset},
         (float)textureIndex,
         tillingFactor
     };
@@ -222,7 +230,7 @@ namespace AGE {
     *s_Data.QuadVertexBufferPtr = QuadVertex{
         {pos.x + halfSize.x, pos.y + halfSize.y, pos.z},
         vertexColor,
-        {0.0f, 1.0f},
+        {0.0f + xOffset + tileSizeU, 1.0f - yOffset},
         (float)textureIndex,
         tillingFactor
     };
@@ -231,7 +239,7 @@ namespace AGE {
     *s_Data.QuadVertexBufferPtr = QuadVertex{
         {pos.x + halfSize.x, pos.y - halfSize.y, pos.z},
         vertexColor,
-        {0.0f, 0.0f},
+        {0.0f + xOffset + tileSizeU, 1.0f - yOffset - tileSieV},
         (float)textureIndex,
         tillingFactor
     };
@@ -240,7 +248,7 @@ namespace AGE {
     *s_Data.QuadVertexBufferPtr = QuadVertex{
         {pos.x - halfSize.x, pos.y - halfSize.y, pos.z},
         vertexColor,
-        {1.0f, 0.0f},
+        {0.0f + xOffset, 1.0f - yOffset - tileSieV},
         (float)textureIndex,
         tillingFactor
     };
