@@ -171,4 +171,13 @@ namespace AGE {
 
     SetData(&data, sizeof(data));
   }
+
+  Ref <OpenGLTexture2D> OpenGLTexture2D::ErrorTextureImpl() {
+    static Ref<OpenGLTexture2D> errorTexture{MakeRef<OpenGLTexture2D>()};
+    return errorTexture;
+  }
+
+  OpenGLTexture2D::OpenGLTexture2D() {
+    SetErrorTexture();
+  }
 } // AGE

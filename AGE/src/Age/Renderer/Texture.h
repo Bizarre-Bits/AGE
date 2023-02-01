@@ -29,6 +29,7 @@ namespace AGE {
   public:
     static Ref<Texture2D> Create(const age_string_t& path);
     static Ref<Texture2D> Create(const uint32_t width, const uint32_t height);
+    static Ref<Texture2D> ErrorTexture();
 
     virtual bool operator==(const Texture2D& other) const = 0;
   };

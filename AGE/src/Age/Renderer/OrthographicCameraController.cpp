@@ -72,9 +72,7 @@ namespace AGE {
     AGE_PROFILE_FUNCTION();
 
     m_AspectRatio = width / height;
-    m_Camera.SetProjection(
-        -m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel
-    );
+    CalculateView();
   }
 
   bool OrthographicCameraController::OnMouseScrolled(MouseScrolledEvent& e) {
@@ -82,8 +80,7 @@ namespace AGE {
 
     m_ZoomLevel -= e.YOffset() * 0.25f;
     m_ZoomLevel = std::max(m_ZoomLevel, 0.25f);
-    m_Bounds    = {-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel};
-    m_Camera.SetProjection(m_Bounds.Left, m_Bounds.Right, m_Bounds.Bottom, m_Bounds.Top);
+    CalculateView();
     return false;
   }
 
@@ -92,5 +89,15 @@ namespace AGE {
 
     OnResize((float)e.Width(), (float)e.Height());
     return false;
+  }
+
+  void OrthographicCameraController::SetZoomLevel(float level) {
+    m_ZoomLevel = level;
+    CalculateView();
+  }
+
+  void OrthographicCameraController::CalculateView() {
+    m_Bounds = {-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel};
+    m_Camera.SetProjection(m_Bounds.Left, m_Bounds.Right, m_Bounds.Bottom, m_Bounds.Top);
   }
 } // AGE

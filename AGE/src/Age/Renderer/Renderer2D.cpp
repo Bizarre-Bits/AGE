@@ -161,51 +161,43 @@ namespace AGE {
   void Renderer2D::DrawQuad(const glm::vec3& pos, const glm::vec2& size, const glm::vec4& color) {
     AGE_PROFILE_FUNCTION();
 
-    DrawQuad(pos, size, nullptr, color);
+    DrawQuad(pos, size, s_Data.UnitTexture, color);
   }
 
   void Renderer2D::DrawQuad(
       const glm::vec2& pos, const glm::vec2& size, const Ref<Texture2D>& texture,
-      const float tillingFactor
+      const float tilingFactor
   ) {
     AGE_PROFILE_FUNCTION();
 
-    DrawQuad(glm::vec3(pos, 0.0f), size, texture, tillingFactor);
+    DrawQuad(glm::vec3(pos, 0.0f), size, texture, tilingFactor);
   }
 
   void Renderer2D::DrawQuad(
       const glm::vec3& pos, const glm::vec2& size, const Ref<Texture2D>& texture,
-      const float tillingFactor
+      const float tilingFactor
   ) {
     AGE_PROFILE_FUNCTION();
 
-    DrawQuad(pos, size, texture, glm::vec4(1.0f), tillingFactor);
+    DrawQuad(pos, size, texture, glm::vec4(1.0f), tilingFactor);
   }
 
   void Renderer2D::DrawQuad(
       const glm::vec2& pos, const glm::vec2& size, const Ref<Texture2D>& texture,
-      const glm::vec4& color
+      const glm::vec4& color, float tilingFactor
   ) {
     AGE_PROFILE_FUNCTION();
 
-    DrawQuad(glm::vec3(pos, 0.0f), size, texture, color);
+    DrawQuad(glm::vec3(pos, 0.0f), size, texture, color, tilingFactor);
   }
 
   void Renderer2D::DrawQuad(
       const glm::vec3& pos, const glm::vec2& size, const Ref<Texture2D>& texture,
-      const glm::vec4& color, const float tillingFactor
+      const glm::vec4& color, const float tilingFactor
   ) {
     AGE_PROFILE_FUNCTION();
 
     int textureIndex = FindTextureIndex(texture);
-
-    int texWidth = texture->Width();
-    int texHeight = texture->Height();
-
-    float tileSizeU = (float)16 / (float)texWidth;
-    float tileSieV = (float)16 / (float)texHeight;
-    float xOffset = tileSizeU * 1;
-    float yOffset = tileSieV * 0;
 
     // Reset color to white if texture is corrupted to properly display error texture
     glm::vec4 vertexColor{color};
@@ -221,36 +213,105 @@ namespace AGE {
     *s_Data.QuadVertexBufferPtr = QuadVertex{
         {pos.x - halfSize.x, pos.y + halfSize.y, pos.z},
         vertexColor,
-        {0.0f + xOffset, 1.0f - yOffset},
+        {0.0f, 1.0f},
         (float)textureIndex,
-        tillingFactor
+        tilingFactor
     };
     s_Data.QuadVertexBufferPtr++;
 
     *s_Data.QuadVertexBufferPtr = QuadVertex{
         {pos.x + halfSize.x, pos.y + halfSize.y, pos.z},
         vertexColor,
-        {0.0f + xOffset + tileSizeU, 1.0f - yOffset},
+        {1.0f, 1.0f},
         (float)textureIndex,
-        tillingFactor
+        tilingFactor
     };
     s_Data.QuadVertexBufferPtr++;
 
     *s_Data.QuadVertexBufferPtr = QuadVertex{
         {pos.x + halfSize.x, pos.y - halfSize.y, pos.z},
         vertexColor,
-        {0.0f + xOffset + tileSizeU, 1.0f - yOffset - tileSieV},
+        {1.0f, 0.0f},
         (float)textureIndex,
-        tillingFactor
+        tilingFactor
     };
     s_Data.QuadVertexBufferPtr++;
 
     *s_Data.QuadVertexBufferPtr = QuadVertex{
         {pos.x - halfSize.x, pos.y - halfSize.y, pos.z},
         vertexColor,
-        {0.0f + xOffset, 1.0f - yOffset - tileSieV},
+        {0.0f, 0.0f},
         (float)textureIndex,
-        tillingFactor
+        tilingFactor
+    };
+    s_Data.QuadVertexBufferPtr++;
+
+    s_Data.QuadIndexCount += 6;
+    s_Data.Stats.QuadCount++;
+  }
+
+  void Renderer2D::DrawQuad(const glm::vec2& pos, const glm::vec2& size, const Ref <SubTexture2D>& subTexture, float tilingFactor) {
+    DrawQuad(glm::vec3{pos, 0.0f}, size, subTexture, glm::vec4{1.0f}, tilingFactor);
+  }
+
+  void Renderer2D::DrawQuad(const glm::vec3& pos, const glm::vec2& size, const Ref <SubTexture2D>& subTexture, float tilingFactor) {
+    DrawQuad(pos, size, subTexture, glm::vec4{1.0f}, tilingFactor);
+  }
+
+  void Renderer2D::DrawQuad(const glm::vec2& pos, const glm::vec2& size, const Ref <SubTexture2D>& subTexture, const glm::vec4& color, float tilingFactor) {
+    DrawQuad(glm::vec3{pos, 0.0f}, size, subTexture, color, tilingFactor);
+  }
+
+  void Renderer2D::DrawQuad(const glm::vec3& pos, const glm::vec2& size, const Ref <SubTexture2D>& subTexture, const glm::vec4& color, float tilingFactor) {
+    auto texture = subTexture->GetTexture();
+
+    int textureIndex = FindTextureIndex(texture);
+
+    // Reset color to white if texture is corrupted to properly display error texture
+    glm::vec4 vertexColor{color};
+    if (texture && !texture->IsCorrect()) {
+      vertexColor = {1.0f, 1.0f, 1.0f, 1.0f};
+    }
+
+    if (s_Data.QuadIndexCount >= s_Data.MaxIndices)
+      NextBatch();
+
+    glm::vec2 halfSize{size * 0.5f};
+    const glm::vec2* texCoords = subTexture->TexCoords();
+
+    *s_Data.QuadVertexBufferPtr = QuadVertex{
+        {pos.x - halfSize.x, pos.y + halfSize.y, pos.z},
+        vertexColor,
+        texCoords[0],
+        (float)textureIndex,
+        tilingFactor
+    };
+    s_Data.QuadVertexBufferPtr++;
+
+    *s_Data.QuadVertexBufferPtr = QuadVertex{
+        {pos.x + halfSize.x, pos.y + halfSize.y, pos.z},
+        vertexColor,
+        texCoords[1],
+        (float)textureIndex,
+        tilingFactor
+    };
+    s_Data.QuadVertexBufferPtr++;
+
+    *s_Data.QuadVertexBufferPtr = QuadVertex{
+        {pos.x + halfSize.x, pos.y - halfSize.y, pos.z},
+        vertexColor,
+        texCoords[2],
+        (float)textureIndex,
+        tilingFactor
+    };
+    s_Data.QuadVertexBufferPtr++;
+
+    *s_Data.QuadVertexBufferPtr = QuadVertex{
+        {pos.x - halfSize.x, pos.y - halfSize.y, pos.z},
+        vertexColor,
+        texCoords[3],
+        (float)textureIndex,
+        tilingFactor
     };
     s_Data.QuadVertexBufferPtr++;
 
@@ -287,23 +348,23 @@ namespace AGE {
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 
   void Renderer2D::DrawRotatedQuad(const glm::vec2& pos, const glm::vec2& size, const float rotationDeg, const glm::vec4& color) {
-    DrawRotatedQuad(glm::vec3{pos, 0.0f}, size, rotationDeg, nullptr, color, 1.0f);
+    DrawRotatedQuad(glm::vec3{pos, 0.0f}, size, rotationDeg, s_Data.UnitTexture, color, 1.0f);
   }
 
   void Renderer2D::DrawRotatedQuad(const glm::vec3& pos, const glm::vec2& size, const float rotationDeg, const glm::vec4& color) {
-    DrawRotatedQuad(pos, size, rotationDeg, nullptr, color, 1.0f);
+    DrawRotatedQuad(pos, size, rotationDeg, s_Data.UnitTexture, color, 1.0f);
   }
 
-  void Renderer2D::DrawRotatedQuad(const glm::vec2& pos, const glm::vec2& size, const float rotationDeg, const Ref<Texture2D>& texture, float tillingFactor) {
-    DrawRotatedQuad(glm::vec3{pos, 0.0f}, size, rotationDeg, nullptr, glm::vec4{1.0f}, 1.0f);
+  void Renderer2D::DrawRotatedQuad(const glm::vec2& pos, const glm::vec2& size, const float rotationDeg, const Ref<Texture2D>& texture, float tilingFactor) {
+    DrawRotatedQuad(glm::vec3{pos, 0.0f}, size, rotationDeg, s_Data.UnitTexture, glm::vec4{1.0f}, 1.0f);
   }
 
-  void Renderer2D::DrawRotatedQuad(const glm::vec3& pos, const glm::vec2& size, const float rotationDeg, const Ref<Texture2D>& texture, float tillingFactor) {
-    DrawRotatedQuad(pos, size, rotationDeg, nullptr, glm::vec4{1.0f}, 1.0f);
+  void Renderer2D::DrawRotatedQuad(const glm::vec3& pos, const glm::vec2& size, const float rotationDeg, const Ref<Texture2D>& texture, float tilingFactor) {
+    DrawRotatedQuad(pos, size, rotationDeg, s_Data.UnitTexture, glm::vec4{1.0f}, 1.0f);
   }
 
-  void Renderer2D::DrawRotatedQuad(const glm::vec2& pos, const glm::vec2& size, const float rotationDeg, const Ref<Texture2D>& texture, const glm::vec4& color) {
-    DrawRotatedQuad(glm::vec3{pos, 0.0f}, size, rotationDeg, nullptr, glm::vec4{1.0f}, 1.0f);
+  void Renderer2D::DrawRotatedQuad(const glm::vec2& pos, const glm::vec2& size, const float rotationDeg, const Ref<Texture2D>& texture, const glm::vec4& color, float tilingFactor) {
+    DrawRotatedQuad(glm::vec3{pos, 0.0f}, size, rotationDeg, s_Data.UnitTexture, glm::vec4{1.0f}, tilingFactor);
   }
 
   void Renderer2D::DrawRotatedQuad(
@@ -348,6 +409,70 @@ namespace AGE {
         transform * s_Data.QuadVertexPositions[3],
         color,
         {1.0f, 0.0f},
+        (float)textureIndex,
+        tillingFactor
+    };
+    s_Data.QuadVertexBufferPtr++;
+
+    s_Data.QuadIndexCount += 6;
+    s_Data.Stats.QuadCount++;
+  }
+
+  void Renderer2D::DrawRotatedQuad(const glm::vec2& pos, const glm::vec2& size, float rotationDeg, const Ref <SubTexture2D>& subTexture, float tilingFactor) {
+    DrawRotatedQuad(glm::vec3{pos, 0.0f}, size, rotationDeg, subTexture, glm::vec4{1.0f}, tilingFactor);
+  }
+
+  void Renderer2D::DrawRotatedQuad(const glm::vec3& pos, const glm::vec2& size, float rotationDeg, const Ref <SubTexture2D>& subTexture, float tilingFactor) {
+    DrawRotatedQuad(pos, size, rotationDeg, subTexture, glm::vec4{1.0f}, tilingFactor);
+  }
+
+  void Renderer2D::DrawRotatedQuad(
+      const glm::vec2& pos, const glm::vec2& size, float rotationDeg, const Ref <SubTexture2D>& subTexture, const glm::vec4& color, float tilingFactor
+  ) {
+    DrawRotatedQuad(glm::vec3{pos, 0.0f}, size, rotationDeg, subTexture, color, tilingFactor);
+  }
+
+  void Renderer2D::DrawRotatedQuad(
+      const glm::vec3& pos, const glm::vec2& size, float rotationDeg, const Ref <SubTexture2D>& subTexture, const glm::vec4& color, float tillingFactor
+  ) {
+    glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos)
+                          * glm::rotate(glm::mat4(1.0f), glm::radians(rotationDeg), {0.0f, 0.0f, 1.0f})
+                          * glm::scale(glm::mat4(1.0f), {size.x, size.y, 0.0f});
+
+    int textureIndex = FindTextureIndex(subTexture->GetTexture());
+    const glm::vec2* texCoord = subTexture->TexCoords();
+
+    *s_Data.QuadVertexBufferPtr = QuadVertex{
+        transform * s_Data.QuadVertexPositions[0],
+        color,
+        texCoord[0],
+        (float)textureIndex,
+        tillingFactor
+    };
+    s_Data.QuadVertexBufferPtr++;
+
+    *s_Data.QuadVertexBufferPtr = QuadVertex{
+        transform * s_Data.QuadVertexPositions[1],
+        color,
+        texCoord[1],
+        (float)textureIndex,
+        tillingFactor
+    };
+    s_Data.QuadVertexBufferPtr++;
+
+    *s_Data.QuadVertexBufferPtr = QuadVertex{
+        transform * s_Data.QuadVertexPositions[2],
+        color,
+        texCoord[2],
+        (float)textureIndex,
+        tillingFactor
+    };
+    s_Data.QuadVertexBufferPtr++;
+
+    *s_Data.QuadVertexBufferPtr = QuadVertex{
+        transform * s_Data.QuadVertexPositions[3],
+        color,
+        texCoord[3],
         (float)textureIndex,
         tillingFactor
     };
