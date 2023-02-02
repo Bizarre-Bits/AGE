@@ -12,5 +12,5 @@ updates:
     target-branch: "dev"
     labels:
       - "dependency bump"
-      - "dependabot"
+      - "dependecies"
       - "github apps"
