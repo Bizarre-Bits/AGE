@@ -10,13 +10,29 @@
 
 #include "glm/gtc/type_ptr.hpp"
 
+static const char* s_MapTiles =
+                         "WWWWWWWWWWWWWWWWWWWWWWWW"
+                         "WWWWWWDDDDDDDDDDDWWWWWWW"
+                         "WWWWDDDDDDDDDDDDDDWWWWWW"
+                         "WWWWDDDDDDDDDDDDDDDWWWWW"
+                         "WWWDDDDDDDWWWWDDDDDDWWWW"
+                         "WWDDDDDWWWWWWWDDDDDDWWWW"
+                         "WWDDDDDWWWWWSDDDDDDDDWWW"
+                         "WWWDDDDWWWWDDDDDDDDDDWWW"
+                         "WWWDDDDDDDDDDDDDDDDDWWWW"
+                         "WWWWDDDDDDDDDDDDDDDWWWWW"
+                         "WWWWWWWWDDDDDDDDDWWWWWWW"
+                         "WWWWWWWWWWWWWWWWWWWWWWWW";
+
 Sandbox2DLayer::Sandbox2DLayer() : m_CameraController(1280.0f / 720.0f), m_Particles(5000) {
   AGE_PROFILE_FUNCTION();
 
-  m_CreeperFaceTex  = AGE::Texture2D::Create("assets/textures/creeper-face.png");
-  m_IncorrectTex    = AGE::Texture2D::Create("wrong/path/to.png");
-  m_CheckerboardTex = AGE::Texture2D::Create("assets/textures/Checkerboard.png");
-  m_GearTex         = AGE::Texture2D::Create("assets/textures/gear-sprite.png");
+  m_SpriteSheet = AGE::Texture2D::Create("assets/textures/tilemap.png");
+
+  m_TileMap['W'] = AGE::SubTexture2D::CreateFromCoords(m_SpriteSheet, {11.0f, 1.0f}, {128.0f, 128.0f});
+  m_TileMap['D'] = AGE::SubTexture2D::CreateFromCoords(m_SpriteSheet, {6.0f, 1.0f}, {128.0f, 128.0f});
+
+  m_CameraController.SetZoomLevel(7.0f);
 }
 
 void Sandbox2DLayer::OnUpdate(AGE::Timestep ts) {
@@ -27,38 +43,34 @@ void Sandbox2DLayer::OnUpdate(AGE::Timestep ts) {
   AGE::RenderCommand::Clear();
   AGE::Renderer2D::BeginScene(m_CameraController.GetCamera());
 
-  AGE::Renderer2D::DrawQuad(glm::vec3{0.0f, 0.0f, -1.0f}, glm::vec2{20.0f}, m_CheckerboardTex, 20.0f);
-
-  int xCount{5};
-  int yCount{xCount};
-
-  for (int x{-xCount}; x <= xCount; x++) {
-    float    normX = (float)(x + xCount) / ((float)xCount * 2.0f);
-    for (int y{-yCount}; y <= yCount; y++) {
-      float normY = (float)(y + yCount) / ((float)yCount * 2.0f);
-
-      float r = normX * 0.6f;
-      float b = normY * 0.6f;
-      float g = 0.4f;
-
-      AGE::Renderer2D::DrawQuad(glm::vec3{x, y, -0.1f}, glm::vec2{0.9f}, m_CheckerboardTex, glm::vec4{r, g, b, 1.0f}, 0.25f);
+  uint32_t mapHeight{12};
+  uint32_t mapWidth{24};
+  for(uint32_t y{0}; y < mapHeight; y++) {
+    float normY = (float)y - ((float)mapHeight / 2.0f);
+    for(uint32_t x{0}; x < mapWidth; x++) {
+      float normX = (float)x - ((float)mapWidth / 2.0f);
+      if(m_TileMap.find(s_MapTiles[y * mapWidth +  x]) == m_TileMap.end()) {
+        AGE::Renderer2D::DrawQuad({normX, normY, -0.1f}, {1.0f, 1.0f}, AGE::Texture2D::ErrorTexture());
+        continue;
+      }
+      AGE::Renderer2D::DrawQuad({normX, normY, -0.1f}, {1.0f, 1.0f}, m_TileMap[s_MapTiles[y * mapWidth +  x]]);
     }
   }
 
   static float lastParticleSpawn{0.0f};
 
   static ParticleProps props{glm::vec2{0.0f},
-                             glm::vec2{0, 1.5f},
-                             0.5f,
+                             glm::vec2{0},
+                             1.5f,
                              45.0f,
                              90.0f,
-                             glm::vec4{0.9f, 0.6f, 0.0f, 1.0f},
-                             glm::vec4{0.6f, 0.1f, 0.0f, 1.0f},
+                             glm::vec4{2.5f, 2.0f, 1.0f, 1.0f},
+                             glm::vec4{0.6f, 0.0f, 0.0f, 0.3f},
                              0.05f,
                              0.1f,
                              0.05f,
                              0.01,
-                             5.0f,
+                             1.0f,
                              0.0f};
 
   lastParticleSpawn += ts;
@@ -81,7 +93,6 @@ void Sandbox2DLayer::OnUpdate(AGE::Timestep ts) {
 
   m_Particles.OnUpdate(ts);
   m_Particles.Render();
-
 
   AGE::Renderer2D::EndScene();
 }

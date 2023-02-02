@@ -13,6 +13,7 @@ namespace AGE {
   public:
     OpenGLTexture2D(const age_string_t& path);
     OpenGLTexture2D(const uint32_t width, uint32_t height);
+    OpenGLTexture2D();
     virtual ~OpenGLTexture2D() override;
 
     virtual void SetData(void* data, uint32_t size) override;
@@ -30,6 +31,8 @@ namespace AGE {
     virtual inline bool operator==(const Texture2D& other) const override {
       return m_RendererID == ((OpenGLTexture2D&)other).m_RendererID;
     }
+
+    static Ref<OpenGLTexture2D> ErrorTextureImpl();
 
   private:
     uint32_t     m_Height, m_Width;

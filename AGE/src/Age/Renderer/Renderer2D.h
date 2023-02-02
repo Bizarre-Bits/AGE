@@ -9,6 +9,7 @@
 
 #include "OrthographicCamera.h"
 #include "Texture.h"
+#include "SubTexture2D.h"
 
 namespace AGE {
 
@@ -32,9 +33,9 @@ namespace AGE {
 
     static void DrawQuad(const glm::vec2& pos, const glm::vec2& size, const glm::vec4& color);
     static void DrawQuad(const glm::vec3& pos, const glm::vec2& size, const glm::vec4& color);
-    static void DrawQuad(const glm::vec2& pos, const glm::vec2& size, const Ref<Texture2D>& texture, float tillingFactor = 1.0f);
-    static void DrawQuad(const glm::vec3& pos, const glm::vec2& size, const Ref<Texture2D>& texture, float tillingFactor = 1.0f);
-    static void DrawQuad(const glm::vec2& pos, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec4& color);
+    static void DrawQuad(const glm::vec2& pos, const glm::vec2& size, const Ref<Texture2D>& texture, float tilingFactor = 1.0f);
+    static void DrawQuad(const glm::vec3& pos, const glm::vec2& size, const Ref<Texture2D>& texture, float tilingFactor = 1.0f);
+    static void DrawQuad(const glm::vec2& pos, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec4& color, float tilingFactor = 1.0f);
 
     /**
      * @brief Adds quad to current batch.
@@ -42,9 +43,24 @@ namespace AGE {
      * @param size - size in meters.
      * @param texture - texture. If none, white 1x1 texture will be used.
      * @param color - tint color.
-     * @param tillingFactor - tilling factor for the texture.
+     * @param tilingFactor - tilling factor for the texture.
      */
-    static void DrawQuad(const glm::vec3& pos, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec4& color, float tillingFactor = 1.0f);
+    static void DrawQuad(const glm::vec3& pos, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec4& color, float tilingFactor = 1.0f);
+
+
+    static void DrawQuad(const glm::vec2& pos, const glm::vec2& size, const Ref<SubTexture2D>& subTexture, float tilingFactor = 1.0f);
+    static void DrawQuad(const glm::vec3& pos, const glm::vec2& size, const Ref<SubTexture2D>& subTexture, float tilingFactor = 1.0f);
+    static void DrawQuad(const glm::vec2& pos, const glm::vec2& size, const Ref<SubTexture2D>& subTexture, const glm::vec4& color, float tilingFactor = 1.0f);
+
+    /**
+     * @brief Adds quad to current batch.
+     * @param pos - world position.
+     * @param size - size in meters.
+     * @param subTexture - sub texture.
+     * @param color - tint color.
+     * @param tilingFactor - tilling factor for the texture.
+     */
+    static void DrawQuad(const glm::vec3& pos, const glm::vec2& size, const Ref<SubTexture2D>& subTexture, const glm::vec4& color, float tilingFactor = 1.0f);
 
 #pragma endregion
 
@@ -52,9 +68,9 @@ namespace AGE {
 
     static void DrawRotatedQuad(const glm::vec2& pos, const glm::vec2& size, float rotationDeg, const glm::vec4& color);
     static void DrawRotatedQuad(const glm::vec3& pos, const glm::vec2& size, float rotationDeg, const glm::vec4& color);
-    static void DrawRotatedQuad(const glm::vec2& pos, const glm::vec2& size, float rotationDeg, const Ref<Texture2D>& texture, float tillingFactor = 1.0f);
-    static void DrawRotatedQuad(const glm::vec3& pos, const glm::vec2& size, float rotationDeg, const Ref<Texture2D>& texture, float tillingFactor = 1.0f);
-    static void DrawRotatedQuad(const glm::vec2& pos, const glm::vec2& size, float rotationDeg, const Ref<Texture2D>& texture, const glm::vec4& color);
+    static void DrawRotatedQuad(const glm::vec2& pos, const glm::vec2& size, float rotationDeg, const Ref<Texture2D>& texture, float tilingFactor = 1.0f);
+    static void DrawRotatedQuad(const glm::vec3& pos, const glm::vec2& size, float rotationDeg, const Ref<Texture2D>& texture, float tilingFactor = 1.0f);
+    static void DrawRotatedQuad(const glm::vec2& pos, const glm::vec2& size, float rotationDeg, const Ref<Texture2D>& texture, const glm::vec4& color, float tilingFactor = 1.0f);
 
     /**
      * @brief Adds a rotated quad to the current batch.
@@ -67,6 +83,24 @@ namespace AGE {
      */
     static void DrawRotatedQuad(
         const glm::vec3& pos, const glm::vec2& size, float rotationDeg, const Ref<Texture2D>& texture, const glm::vec4& color, float tillingFactor = 1.0f
+    );
+
+
+    static void DrawRotatedQuad(const glm::vec2& pos, const glm::vec2& size, float rotationDeg, const Ref<SubTexture2D>& subTexture, float tilingFactor = 1.0f);
+    static void DrawRotatedQuad(const glm::vec3& pos, const glm::vec2& size, float rotationDeg, const Ref<SubTexture2D>& subTexture, float tilingFactor = 1.0f);
+    static void DrawRotatedQuad(const glm::vec2& pos, const glm::vec2& size, float rotationDeg, const Ref<SubTexture2D>& subTexture, const glm::vec4& color, float tilingFactor = 1.0f);
+
+    /**
+     * @brief Adds a rotated quad to the current batch.
+     * @param pos - world position.
+     * @param size - size in meters.
+     * @param rotationDeg  - rotation in degrees.
+     * @param subTexture - sub texture
+     * @param color - tint color.
+     * @param tillingFactor - tilling factor for the texture.
+     */
+    static void DrawRotatedQuad(
+        const glm::vec3& pos, const glm::vec2& size, float rotationDeg, const Ref<SubTexture2D>& subTexture, const glm::vec4& color, float tillingFactor = 1.0f
     );
 
 #pragma endregion
