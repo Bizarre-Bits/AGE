@@ -16,24 +16,13 @@ public:
 
   virtual void OnUpdate(AGE::Timestep ts) override;
   virtual void OnEvent(AGE::Event& e) override;
+  virtual void OnUiRender(AGE::Timestep ts) override;
+
+  void AppDockSpace(bool* p_open);
 
 private:
   AGE::OrthographicCameraController m_CameraController;
-  AGE::Ref<AGE::Texture2D>          m_SpriteSheet;
-  std::unordered_map<char, AGE::Ref<AGE::SubTexture2D>> m_TileMap;
-
-  friend class Sandbox2DUI;
-
-  ParticleSystem m_Particles;
-};
-
-class Sandbox2DUI : public AGE::ImGuiLayer {
-public:
-  virtual void OnUpdate(AGE::Timestep ts) override;
-  virtual void OnAttach() override;
-
-private:
-  glm::vec3 m_BgColor{0.2f, 0.2f, 0.2f};
+  AGE::Ref<AGE::Framebuffer>        m_Framebuffer;
 };
 
 

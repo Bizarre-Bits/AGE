@@ -28,7 +28,7 @@ namespace AGE {
   class DebugLayer : public ImGuiLayer {
   public:
     DebugLayer();
-    virtual void OnUpdate(Timestep ts) override;
+    virtual void OnUiRender(Timestep ts) override;
 
   private:
     FpsPlot m_FpsPlot;

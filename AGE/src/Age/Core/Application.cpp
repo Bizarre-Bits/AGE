@@ -39,15 +39,19 @@ namespace AGE {
 
       Timestep ts = m_Timer.DeltaTime();
 
-      // TODO: That looks strange, should figure out a better solution.
-      if (ImGuiLayer::IsInitialized)
+      {
+        AGE_PROFILE_SCOPE("LayerStack OnUpdate");
+
+        for (Layer* layer: m_LayerStack)
+          layer->OnUpdate(ts);
+      }
+      {
+        AGE_PROFILE_SCOPE("LayerStack OnUiRender");
         ImGuiLayer::Begin();
-
-      for (Layer* layer: m_LayerStack)
-        layer->OnUpdate(ts);
-
-      if (ImGuiLayer::IsInitialized)
+        for (Layer* layer: m_LayerStack)
+          layer->OnUiRender(ts);
         ImGuiLayer::End();
+      }
 
       m_Window->OnUpdate();
 
@@ -94,7 +98,7 @@ namespace AGE {
     return s_Instance;
   }
 
-  Scope<Window>& Application::Window() {
+  Scope <Window>& Application::Window() {
     AGE_PROFILE_FUNCTION();
 
     return m_Window;

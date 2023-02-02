@@ -13,8 +13,7 @@
 namespace AGE {
   DebugLayer::DebugLayer() : ImGuiLayer("Debug Layer") {}
 
-  void DebugLayer::OnUpdate(Timestep ts) {
-    AGE_PROFILE_FUNCTION();
+  void DebugLayer::OnUiRender(Timestep ts) {
 
     constexpr float fpsTextUpdateThresholdSeconds{0.1f};
     static float lastFpsUpdateSeconds{0.0f};
