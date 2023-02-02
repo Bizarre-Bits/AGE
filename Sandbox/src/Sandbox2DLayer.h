@@ -23,6 +23,8 @@ private:
   std::unordered_map<char, AGE::Ref<AGE::SubTexture2D>> m_TileMap;
 
   friend class Sandbox2DUI;
+
+  ParticleSystem m_Particles;
 };
 
 class Sandbox2DUI : public AGE::ImGuiLayer {

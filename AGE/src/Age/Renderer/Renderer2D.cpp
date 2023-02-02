@@ -34,7 +34,7 @@ namespace AGE {
 
     uint32_t QuadIndexCount = 0;
 
-    std::array<Ref<Texture2D>, MaxTextureSlots> TextureSlots;
+    std::array<Ref<Texture2D>, MaxTextureSlots> TextureSlots{UnitTexture};
     uint32_t                                    TextureSlotIndex = 1; //0 - Unit Texture;
 
     glm::vec4 QuadVertexPositions[4];
@@ -320,7 +320,7 @@ namespace AGE {
   }
 
   int Renderer2D::FindTextureIndex(const Ref<Texture2D>& texture) {
-    int textureIndex = 0;
+    int textureIndex = -1;
 
     if (texture != nullptr) {
       for (int i{0}; i < s_Data.TextureSlotIndex; i++) {
@@ -330,7 +330,7 @@ namespace AGE {
         }
       }
 
-      if (textureIndex == 0) {
+      if (textureIndex == -1) {
         textureIndex = (int)s_Data.TextureSlotIndex;
         s_Data.TextureSlots[textureIndex] = texture;
         s_Data.TextureSlotIndex++;

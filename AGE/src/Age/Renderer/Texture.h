@@ -31,7 +31,7 @@ namespace AGE {
     static Ref<Texture2D> Create(const uint32_t width, const uint32_t height);
     static Ref<Texture2D> ErrorTexture();
 
-    virtual bool operator==(const Texture2D& other) const = 0;
+    virtual bool operator==(const Texture2D& other) const { return ID() == other.ID(); };
   };
 }
 
