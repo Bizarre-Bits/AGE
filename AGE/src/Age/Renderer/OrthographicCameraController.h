@@ -32,12 +32,13 @@ namespace AGE {
     void OnEvent(Event& e);
 
     void OnResize(float width, float height);
+    void CalculateView();
 
     OrthographicCamera& GetCamera() { return m_Camera; }
     const OrthographicCamera& GetCamera() const { return m_Camera; }
 
     float ZoomLevel() const { return m_ZoomLevel; }
-    void SetZoomLevel(float level) { m_ZoomLevel = level; }
+    void SetZoomLevel(float level);
     [[nodiscard]] inline CameraBounds Bounds() const { return m_Bounds; }
 
   private:
