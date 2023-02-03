@@ -72,7 +72,7 @@ namespace AGE {
 
     GLFWimage windowIcon;
     windowIcon.pixels = stbi_load(
-        "assets/icons/age_logo.png", &windowIcon.width, &windowIcon.height, 0, 4
+        "assets/core_assets/icons/age_logo.png", &windowIcon.width, &windowIcon.height, 0, 4
     );
     glfwSetWindowIcon(m_Window, 1, &windowIcon);
     stbi_image_free(windowIcon.pixels);

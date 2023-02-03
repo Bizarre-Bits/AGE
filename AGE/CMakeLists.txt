@@ -100,6 +100,34 @@ endif ()
 
 target_compile_definitions(age_core PUBLIC AGE_RENDER_PLATFORM_${AGE_RENDER_PLATFORM})
 
-#__GLX_VENDOR_LIBRARY_NAME=nvidia;__NV_PRIME_RENDER_OFFLOAD=1
+if(NOT FINAL_EXE_BINARY_DIR OR FINAL_EXE_BIN_DIR STREQUAL "")
+    message(FATAL_ERROR "There is no target \"${FINAL_EXE_BINARY_DIR}\" (FINAL_EXE_BINARY_DIR)")
+else()
+    message(STATUS "Final exe binary dir is \"${FINAL_EXE_BINARY_DIR}\"")
+endif()
+
+file(GLOB_RECURSE _AGECORE_ASSETS ${CMAKE_CURRENT_SOURCE_DIR}/assets/core_assets/*)
+
+add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/${FINAL_EXE_BINARY_DIR}/assets
+        COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/${FINAL_EXE_BINARY_DIR}/assets)
+
+add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/${FINAL_EXE_BINARY_DIR}/assets/core_assets
+        COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/${FINAL_EXE_BINARY_DIR}/assets/core_assets
+        DEPENDS ${CMAKE_BINARY_DIR}/${FINAL_EXE_BINARY_DIR}/assets)
+
+foreach (assetSrc ${_AGECORE_ASSETS})
+    string(REPLACE ${CMAKE_CURRENT_SOURCE_DIR}/assets/core_assets/ "" assetPath ${assetSrc})
+    message(STATUS "Add custom command for ${assetPath}")
+    list(APPEND assetsOutputList ${CMAKE_BINARY_DIR}/${FINAL_EXE_BINARY_DIR}/assets/core_assets/${assetPath})
+    target_sources(AGEditor PUBLIC ${assetSrc})
+    add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/${FINAL_EXE_BINARY_DIR}/assets/core_assets/${assetPath}
+            COMMAND ${CMAKE_COMMAND} -E copy ${assetSrc} ${CMAKE_BINARY_DIR}/${FINAL_EXE_BINARY_DIR}/assets/core_assets/${assetPath}
+            DEPENDS ${assetSrc} ${CMAKE_BINARY_DIR}/${FINAL_EXE_BINARY_DIR}/assets/core_assets
+            COMMENT "Copy ${assetPath}")
+endforeach ()
+
+add_custom_target(core_assets ALL DEPENDS ${assetsOutputList})
+
+add_dependencies(AGEditor core_assets)
 
 
