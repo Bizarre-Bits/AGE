@@ -16,13 +16,9 @@ public:
 
   virtual void OnUpdate(AGE::Timestep ts) override;
   virtual void OnEvent(AGE::Event& e) override;
-  virtual void OnUiRender(AGE::Timestep ts) override;
-
-  void AppDockSpace(bool* p_open);
 
 private:
   AGE::OrthographicCameraController m_CameraController;
-  AGE::Ref<AGE::Framebuffer>        m_Framebuffer;
 };
 
 
