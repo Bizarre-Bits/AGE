@@ -32,7 +32,7 @@ namespace AGE {
     if (!s_IsInitialized) {
       auto window = (GLFWwindow*)Application::Instance()->Window().NativeWindow();
       ImGui_ImplGlfw_InitForOpenGL(window, true);
-      ImGui_ImplOpenGL3_Init("#version 450");
+      ImGui_ImplOpenGL3_Init("#version 430");
       s_IsInitialized = true;
     }
   }

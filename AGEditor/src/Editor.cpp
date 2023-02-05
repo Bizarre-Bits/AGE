@@ -5,7 +5,7 @@
 #include "Editor.h"
 
 namespace AGE {
-  Editor::Editor() {
+  Editor::Editor(const ApplicationSpecs& specs): Application(specs) {
     PushLayer(new EditorLayer);
   }
 } // AGE

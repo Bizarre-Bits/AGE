@@ -12,7 +12,7 @@ namespace AGE {
 
   class Editor : public Application{
   public:
-    Editor();
+    Editor(const ApplicationSpecs& specs);
   };
 
 } // AGE

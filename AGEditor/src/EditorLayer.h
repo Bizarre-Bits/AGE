@@ -12,6 +12,7 @@ namespace AGE {
   class EditorLayer : public Layer {
   public:
     virtual void OnUpdate(Timestep ts) override;
+    virtual void OnUiRender(Timestep ts) override;
   };
 
 } // AGE
