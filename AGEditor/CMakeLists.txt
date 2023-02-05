@@ -1,10 +1,10 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.7)
-project(AGE)
+project(AGEditor)
 set(CMAKE_CXX_STANDARD 23)
 
-file(GLOB_RECURSE _EDITOR_SRCS src/*.cpp src/*.h)
+file(GLOB_RECURSE _AGEDITOR_SRCS src/*.cpp src/*.h)
 
-add_executable(AGEditor ${_EDITOR_SRCS})
+add_executable(AGEditor ${_AGEDITOR_SRCS})
 include_directories(AGEditor src)
 target_link_libraries(AGEditor PUBLIC age_core)
 
@@ -17,7 +17,7 @@ add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/assets/client_assets
 
 foreach (assetSrc ${_AGEDITOR_ASSETS})
     string(REPLACE ${CMAKE_CURRENT_SOURCE_DIR}/assets/client_assets/ "" assetPath ${assetSrc})
-    message(STATUS "Client Assets: Add custom command for ${assetPath}")
+    message(STATUS "AGE_CLIENT: Add custom command for ${assetPath}")
     list(APPEND assetsOutputList ${CMAKE_CURRENT_BINARY_DIR}/assets/client_assets/${assetPath})
     target_sources(AGEditor PUBLIC ${assetSrc})
     add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/assets/client_assets/${assetPath}
@@ -26,6 +26,7 @@ foreach (assetSrc ${_AGEDITOR_ASSETS})
             COMMENT "Client Assets: Copy ${assetPath}")
 endforeach ()
 
-add_custom_target(client_assets ALL DEPENDS ${assetsOutputList})
+add_custom_target(AGEditor_client_assets ALL DEPENDS ${assetsOutputList})
 
-add_dependencies(AGEditor client_assets)
+add_dependencies(AGEditor AGEditor_client_assets)
+add_dependencies(AGEditor core_assets)

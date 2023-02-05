@@ -15,7 +15,7 @@ namespace AGE {
   bool OpenGLInput::IsKeyPressedImpl(KeyCode keycode) {
     AGE_PROFILE_FUNCTION();
 
-    auto window = (GLFWwindow*)Application::Instance()->Window()->NativeWindow();
+    auto window = (GLFWwindow*)Application::Instance()->Window().NativeWindow();
 
     auto state = glfwGetKey(window, keycode);
     return state == GLFW_PRESS || state == GLFW_REPEAT;
@@ -24,7 +24,7 @@ namespace AGE {
   bool OpenGLInput::IsMousePressedImpl(MouseCode mousecode) {
     AGE_PROFILE_FUNCTION();
 
-    auto window = (GLFWwindow*)Application::Instance()->Window()->NativeWindow();
+    auto window = (GLFWwindow*)Application::Instance()->Window().NativeWindow();
     int state = glfwGetMouseButton(window, mousecode);
     return state == GLFW_PRESS;
   }
@@ -32,7 +32,7 @@ namespace AGE {
   std::pair<float, float> OpenGLInput::MousePosImpl() {
     AGE_PROFILE_FUNCTION();
 
-    auto window = (GLFWwindow*)Application::Instance()->Window()->NativeWindow();
+    auto window = (GLFWwindow*)Application::Instance()->Window().NativeWindow();
     double xpos, ypos;
     glfwGetCursorPos(window, &xpos, &ypos);
     return {(float)xpos, (float)ypos};

@@ -117,9 +117,9 @@ add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/${FINAL_EXE_BINARY_DIR}/assets/cor
 
 foreach (assetSrc ${_AGECORE_ASSETS})
     string(REPLACE ${CMAKE_CURRENT_SOURCE_DIR}/assets/core_assets/ "" assetPath ${assetSrc})
-    message(STATUS "Add custom command for ${assetPath}")
+    message(STATUS "AGE_CORE: Add custom command for ${assetPath}")
     list(APPEND assetsOutputList ${CMAKE_BINARY_DIR}/${FINAL_EXE_BINARY_DIR}/assets/core_assets/${assetPath})
-    target_sources(AGEditor PUBLIC ${assetSrc})
+    target_sources(age_core PUBLIC ${assetSrc})
     add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/${FINAL_EXE_BINARY_DIR}/assets/core_assets/${assetPath}
             COMMAND ${CMAKE_COMMAND} -E copy ${assetSrc} ${CMAKE_BINARY_DIR}/${FINAL_EXE_BINARY_DIR}/assets/core_assets/${assetPath}
             DEPENDS ${assetSrc} ${CMAKE_BINARY_DIR}/${FINAL_EXE_BINARY_DIR}/assets/core_assets
@@ -128,6 +128,6 @@ endforeach ()
 
 add_custom_target(core_assets ALL DEPENDS ${assetsOutputList})
 
-add_dependencies(AGEditor core_assets)
+add_dependencies(age_core core_assets)
 
 

@@ -21,12 +21,12 @@ namespace AGE {
 
     virtual void Run();
 
-    void OnEvent(Event& e);
+    virtual void OnEvent(Event& e);
 
-    void PushLayer(Layer* layer);
-    void PushOverlay(Layer* layer);
+    virtual void PushLayer(Layer* layer);
+    virtual void PushOverlay(Layer* layer);
 
-    Scope <AGE::Window>& Window();
+    AGE::Window& Window();
     Timestep Uptime();
 
     static Application* Instance();

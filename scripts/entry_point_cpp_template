@@ -1,0 +1,17 @@
+#include "Age/EntryPoint.h"
+#include "Age/Age.h"
+
+namespace {project_namespace} {{
+  class {project_name}Layer : public AGE::Layer {{
+      public:
+      virtual void OnUpdate(AGE::Timestep ts) override {{
+        AGE::RenderCommand::Clear();
+      }}
+  }};
+}} // {project_namespace}
+
+AGE::Application* AGE::CreateApplication() {{
+    AGE::Application* app = new AGE::Application{{}};
+    app->PushLayer(new {project_namespace}::{project_name}Layer());
+    return app;
+}}

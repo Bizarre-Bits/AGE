@@ -51,8 +51,8 @@ namespace AGE {
 
   void ImGuiLayer::End() {
     ImGuiIO& io          = ImGui::GetIO();
-    Scope<Window>& window = Application::Instance()->Window();
-    io.DisplaySize       = ImVec2((float)window->Width(), (float)window->Height());
+    Window& window = Application::Instance()->Window();
+    io.DisplaySize       = ImVec2((float)window.Width(), (float)window.Height());
 
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -67,7 +67,7 @@ namespace AGE {
 
   void ImGuiLayer::InitImGui() {
     if (!IsInitialized) {
-      auto window = (GLFWwindow*)Application::Instance()->Window()->NativeWindow();
+      auto window = (GLFWwindow*)Application::Instance()->Window().NativeWindow();
       ImGui_ImplGlfw_InitForOpenGL(window, true);
       ImGui_ImplOpenGL3_Init("#version 410");
       IsInitialized = true;

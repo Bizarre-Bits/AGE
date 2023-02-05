@@ -98,10 +98,10 @@ namespace AGE {
     return s_Instance;
   }
 
-  Scope <Window>& Application::Window() {
+  Window& Application::Window() {
     AGE_PROFILE_FUNCTION();
 
-    return m_Window;
+    return *m_Window;
   }
 
   Timestep Application::Uptime() {
