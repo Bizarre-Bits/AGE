@@ -4,6 +4,8 @@
 
 #include "agepch.h"
 
+#include <imgui.h>
+
 #include "DebugLayer.h"
 
 #include "Age/Core/Window.h"
@@ -11,7 +13,7 @@
 #include "Age/Core/Input.h"
 
 namespace AGE {
-  DebugLayer::DebugLayer() : ImGuiLayer("Debug Layer") {}
+  DebugLayer::DebugLayer() : Layer("Debug Layer") {}
 
   void DebugLayer::OnUiRender(Timestep ts) {
 

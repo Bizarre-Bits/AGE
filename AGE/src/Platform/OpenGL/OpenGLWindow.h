@@ -46,6 +46,7 @@ namespace AGE {
     } m_Data;
 
     static bool s_GLFWInitialized;
+    static bool s_ImGuiInitialized;
   };
 }// namespace AGE
 

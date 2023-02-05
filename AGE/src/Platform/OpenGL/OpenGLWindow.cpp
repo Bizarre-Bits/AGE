@@ -7,15 +7,19 @@
 #include "OpenGLWindow.h"
 
 #include <stb_image.h>
+#include <imgui.h>
 
 #include "Age/Events/KeyEvent.h"
 #include "Age/Events/MouseEvent.h"
 #include "Age/Events/WindowEvent.h"
 
 #include "Platform/OpenGL/OpenGLContext.h"
+#include "backends/imgui_impl_opengl3.h"
+#include "backends/imgui_impl_glfw.h"
 
 namespace AGE {
   bool OpenGLWindow::s_GLFWInitialized{false};
+  bool OpenGLWindow::s_ImGuiInitialized{false};
 
   void GLFWErrorCallback(int error, const char* description) {
     AGE_PROFILE_FUNCTION();
@@ -212,7 +216,6 @@ namespace AGE {
 
   void OpenGLWindow::Destroy() {
     AGE_PROFILE_FUNCTION();
-
     glfwDestroyWindow(m_Window);
   }
   void* OpenGLWindow::NativeWindow() const {

@@ -23,8 +23,8 @@ namespace AGE {
 
     virtual void OnEvent(Event& e);
 
-    virtual void PushLayer(Layer* layer);
-    virtual void PushOverlay(Layer* layer);
+    void PushLayer(Layer* layer);
+    void PushOverlay(Layer* layer);
 
     AGE::Window& Window();
     Timestep Uptime();

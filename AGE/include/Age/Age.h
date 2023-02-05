@@ -20,8 +20,6 @@
 
 // Layers
 #include "Age/Core/Layer.h"
-#include "Age/ImGui/ImGuiBuild.h"
-#include "Age/ImGui/ImGuiLayer.h"
 #include "Age/Debug/DebugLayer.h"
 
 //Renderer

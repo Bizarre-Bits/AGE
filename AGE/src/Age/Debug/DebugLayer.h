@@ -5,7 +5,7 @@
 #ifndef AGE_DEBUGLAYER_H
 #define AGE_DEBUGLAYER_H
 
-#include "Age/ImGui/ImGuiLayer.h"
+#include "Age/Core/Layer.h"
 
 namespace AGE {
 
@@ -22,10 +22,10 @@ namespace AGE {
     std::array<float, 60> m_Data;
     std::size_t           m_NextIndex{0};
     float                 m_MaxValue{0};
-    float                 m_MinValue{FLT_MAX};
+    float                 m_MinValue{std::numeric_limits<float>::max()};
   };
 
-  class DebugLayer : public ImGuiLayer {
+  class DebugLayer : public Layer {
   public:
     DebugLayer();
     virtual void OnUiRender(Timestep ts) override;

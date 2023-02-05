@@ -7,9 +7,9 @@
 #include "Application.h"
 
 #include "Age/Debug/DebugLayer.h"
-#include "Age/ImGui/ImGuiLayer.h"
 #include "Age/Renderer/Renderer.h"
 #include "Age/Renderer/Renderer2D.h"
+#include "Age/Renderer/ImGuiHandler.h"
 
 namespace AGE {
   Application* Application::s_Instance{nullptr};
@@ -24,6 +24,7 @@ namespace AGE {
 
     Renderer::Init();
     Renderer2D::Init();
+    ImGuiHandler::InitImGui();
 
 #ifdef DEBUG
     PushOverlay(new DebugLayer);
@@ -47,15 +48,17 @@ namespace AGE {
       }
       {
         AGE_PROFILE_SCOPE("LayerStack OnUiRender");
-        ImGuiLayer::Begin();
+        ImGuiHandler::BeginFrame();
         for (Layer* layer: m_LayerStack)
           layer->OnUiRender(ts);
-        ImGuiLayer::End();
+        ImGuiHandler::EndFrame();
       }
 
       m_Window->OnUpdate();
 
     }
+
+    ImGuiHandler::ShutDownImGui();
   }
 
   void Application::OnEvent(Event& e) {

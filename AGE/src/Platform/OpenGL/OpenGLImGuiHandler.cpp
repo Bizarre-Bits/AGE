@@ -1,23 +1,18 @@
 //
-// Created by alex on 05.09.22.
+// Created by alex on 2/5/23.
 //
 
-#include "agepch.h"
-
-// TODO: must be moved to the platform specific code
-#include "Platform/OpenGL/OpenGLPlatform.h"
-
-#include "Age/ImGui/ImGuiLayer.h"
+#include "OpenGLImGuiHandler.h"
+#include "imgui.h"
+#include "backends/imgui_impl_opengl3.h"
 
 #include "Age/Core/Application.h"
-
+#include "backends/imgui_impl_glfw.h"
 
 namespace AGE {
-  bool ImGuiLayer::IsInitialized{false};
+  bool OpenGLImGuiHandler::s_IsInitialized{false};
 
-  ImGuiLayer::ImGuiLayer(age_string_t name) : Layer(name) {}
-
-  void ImGuiLayer::OnAttach() {
+  void OpenGLImGuiHandler::InitImGui() {
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGui::StyleColorsDark();
@@ -34,22 +29,28 @@ namespace AGE {
       style.Colors[ImGuiCol_WindowBg].w = 1.0f;
     }
 
-    InitImGui();
+    if (!s_IsInitialized) {
+      auto window = (GLFWwindow*)Application::Instance()->Window().NativeWindow();
+      ImGui_ImplGlfw_InitForOpenGL(window, true);
+      ImGui_ImplOpenGL3_Init("#version 450");
+      s_IsInitialized = true;
+    }
   }
 
-  void ImGuiLayer::OnDetach() {
+  void OpenGLImGuiHandler::ShutDownImGui() {
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
+    s_IsInitialized = false;
   }
 
-  void ImGuiLayer::Begin() {
+  void OpenGLImGuiHandler::BeginFrame() {
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
   }
 
-  void ImGuiLayer::End() {
+  void OpenGLImGuiHandler::EndFrame() {
     ImGuiIO& io          = ImGui::GetIO();
     Window& window = Application::Instance()->Window();
     io.DisplaySize       = ImVec2((float)window.Width(), (float)window.Height());
@@ -64,13 +65,4 @@ namespace AGE {
       glfwMakeContextCurrent(backup_current_context);
     }
   }
-
-  void ImGuiLayer::InitImGui() {
-    if (!IsInitialized) {
-      auto window = (GLFWwindow*)Application::Instance()->Window().NativeWindow();
-      ImGui_ImplGlfw_InitForOpenGL(window, true);
-      ImGui_ImplOpenGL3_Init("#version 410");
-      IsInitialized = true;
-    }
-  }
-}// namespace AGE
+} // AGE

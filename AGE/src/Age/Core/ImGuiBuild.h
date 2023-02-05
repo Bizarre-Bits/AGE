@@ -5,12 +5,10 @@
 #ifndef AGE_IMGUIBUILD_H
 #define AGE_IMGUIBUILD_H
 
-#include <imgui.h>
+#include "imgui.h"
 
 #ifdef AGE_RENDER_PLATFORM_OPENGL
-  #define IMGUI_IMPL_OPENGL_LOADER_GLAD
-  #include <backends/imgui_impl_glfw.h>
-  #include <backends/imgui_impl_opengl3.h>
+  #include "Platform/OpenGL/OpenGLPlatformImGui.h"
 #endif
 
 #endif//AGE_IMGUIBUILD_H
