@@ -3,32 +3,30 @@
 //
 #include "agepch.h"
 
-#include "ImGuiHandler.h"
+#include "Window.h"
 
 #if defined(AGE_INCLUDE_OPENGL)
-  #include "Platform/OpenGL/OpenGLImGuiHandler.h"
+  #include "Platform/OpenGL/OpenGLWindow.h"
 #endif
 
-#include "Renderer.h"
-#include "RenderAPI.h"
+#include "Age/Renderer/Renderer.h"
+#include "Age/Renderer/RenderAPI.h"
 
 namespace AGE {
-  Ref<ImGuiHandler_PlatformImpl> ImGuiHandler::s_ImGuiPlatformAPI = ImGuiHandler::CreatePlatformAPI();
-
-  Ref <ImGuiHandler_PlatformImpl> ImGuiHandler::CreatePlatformAPI() {
+  Scope<Window> Window::Create(const AGE::WindowProps& props) {
     AGE_PROFILE_FUNCTION();
 
     switch (Renderer::GetAPI()) {
       case RenderAPI::API::None: AGE_CORE_ASSERT(false, "RendererAPI::None is not supported");
       case RenderAPI::API::OpenGL:
 #ifdef AGE_INCLUDE_OPENGL
-        return MakeRef<OpenGLImGuiHandler>();
+        return CreateScope<OpenGLWindow>(props);
 #else
         AGE_CORE_ASSER(false, "OpenGL is not available, because it is not included into the current compilation")
 #endif
       default: {
         AGE_CORE_ASSERT(false,
-                        "Could not create a platform specific ImGui handler, as there is no RendererAPI selected");
+                        "Could not create a platform specific Window, as there is no RendererAPI selected");
       }
     }
 

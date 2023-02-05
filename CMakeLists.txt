@@ -6,5 +6,5 @@ set(CMAKE_CXX_STANDARD 23)
 add_subdirectory(AGEditor)
 add_subdirectory(Sandbox)
 
-set(FINAL_EXE_BINARY_DIR AGEditor)
+set(FINAL_EXE_BINARY_DIR Sandbox)
 add_subdirectory(AGE)

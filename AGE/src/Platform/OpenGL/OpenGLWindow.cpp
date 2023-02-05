@@ -14,23 +14,14 @@
 #include "Age/Events/WindowEvent.h"
 
 #include "Platform/OpenGL/OpenGLContext.h"
-#include "backends/imgui_impl_opengl3.h"
-#include "backends/imgui_impl_glfw.h"
 
 namespace AGE {
   bool OpenGLWindow::s_GLFWInitialized{false};
-  bool OpenGLWindow::s_ImGuiInitialized{false};
 
   void GLFWErrorCallback(int error, const char* description) {
     AGE_PROFILE_FUNCTION();
 
     AGE_CORE_ERROR("GLFW Error ({0}): {1}", error, description);
-  }
-
-  Window* Window::Create(const AGE::WindowProps& props) {
-    AGE_PROFILE_FUNCTION();
-
-    return new OpenGLWindow(props);
   }
 
   OpenGLWindow::OpenGLWindow(const WindowProps& props) {
@@ -76,7 +67,7 @@ namespace AGE {
 
     GLFWimage windowIcon;
     windowIcon.pixels = stbi_load(
-        "assets/core_assets/icons/age_logo.png", &windowIcon.width, &windowIcon.height, 0, 4
+        props.IconPath.c_str(), &windowIcon.width, &windowIcon.height, 0, 4
     );
     glfwSetWindowIcon(m_Window, 1, &windowIcon);
     stbi_image_free(windowIcon.pixels);

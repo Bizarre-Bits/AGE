@@ -14,12 +14,18 @@
 namespace AGE {
   Application* Application::s_Instance{nullptr};
 
-  Application::Application() : m_Running{true}, m_LayerStack() {
+  Application::Application(const ApplicationSpecs& specs) : m_Running{true}, m_LayerStack() {
     AGE_PROFILE_FUNCTION();
 
     s_Instance = this;
 
-    m_Window.reset(Window::Create());
+    WindowProps windowProps{};
+    windowProps.Width = specs.Width;
+    windowProps.Height = specs.Height;
+    windowProps.Title = specs.AppTitle;
+    windowProps.IconPath = specs.AppIcon;
+
+    m_Window = Window::Create(windowProps);
     m_Window->EventCallback(AGE_BIND_EVENT_FN(&Application::OnEvent));
 
     Renderer::Init();

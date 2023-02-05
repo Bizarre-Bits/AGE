@@ -11,7 +11,9 @@ namespace Sandbox {
 } // Sandbox
 
 AGE::Application* AGE::CreateApplication() {
-    AGE::Application* app = new AGE::Application{};
+    AGE::ApplicationSpecs specs{};
+    specs.AppTitle = "Sandbox";
+    auto* app = new AGE::Application{specs};
     app->PushLayer(new Sandbox::SandboxLayer());
     return app;
 }
