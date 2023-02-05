@@ -11,7 +11,9 @@ namespace {project_namespace} {{
 }} // {project_namespace}
 
 AGE::Application* AGE::CreateApplication() {{
-    AGE::Application* app = new AGE::Application{{}};
+    AGE::ApplicationSpecs specs{{}};
+    specs.AppTitle = "{project_name}";
+    AGE::Application* app = new AGE::Application{{specs}};
     app->PushLayer(new {project_namespace}::{project_name}Layer());
     return app;
 }}
