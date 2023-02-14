@@ -61,7 +61,6 @@ namespace AGE {
       }
 
       m_Window->OnUpdate();
-
     }
 
     ImGuiHandler::ShutDownImGui();

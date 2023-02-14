@@ -100,7 +100,6 @@ namespace AGE {
 
   void Renderer2D::ShutDown() {
     AGE_PROFILE_FUNCTION();
-
   }
 
   void Renderer2D::BeginScene(const OrthographicCamera& camera) {

@@ -78,7 +78,7 @@ namespace AGE {
   }
 
   OpenGLIndexBuffer::~OpenGLIndexBuffer() {
-
+    glDeleteBuffers(1, &m_RendererID);
   }
 
   void OpenGLIndexBuffer::Bind() const {
