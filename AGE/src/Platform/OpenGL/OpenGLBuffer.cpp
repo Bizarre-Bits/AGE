@@ -15,7 +15,9 @@ namespace AGE {
  * ===============================================================
  */
 
-  OpenGLVertexBuffer::OpenGLVertexBuffer(uint32_t size) {
+// It initializes m_Count with 0,
+// because count property won't be needed for buffers generated this way, I guess
+OpenGLVertexBuffer::OpenGLVertexBuffer(uint32_t size): m_Count{0} {
     AGE_PROFILE_FUNCTION();
 
     glGenBuffers(1, &m_RenderID);
@@ -78,7 +80,7 @@ namespace AGE {
   }
 
   OpenGLIndexBuffer::~OpenGLIndexBuffer() {
-
+    glDeleteBuffers(1, &m_RendererID);
   }
 
   void OpenGLIndexBuffer::Bind() const {

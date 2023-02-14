@@ -19,6 +19,7 @@ namespace AGE {
                                                      std::pair{GL_FRAGMENT_SHADER, fragmentSrc}};
     Compile(sources);
   }
+
   OpenGLShader::OpenGLShader(const age_string_t filepath) {
     AGE_PROFILE_FUNCTION();
 
@@ -34,7 +35,7 @@ namespace AGE {
   }
 
   OpenGLShader::~OpenGLShader() {
-
+    glDeleteProgram(m_RendererID);
   }
 
   void OpenGLShader::Bind() const {
@@ -108,7 +109,7 @@ namespace AGE {
       if (size != -1) {
         result.resize(size);
         in.seekg(0, std::ios::beg);
-        in.read(&result[0], size);
+        in.read(&result[0], (int32_t)size);
       } else {
         AGE_CORE_ERROR("Could not read from file '{0}'", filepath);
       }
@@ -215,7 +216,6 @@ namespace AGE {
       glDetachShader(m_RendererID, shader);
       glDeleteShader(shader);
     }
-
   }
 
   void OpenGLShader::SetMat4(const age_string_t& name, const glm::mat4& value) {
