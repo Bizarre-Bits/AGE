@@ -15,7 +15,7 @@ namespace AGE {
     m_ViewProjectionMatrix = m_ProjectionMatrix * m_ViewMatrix;
   }
 
-  void OrthographicCamera::RecalculateViewMatrix() {
+  void OrthographicCamera::RecalculateViewProjectionMatrix() {
     AGE_PROFILE_FUNCTION();
 
     glm::mat4 transform =

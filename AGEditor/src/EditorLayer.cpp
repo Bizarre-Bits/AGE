@@ -27,7 +27,11 @@ namespace AGE {
 
     Renderer2D::DrawQuad(glm::vec2{0.0f}, glm::vec2{1.0f}, glm::vec4{1.0f, 0.0f, 1.0f, 1.0f});
 
-    m_ViewportCameraController.OnUpdate(ts);
+    if (m_IsViewportFocused)
+      m_ViewportCameraController.OnUpdate(ts);
+    else
+      m_ViewportCameraController.GetCamera().RecalculateViewProjectionMatrix();
+
     Renderer2D::EndScene();
 
     m_Framebuffer->Unbind();
@@ -39,8 +43,13 @@ namespace AGE {
     ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 
     ImGui::Begin("Viewport");
+
+    m_IsViewportHovered      = ImGui::IsWindowHovered();
+    m_IsViewportFocused      = ImGui::IsWindowFocused();
+
+
     ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
-    m_ViewportSize = {viewportPanelSize.x, viewportPanelSize.y};
+    m_ViewportSize           = {viewportPanelSize.x, viewportPanelSize.y};
 
     uint32_t textureID = m_Framebuffer->ColorAttachmentID();
     ImGui::Image((void*)textureID, viewportPanelSize, {0.0f, 1.0f}, {1.0f, 0.0f});
@@ -55,13 +64,21 @@ namespace AGE {
     ImGui::Text("Framebuffer: %d %d", (int)m_Framebuffer->Specification().Width, (int)m_Framebuffer->Specification().Height);
     ImGui::Text("Aspect ratio: %f", m_ViewportSize.x / m_ViewportSize.y);
     ImGui::Text("Camera aspect ratio: %f", m_ViewportCameraController.AspectRatio());
+    ImGui::Text("Focus: %b", m_IsViewportFocused);
+    ImGui::Text("Hover: %b", m_IsViewportHovered);
 
     ImGui::End();
   }
 
   void EditorLayer::OnEvent(Event& e) {
     Layer::OnEvent(e);
-    m_ViewportCameraController.OnEvent(e);
+    if (!m_IsViewportHovered) {
+      ImGuiIO& io = ImGui::GetIO();
+      e.Handled |= e.IsInCategory(EventCategory::EventCategoryMouse) & io.WantCaptureMouse;
+      e.Handled |= e.IsInCategory(EventCategory::EventCategoryKeyboard) & io.WantCaptureKeyboard;
+    } else {
+      m_ViewportCameraController.OnEvent(e);
+    }
   }
 
-} // AGE
+}// namespace AGE

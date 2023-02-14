@@ -17,11 +17,14 @@ namespace AGE {
     virtual void OnEvent(Event& e) override;
 
   private:
-    glm::vec2                    m_ViewportSize;
-    Ref <Framebuffer>            m_Framebuffer;
+    glm::vec2 m_ViewportSize;
+    Ref<Framebuffer> m_Framebuffer;
     OrthographicCameraController m_ViewportCameraController;
+
+    bool m_IsViewportHovered{false};
+    bool m_IsViewportFocused{false};
   };
 
-} // AGE
+}// namespace AGE
 
-#endif //AGE_EDITORLAYER_H
+#endif//AGE_EDITORLAYER_H

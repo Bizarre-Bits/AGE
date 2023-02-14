@@ -15,12 +15,12 @@ namespace AGE {
 
     inline void SetPosition(const glm::vec3& position) {
       m_Position = position;
-      RecalculateViewMatrix();
+      RecalculateViewProjectionMatrix();
     }
 
     inline void SetRotation(const float rotation) {
       m_Rotation = rotation;
-      RecalculateViewMatrix();
+      RecalculateViewProjectionMatrix();
     }
 
     inline void SetProjection(float left, float right, float bottom, float top) {
@@ -34,10 +34,9 @@ namespace AGE {
     inline const glm::mat4& ViewMatrix() const { return m_ViewMatrix; }
     inline const glm::mat4& ViewProjectionMatrix() const { return m_ViewProjectionMatrix; }
 
-  private:
-    void RecalculateViewMatrix();
+    void RecalculateViewProjectionMatrix();
 
-  public:
+  private:
     glm::mat4 m_ProjectionMatrix;
     glm::mat4 m_ViewMatrix;
     glm::mat4 m_ViewProjectionMatrix;
