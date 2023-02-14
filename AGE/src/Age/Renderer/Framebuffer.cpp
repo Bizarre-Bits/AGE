@@ -8,7 +8,7 @@
 #include "Renderer.h"
 
 #if defined(AGE_INCLUDE_OPENGL)
-  #include "Platform/OpenGL/OpenGLFramebuffer.h"
+  #include "RenderAPI/OpenGL/OpenGLFramebuffer.h"
 #endif
 
 namespace AGE {

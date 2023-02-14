@@ -1,35 +1,32 @@
 //
-// Created by alex on 06.09.22.
+// Created by alex on 2/14/23.
 //
 
+#include "Age/Core/Input.h"
 #include "agepch.h"
-#include "Platform/OpenGL/OpenGLPlatform.h"
+#include <Age/Core/Application.h>
 
-#include "Age/Core/Application.h"
-#include "Platform/OpenGL/OpenGLInput.h"
-
+#include "RenderAPI/OpenGL/OpenGLMaster.h"
 
 namespace AGE {
-  Input* Input::s_Instance = new OpenGLInput;
-
-  bool OpenGLInput::IsKeyPressedImpl(KeyCode keycode) {
+  bool Input::IsKeyPressed(KeyCode key) {
     AGE_PROFILE_FUNCTION();
 
     auto window = (GLFWwindow*)Application::Instance()->Window().NativeWindow();
 
-    auto state = glfwGetKey(window, keycode);
+    auto state = glfwGetKey(window, key);
     return state == GLFW_PRESS || state == GLFW_REPEAT;
   }
 
-  bool OpenGLInput::IsMousePressedImpl(MouseCode mousecode) {
+  bool Input::IsMouseButtonPressed(MouseCode button) {
     AGE_PROFILE_FUNCTION();
 
     auto window = (GLFWwindow*)Application::Instance()->Window().NativeWindow();
-    int state = glfwGetMouseButton(window, mousecode);
+    int state = glfwGetMouseButton(window, button);
     return state == GLFW_PRESS;
   }
 
-  std::pair<float, float> OpenGLInput::MousePosImpl() {
+  std::pair<float, float> Input::MousePosition() {
     AGE_PROFILE_FUNCTION();
 
     auto window = (GLFWwindow*)Application::Instance()->Window().NativeWindow();
@@ -38,17 +35,17 @@ namespace AGE {
     return {(float)xpos, (float)ypos};
   }
 
-  float OpenGLInput::MouseXImpl() {
+  float Input::MouseX() {
     AGE_PROFILE_FUNCTION();
 
-    auto[x,y] = MousePosImpl();
+    auto[x,y] = MousePosition();
     return x;
   }
 
-  float OpenGLInput::MouseYImpl() {
+  float Input::MouseY() {
     AGE_PROFILE_FUNCTION();
 
-    auto[x, y] = MousePosImpl();
+    auto[x, y] = MousePosition();
     return y;
   }
 }// namespace AGE

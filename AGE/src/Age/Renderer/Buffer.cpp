@@ -9,7 +9,7 @@
 #include "RenderAPI.h"
 
 #ifdef AGE_INCLUDE_OPENGL
-  #include "Platform/OpenGL/OpenGLBuffer.h"
+  #include "RenderAPI/OpenGL/OpenGLBuffer.h"
 #endif
 
 namespace AGE {

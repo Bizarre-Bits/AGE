@@ -2,13 +2,12 @@
 // Created by alex on 09.09.22.
 //
 
-#ifndef AGE_OPENGLVERTEXARRAY_H
-#define AGE_OPENGLVERTEXARRAY_H
+#pragma once
 
 #include <vector>
 
 #include "Age/Renderer/VertexArray.h"
-#include "Platform/OpenGL/OpenGLBuffer.h"
+#include "RenderAPI/OpenGL/OpenGLBuffer.h"
 
 namespace AGE {
   class OpenGLVertexArray : public VertexArray {
@@ -33,5 +32,3 @@ namespace AGE {
     uint32_t m_RenderID;
   };
 } // AGE
-
-#endif //AGE_OPENGLVERTEXARRAY_H

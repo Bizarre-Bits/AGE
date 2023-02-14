@@ -3,8 +3,8 @@
 //
 #include "agepch.h"
 
-#include "OpenGLPlatform.h"
 #include "OpenGLFramebuffer.h"
+#include "OpenGLMaster.h"
 
 namespace AGE {
   OpenGLFramebuffer::OpenGLFramebuffer(const FramebufferSpecification& specs) : m_Specification(specs) {

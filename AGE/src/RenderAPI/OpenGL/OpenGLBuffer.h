@@ -2,10 +2,9 @@
 // Created by alex on 09.09.22.
 //
 
-#ifndef AGE_OPENGLBUFFER_H
-#define AGE_OPENGLBUFFER_H
+#pragma once
 
-#include "Platform/OpenGL/OpenGLPlatform.h"
+#include "RenderAPI/OpenGL/OpenGLMaster.h"
 
 #include "Age/Renderer/Buffer.h"
 
@@ -53,5 +52,3 @@ namespace AGE {
   };
 
 } // AGE
-
-#endif //AGE_OPENGLBUFFER_H

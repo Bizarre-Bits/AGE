@@ -8,7 +8,7 @@ add_library(age_core STATIC)
 
 target_include_directories(age_core INTERFACE include PUBLIC src vendor/imgui vendor/glm/ vendor/stb_image)
 
-file(GLOB_RECURSE _AGE_CORE_SRCS src/agepch.cpp src/agepch.h  src/Age/*.cpp src/Age/*.h vendor/stb_image/stb_image.cpp vendor/stb_image/stb_image.h)
+file(GLOB_RECURSE _AGE_CORE_SRCS src/agepch.cpp src/agepch.h src/Age/*.cpp src/Age/*.h vendor/stb_image/stb_image.cpp vendor/stb_image/stb_image.h)
 list(REMOVE_ITEM _AGE_CORE_SRCS ${REMOVE_CMAKE})
 
 file(GLOB _IMGUI_SRCS vendor/imgui/*.cpp vendor/imgui/*.h)
@@ -20,7 +20,7 @@ option(AGE_INCLUDE_OPENGL "If ON, OpenGL-specific implementations will be added 
 option(AGE_INCLUDE_VULCAN "If ON, Vulcan-specific implementations will be added to the project" OFF)
 option(AGE_INCLUDE_DIRECTX "If ON, DirectX-specific implementations will be added to the project" OFF)
 
-set(AGE_RENDER_PLATFORM OPENGL CACHE STRING "Render platform to be used. (OPENGL)")
+set(AGE_RENDER_API OPENGL CACHE STRING "Render platform to be used. (OPENGL)")
 
 add_subdirectory(vendor/glm)
 add_subdirectory(vendor/spdlog)
@@ -30,14 +30,17 @@ target_link_libraries(age_core PUBLIC spdlog glm)
 ##################################################
 #                Figure out OS                   #
 ##################################################
+
 if (WIN32)
     target_compile_definitions(age_core PUBLIC AGE_OS_WINDOWS)
     message(STATUS "Windows platform")
     set(AGE_OS "WINDOWS")
+    set(AGE_PLATFORM "Desktop")
 elseif (UNIX AND NOT APPLE)
     target_compile_definitions(age_core PUBLIC AGE_OS_LINUX)
     message(STATUS "Linux platform")
     set(AGE_OS "LINUX")
+    set(AGE_PLATFORM "Desktop")
 endif ()
 
 if (${CMAKE_BUILD_TYPE} STREQUAL "Debug")
@@ -53,27 +56,23 @@ if (${CMAKE_BUILD_TYPE} STREQUAL "Release")
 endif ()
 
 ##################################################
+#           Add platform specific files          #
+##################################################
+
+if (AGE_PLATFORM STREQUAL "Desktop")
+    message(STATUS "We will use Desktop platform specific code")
+    file(GLOB _PLATFORM_CODE_SRCS src/Platform/Desktop/*.cpp)
+endif ()
+
+target_sources(age_core PUBLIC ${_PLATFORM_CODE_SRCS})
+
+
+##################################################
 #           Configure Render Platforms           #
 ##################################################
 
 # find vulcan
 # find directX
-
-
-########################################
-#     WTF!? SHOULD WORK BUT DOESN'T!   #
-########################################
-
-#if (DEFINED ENV{WAYLAND_DISPLAY})
-#    message(STATUS "Will be using Wayland")
-#    set(GLFW_BUILD_WAYLAND ON)
-#    set(GLFW_INCLUDE_WAYLAND ON)
-#
-#    set(GLFW_BUILD_X11 ON)
-#    set(GLFW_INCLUDE_X11 ON)
-#else ()
-#    set(AGE_INCLUDE_WAYLAND OFF)
-#endif ()
 
 if (AGE_INCLUDE_OPENGL)
     message(STATUS "Including OpenGl")
@@ -84,7 +83,7 @@ if (AGE_INCLUDE_OPENGL)
     target_link_libraries(age_core PUBLIC glfw ${GLFW_LIBRARIES})
 
     file(GLOB _IMGUI_BE vendor/imgui/backends/imgui_impl_opengl3* vendor/imgui/backends/imgui_impl_glfw.*)
-    file(GLOB _AGE_OPENGL_PLATFORM_SRCS src/Platform/OpenGL/*)
+    file(GLOB _AGE_OPENGL_PLATFORM_SRCS src/RenderAPI/OpenGL/*)
     file(GLOB _AGE_OPENGL_PLATFORM_C_SRCS vendor/GLAD/src/glad.c)
 
     target_sources(age_core PRIVATE ${_IMGUI_BE} ${_AGE_OPENGL_PLATFORM_SRCS})
@@ -98,13 +97,18 @@ if (AGE_INCLUDE_OPENGL)
     target_link_libraries(age_core PUBLIC age_core_glad)
 endif ()
 
-target_compile_definitions(age_core PUBLIC AGE_RENDER_PLATFORM_${AGE_RENDER_PLATFORM})
+target_compile_definitions(age_core PUBLIC AGE_RENDER_API_${AGE_RENDER_API})
 
-if(NOT FINAL_EXE_BINARY_DIR OR FINAL_EXE_BIN_DIR STREQUAL "")
+
+##################################################
+#               Import Assets                    #
+##################################################
+
+if (NOT FINAL_EXE_BINARY_DIR OR FINAL_EXE_BIN_DIR STREQUAL "")
     message(FATAL_ERROR "There is no target \"${FINAL_EXE_BINARY_DIR}\" (FINAL_EXE_BINARY_DIR)")
-else()
+else ()
     message(STATUS "Final exe binary dir is \"${FINAL_EXE_BINARY_DIR}\"")
-endif()
+endif ()
 
 file(GLOB_RECURSE _AGECORE_ASSETS ${CMAKE_CURRENT_SOURCE_DIR}/assets/core_assets/*)
 
@@ -129,5 +133,7 @@ endforeach ()
 add_custom_target(core_assets ALL DEPENDS ${assetsOutputList})
 
 add_dependencies(age_core core_assets)
+
+
 
 

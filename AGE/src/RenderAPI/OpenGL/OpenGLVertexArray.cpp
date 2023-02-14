@@ -4,7 +4,7 @@
 
 #include "agepch.h"
 
-#include "OpenGLPlatform.h"
+#include "OpenGLMaster.h"
 #include "OpenGLVertexArray.h"
 
 namespace AGE {

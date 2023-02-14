@@ -43,7 +43,7 @@ namespace AGE {
 
     m_FpsPlot.Render();
 
-    auto [mX, mY] = Input::MousePos();
+    auto [mX, mY] = Input::MousePosition();
     ImGui::Text("Mouse Position: %i, %i", (int)mX, (int)mY);
     ImGui::End();
   }
