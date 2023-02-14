@@ -7,8 +7,14 @@
 #include "OpenGLFramebuffer.h"
 
 namespace AGE {
-  OpenGLFramebuffer::OpenGLFramebuffer(const FramebufferSpecification& specs): m_Specification(specs) {
+  OpenGLFramebuffer::OpenGLFramebuffer(const FramebufferSpecification& specs) : m_Specification(specs) {
     Invalidate();
+  }
+
+  OpenGLFramebuffer::~OpenGLFramebuffer() {
+    glDeleteFramebuffers(1, &m_RenderID);
+    glDeleteTextures(1, &m_ColorAttachment);
+    glDeleteTextures(1, &m_DepthAttachment);
   }
 
   const FramebufferSpecification& OpenGLFramebuffer::Specification() const {
@@ -16,6 +22,12 @@ namespace AGE {
   }
 
   void OpenGLFramebuffer::Invalidate() {
+    if (m_RenderID) {
+      glDeleteFramebuffers(1, &m_RenderID);
+      glDeleteTextures(1, &m_ColorAttachment);
+      glDeleteTextures(1, &m_DepthAttachment);
+    }
+
     glCreateFramebuffers(1, &m_RenderID);
     glBindFramebuffer(GL_FRAMEBUFFER, m_RenderID);
 
@@ -39,9 +51,22 @@ namespace AGE {
 
   void OpenGLFramebuffer::Bind() {
     glBindFramebuffer(GL_FRAMEBUFFER, m_RenderID);
+    glViewport(0, 0, m_Specification.Width, m_Specification.Height);
   }
 
   void OpenGLFramebuffer::Unbind() {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
+  }
+
+  void OpenGLFramebuffer::Resize(uint32_t width, uint32_t height) {
+    if (!width || !height)
+      return;
+
+    if (width == m_Specification.Width && height == m_Specification.Height)
+      return;
+
+    m_Specification.Width  = width;
+    m_Specification.Height = height;
+    Invalidate();
   }
 } // AGE

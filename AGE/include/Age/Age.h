@@ -12,6 +12,7 @@
 
 // Utils
 #include "Age/Utils/Random.h"
+#include <glm/glm.hpp>
 
 // Input handling
 #include "Age/Core/Input.h"

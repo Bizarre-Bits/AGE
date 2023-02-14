@@ -20,9 +20,9 @@ namespace AGE {
     AGE_CORE_TRACE("Initialized Glad");
 
     AGE_CORE_INFO("OpenGL info:");
-//    AGE_CORE_INFO("   Vendor: {0}", glGetString(GL_VENDOR));
-//    AGE_CORE_INFO("   Renderer: {0}", glGetString(GL_RENDERER));
-//    AGE_CORE_INFO("   Version: {0}", glGetString(GL_VERSION));
+    AGE_CORE_INFO("   Vendor: {0}", reinterpret_cast<const char*>((glGetString(GL_VENDOR))));
+    AGE_CORE_INFO("   Renderer: {0}", reinterpret_cast<const char*>(glGetString(GL_RENDERER)));
+    AGE_CORE_INFO("   Version: {0}", reinterpret_cast<const char*>(glGetString(GL_VERSION)));
   }
 
   void OpenGLContext::SwapBuffers() {
