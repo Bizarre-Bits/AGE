@@ -2,8 +2,7 @@
 // Created by alex on 06.10.22.
 //
 
-#ifndef AGE_TIMER_H
-#define AGE_TIMER_H
+#pragma once
 
 #include <chrono>
 
@@ -42,5 +41,3 @@ namespace AGE {
   };
 
 } // AGE
-
-#endif //AGE_TIMER_H

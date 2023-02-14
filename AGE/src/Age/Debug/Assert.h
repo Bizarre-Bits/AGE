@@ -2,8 +2,7 @@
 // Created by alex on 28.08.22.
 //
 
-#ifndef AGE_ASSERT_H
-#define AGE_ASSERT_H
+#pragma once
 
 #include "Age/Core/Core.h"
 #include "Age/Core/Log.h"
@@ -37,5 +36,3 @@
   #define AGE_CORE_ASSERT_FORMATTED(...)
   #define AGE_ASSERT_FORMATTED(...)
 #endif
-
-#endif//AGE_ASSERT_H

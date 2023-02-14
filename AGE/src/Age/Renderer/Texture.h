@@ -2,8 +2,7 @@
 // Created by alex on 11.10.22.
 //
 
-#ifndef AGE_TEXTURE_H
-#define AGE_TEXTURE_H
+#pragma once
 
 #include "Age/Core/Core.h"
 
@@ -34,5 +33,3 @@ namespace AGE {
     virtual bool operator==(const Texture2D& other) const { return ID() == other.ID(); };
   };
 }
-
-#endif //AGE_TEXTURE_H

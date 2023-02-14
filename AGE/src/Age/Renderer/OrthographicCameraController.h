@@ -2,8 +2,7 @@
 // Created by alex on 18.10.22.
 //
 
-#ifndef AGE_ORTHOGRAPHICCAMERACONTROLLER_H
-#define AGE_ORTHOGRAPHICCAMERACONTROLLER_H
+#pragma once
 
 #include <glm/glm.hpp>
 
@@ -60,5 +59,3 @@ namespace AGE {
     float     m_CameraTranslationSpeed = 5.0f, m_CameraRotationSpeed = 180.0f;
   };
 } // AGE
-
-#endif //AGE_ORTHOGRAPHICCAMERACONTROLLER_H

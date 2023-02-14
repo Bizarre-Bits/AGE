@@ -2,8 +2,7 @@
 // Created by alex on 18.10.22.
 //
 
-#ifndef AGE_RENDERER2D_H
-#define AGE_RENDERER2D_H
+#pragma once
 
 #include <glm/glm.hpp>
 
@@ -121,5 +120,3 @@ namespace AGE {
   };
 
 } // AGE
-
-#endif //AGE_RENDERER2D_H

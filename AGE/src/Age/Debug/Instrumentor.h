@@ -2,8 +2,7 @@
 // Created by alex on 06.11.22.
 //
 
-#ifndef AGE_INSTRUMENTOR_H
-#define AGE_INSTRUMENTOR_H
+#pragma once
 
 #include <chrono>
 #include <thread>
@@ -207,5 +206,3 @@ namespace AGE {
 	#define AGE_PROFILE_SCOPE(name)
 	#define AGE_PROFILE_FUNCTION()
 #endif
-
-#endif //AGE_INSTRUMENTOR_H

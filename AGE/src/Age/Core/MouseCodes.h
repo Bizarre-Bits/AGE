@@ -2,8 +2,7 @@
 // Created by alex on 27.08.22.
 //
 
-#ifndef AGE_MOUSECODES_H
-#define AGE_MOUSECODES_H
+#pragma once
 
 #include "agepch.h"
 
@@ -28,5 +27,3 @@ namespace AGE {
     };
   }
 }// namespace AGE
-
-#endif//AGE_MOUSECODES_H

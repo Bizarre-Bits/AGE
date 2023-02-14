@@ -2,8 +2,7 @@
 // Created by alex on 29.08.22.
 //
 
-#ifndef AGE_LAYERSTACK_H
-#define AGE_LAYERSTACK_H
+#pragma once
 
 #include <vector>
 
@@ -32,5 +31,3 @@ namespace AGE {
   };
 
 }// namespace AGE
-
-#endif//AGE_LAYERSTACK_H

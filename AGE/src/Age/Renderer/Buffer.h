@@ -2,8 +2,7 @@
 // Created by alex on 09.09.22.
 //
 
-#ifndef AGE_VERTEXBUFFER_H
-#define AGE_VERTEXBUFFER_H
+#pragma once
 
 #include <vector>
 
@@ -109,5 +108,3 @@ namespace AGE {
     static Ref<IndexBuffer> Create(uint32_t* indices, uint32_t count);
   };
 }
-
-#endif //AGE_VERTEXBUFFER_H

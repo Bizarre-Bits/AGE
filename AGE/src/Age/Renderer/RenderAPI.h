@@ -2,8 +2,7 @@
 // Created by alex on 04.10.22.
 //
 
-#ifndef AGE_RENDERAPI_H
-#define AGE_RENDERAPI_H
+#pragma once
 
 #include "glm/vec4.hpp"
 #include "VertexArray.h"
@@ -31,6 +30,3 @@ namespace AGE {
   };
 
 } // AGE
-
-
-#endif //AGE_RENDERAPI_H
