@@ -13,7 +13,7 @@
 #include "Age/Events/MouseEvent.h"
 #include "Age/Events/WindowEvent.h"
 
-#include "Platform/OpenGL/OpenGLContext.h"
+#include "RenderAPI/OpenGL/OpenGLContext.h"
 
 namespace AGE {
   bool OpenGLWindow::s_GLFWInitialized{false};

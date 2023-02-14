@@ -2,8 +2,7 @@
 // Created by alex on 2/2/23.
 //
 
-#ifndef AGE_FRAMEBUFFER_H
-#define AGE_FRAMEBUFFER_H
+#pragma once
 
 #include "Age/Core/Core.h"
 
@@ -31,5 +30,3 @@ namespace AGE {
   };
 
 } // AGE
-
-#endif //AGE_FRAMEBUFFER_H

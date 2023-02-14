@@ -2,8 +2,7 @@
 // Created by alex on 04.10.22.
 //
 
-#ifndef AGE_RENDERER_H
-#define AGE_RENDERER_H
+#pragma once
 
 #include "RenderAPI.h"
 
@@ -35,5 +34,3 @@ namespace AGE {
   };
 
 } // AGE
-
-#endif //AGE_RENDERER_H

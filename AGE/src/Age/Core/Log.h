@@ -2,8 +2,7 @@
 // Created by a on 24.08.22.
 //
 
-#ifndef AGE_LOG_H
-#define AGE_LOG_H
+#pragma once
 
 #include "Age/Core/Core.h"
 
@@ -55,5 +54,3 @@ namespace AGE {
   #define AGE_ERROR(...)
   #define AGE_CRITICAL(...)
 #endif
-
-#endif//AGE_LOG_H

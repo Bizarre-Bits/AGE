@@ -2,14 +2,13 @@
 // Created by alex on 08.09.22.
 //
 
-#ifndef AGE_OPENGLSHADER_H
-#define AGE_OPENGLSHADER_H
+#pragma once
 
 #include <unordered_map>
 
-#include "OpenGLPlatform.h"
 #include "Age/Core/Core.h"
 #include "Age/Renderer/Shader.h"
+#include "OpenGLMaster.h"
 
 namespace AGE {
   class OpenGLShader : public Shader {
@@ -59,5 +58,3 @@ namespace AGE {
     age_string_t m_Name;
   };
 }
-
-#endif //AGE_OPENGLSHADER_H

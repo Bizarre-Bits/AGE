@@ -2,11 +2,10 @@
 // Created by alex on 11.10.22.
 //
 
-#ifndef AGE_OPENGLTEXTURE_H
-#define AGE_OPENGLTEXTURE_H
+#pragma once
 
 #include "Age/Renderer/Texture.h"
-#include "OpenGLPlatform.h"
+#include "OpenGLMaster.h"
 
 namespace AGE {
   class OpenGLTexture2D : public Texture2D {
@@ -47,5 +46,3 @@ namespace AGE {
     void SetErrorTexture();
   };
 } // AGE
-
-#endif //AGE_OPENGLTEXTURE_H

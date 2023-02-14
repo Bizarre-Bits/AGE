@@ -2,8 +2,7 @@
 // Created by alex on 08.09.22.
 //
 
-#ifndef AGE_SHADER_H
-#define AGE_SHADER_H
+#pragma once
 
 #include <glm/glm.hpp>
 #include <unordered_map>
@@ -56,5 +55,3 @@ namespace AGE {
   };
 
 } // AGE
-
-#endif //AGE_SHADER_H

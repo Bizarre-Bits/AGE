@@ -2,8 +2,7 @@
 // Created by alex on 08.09.22.
 //
 
-#ifndef AGE_CONTEXT_H
-#define AGE_CONTEXT_H
+#pragma once
 
 namespace AGE {
   class Context {
@@ -16,5 +15,3 @@ namespace AGE {
   };
 
 }// namespace AGE
-
-#endif//AGE_CONTEXT_H

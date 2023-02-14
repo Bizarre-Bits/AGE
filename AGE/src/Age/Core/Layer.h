@@ -2,8 +2,7 @@
 // Created by alex on 29.08.22.
 //
 
-#ifndef AGE_LAYER_H
-#define AGE_LAYER_H
+#pragma once
 
 #include "Age/Core/Core.h"
 #include "Age/Events/Event.h"
@@ -28,5 +27,3 @@ namespace AGE {
   };
 
 }// namespace AGE
-
-#endif//AGE_LAYER_H

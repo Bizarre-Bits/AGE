@@ -2,12 +2,11 @@
 // Created by alex on 2/5/23.
 //
 
-#ifndef AGE_OPENGLIMGUIHANDLER_H
-#define AGE_OPENGLIMGUIHANDLER_H
+#pragma once
 
-#include "OpenGLPlatform.h"
-#include "Age/Renderer/ImGuiHandler.h"
 #include "Age/Core/ImGuiBuild.h"
+#include "Age/Renderer/ImGuiHandler.h"
+#include "OpenGLMaster.h"
 
 namespace AGE {
 
@@ -22,5 +21,3 @@ namespace AGE {
   };
 
 } // AGE
-
-#endif //AGE_OPENGLIMGUIHANDLER_H

@@ -2,8 +2,7 @@
 // Created by alex on 1/31/23.
 //
 
-#ifndef AGE_SUBTEXTURE2D_H
-#define AGE_SUBTEXTURE2D_H
+#pragma once
 
 #include "Age/Core/Core.h"
 #include "Texture.h"
@@ -26,5 +25,3 @@ namespace AGE {
   };
 
 } // AGE
-
-#endif //AGE_SUBTEXTURE2D_H

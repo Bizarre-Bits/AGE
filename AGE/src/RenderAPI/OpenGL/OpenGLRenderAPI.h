@@ -2,8 +2,7 @@
 // Created by alex on 04.10.22.
 //
 
-#ifndef AGE_OPENGLRENDERAPI_H
-#define AGE_OPENGLRENDERAPI_H
+#pragma once
 
 #include "Age/Renderer/RenderAPI.h"
 
@@ -18,5 +17,3 @@ namespace AGE {
     virtual void DrawIndexed(const Ref <VertexArray>& va, uint32_t count) override;
   };
 }
-
-#endif //AGE_OPENGLRENDERAPI_H

@@ -2,8 +2,7 @@
 // Created by alex on 2/5/23.
 //
 
-#ifndef AGE_IMGUIHANDLER_H
-#define AGE_IMGUIHANDLER_H
+#pragma once
 
 #include "Age/Core/Core.h"
 namespace AGE {
@@ -39,5 +38,3 @@ namespace AGE {
     static Ref<ImGuiHandler_PlatformImpl> s_ImGuiPlatformAPI;
   };
 }
-
-#endif //AGE_IMGUIHANDLER_H

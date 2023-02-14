@@ -2,8 +2,7 @@
 // Created by alex on 27.08.22.
 //
 
-#ifndef AGE_WINDOWEVENT_H
-#define AGE_WINDOWEVENT_H
+#pragma once
 
 #include "Event.h"
 
@@ -36,5 +35,3 @@ namespace AGE {
     EVENT_CLASS_CATEGORY(EventCategoryApplication)
   };
 }// namespace AGE
-
-#endif//AGE_WINDOWEVENT_H

@@ -2,13 +2,12 @@
 // Created by alex on 28.08.22.
 //
 
-#ifndef AGE_OPENGLWINDOW_H
-#define AGE_OPENGLWINDOW_H
+#pragma once
 
 #include "Age/Core/Core.h"
 #include "Age/Core/Window.h"
 
-#include "Platform/OpenGL/OpenGLPlatform.h"
+#include "RenderAPI/OpenGL/OpenGLMaster.h"
 
 namespace AGE {
   class OpenGLWindow : public Window {
@@ -48,5 +47,3 @@ namespace AGE {
     static bool s_GLFWInitialized;
   };
 }// namespace AGE
-
-#endif//AGE_OPENGLWINDOW_H
