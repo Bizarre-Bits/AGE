@@ -5,7 +5,6 @@ import os
 import shutil
 import re
 from typing import TypedDict
-from datetime import datetime
 
 
 class CmdArgs(TypedDict):
@@ -72,7 +71,7 @@ def parse_cmd_args() -> CmdArgs | None:
                 print(f"Incorrect project name: {result['project_name']}! Project name must also be a correct C++ symbol name.")
                 sys.exit(1)
         except IndexError:
-            print(f"There is no project name provided")
+            print("There is no project name provided")
             print_usage()
             sys.exit(1)
     else:
@@ -89,7 +88,7 @@ def parse_cmd_args() -> CmdArgs | None:
                 print(f"Incorrect project namespace: {result['project_namespace']}! Project namespace must be a correct C++ symbol name.")
                 sys.exit(1)
         except IndexError:
-            print(f"There is no project namespace provided")
+            print("There is no project namespace provided")
             print_usage()
             sys.exit(1)
     else:
@@ -103,7 +102,7 @@ def get_project_name() -> str:
     while project_name == "":
         project_name = input("Project Name: ")
         if not is_valid_cpp_symbol_name(project_name):
-            print(f"Project name must also be a correct C++ symbol name.")
+            print("Project name must also be a correct C++ symbol name.")
             project_name = ""
     return project_name
 
@@ -126,11 +125,11 @@ def get_project_namespace(project_name: str) -> str:
 def prepare_dir(project_root: str, force: bool):
     try:
         os.mkdir(project_root)
-    except FileExistsError as err:
+    except FileExistsError:
         if not force:
             print(f"Cannot create new project: {project_root} already exists")
             print(f"You can use --force to remove contents of {project_root} and create a new project in there")
-            print(f"WARNING: this is not a safe action. Do it on your own risk")
+            print("WARNING: this is not a safe action. Do it on your own risk")
             sys.exit(1)
         else:
             print(f"{project_root} exists but --force option was specified. Proceeding")
@@ -149,7 +148,6 @@ def make_cmake_lists(project_root: str, project_name: str):
 
 def generate_cpp_files(project_root: str, project_name: str, project_namespace: str):
     entry_point_template_text = ""
-    new_layer_template_text = ""
 
     with open("./entry_point_cpp_template") as file:
         entry_point_template_text = file.read()
