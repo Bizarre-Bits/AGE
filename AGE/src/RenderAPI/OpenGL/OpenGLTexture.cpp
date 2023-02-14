@@ -4,8 +4,8 @@
 
 #include "agepch.h"
 
-#include <stb_image.h>
 #include <bitset>
+#include <stb_image.h>
 
 #include "OpenGLMaster.h"
 #include "OpenGLTexture.h"
@@ -14,10 +14,10 @@ namespace AGE {
   OpenGLTexture2D::OpenGLTexture2D(const uint32_t width, uint32_t height) : m_Width(width),
                                                                             m_Height(height),
                                                                             m_InternalFormat(
-                                                                                GL_RGBA8
-                                                                            ),
+                                                                                GL_RGBA8),
                                                                             m_DataFormat(GL_RGBA),
-                                                                            m_isCorrect{true} {
+                                                                            m_isCorrect{true},
+                                                                            m_Slot{0} {
     AGE_PROFILE_FUNCTION();
 
     glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
@@ -64,8 +64,7 @@ namespace AGE {
     glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
     glTextureSubImage2D(
-        m_RendererID, 0, 0, 0, m_Width, m_Height, m_DataFormat, GL_UNSIGNED_BYTE, data
-    );
+        m_RendererID, 0, 0, 0, m_Width, m_Height, m_DataFormat, GL_UNSIGNED_BYTE, data);
 
     stbi_image_free(data);
   }
@@ -92,8 +91,7 @@ namespace AGE {
                               m_Width * m_Height * bytesPerPixel, size);
 
     glTextureSubImage2D(
-        m_RendererID, 0, 0, 0, m_Width, m_Height, m_DataFormat, GL_UNSIGNED_BYTE, data
-    );
+        m_RendererID, 0, 0, 0, m_Width, m_Height, m_DataFormat, GL_UNSIGNED_BYTE, data);
   }
 
   OpenGLTexture2D::~OpenGLTexture2D() {
@@ -136,10 +134,10 @@ namespace AGE {
   void OpenGLTexture2D::SetErrorTexture() {
     AGE_PROFILE_FUNCTION();
 
-    m_Height         = m_Width = 4;
-    m_DataFormat     = GL_RGBA;
-    m_InternalFormat = GL_RGBA8;
-    m_isCorrect      = false;
+    m_Height = m_Width = 4;
+    m_DataFormat       = GL_RGBA;
+    m_InternalFormat   = GL_RGBA8;
+    m_isCorrect        = false;
 
     uint32_t data[]{
         0xffff00ff,
@@ -172,7 +170,7 @@ namespace AGE {
     SetData(&data, sizeof(data));
   }
 
-  Ref <OpenGLTexture2D> OpenGLTexture2D::ErrorTextureImpl() {
+  Ref<OpenGLTexture2D> OpenGLTexture2D::ErrorTextureImpl() {
     static Ref<OpenGLTexture2D> errorTexture{MakeRef<OpenGLTexture2D>()};
     return errorTexture;
   }
@@ -180,4 +178,4 @@ namespace AGE {
   OpenGLTexture2D::OpenGLTexture2D() {
     SetErrorTexture();
   }
-} // AGE
+}// namespace AGE
