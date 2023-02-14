@@ -2,8 +2,7 @@
 // Created by alex on 1/26/23.
 //
 
-#ifndef AGE_RANDOM_H
-#define AGE_RANDOM_H
+#pragma once
 
 #include <random>
 #include <cinttypes>
@@ -53,5 +52,3 @@ namespace AGE {
   };
 
 } // AGE
-
-#endif //AGE_RANDOM_H

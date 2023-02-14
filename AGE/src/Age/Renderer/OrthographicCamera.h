@@ -2,8 +2,7 @@
 // Created by alex on 05.10.22.
 //
 
-#ifndef AGE_ORTHOGRAPHICCAMERA_H
-#define AGE_ORTHOGRAPHICCAMERA_H
+#pragma once
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -48,5 +47,3 @@ namespace AGE {
   };
 
 } // AGE
-
-#endif //AGE_ORTHOGRAPHICCAMERA_H

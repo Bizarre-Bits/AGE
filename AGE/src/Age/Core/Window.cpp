@@ -6,7 +6,7 @@
 #include "Window.h"
 
 #if defined(AGE_INCLUDE_OPENGL)
-  #include "Platform/OpenGL/OpenGLWindow.h"
+  #include "RenderAPI/OpenGL/OpenGLWindow.h"
 #endif
 
 #include "Age/Renderer/Renderer.h"

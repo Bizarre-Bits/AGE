@@ -2,8 +2,7 @@
 // Created by alex on 27.08.22.
 //
 
-#ifndef AGE_MOUSEEVENT_H
-#define AGE_MOUSEEVENT_H
+#pragma once
 
 #include "Event.h"
 
@@ -90,5 +89,3 @@ namespace AGE {
     float m_XOffset, m_YOffset;
   };
 }// namespace AGE
-
-#endif//AGE_MOUSEEVENT_H

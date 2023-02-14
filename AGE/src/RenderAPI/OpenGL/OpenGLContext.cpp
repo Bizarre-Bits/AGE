@@ -3,7 +3,7 @@
 //
 
 #include "agepch.h"
-#include "Platform/OpenGL/OpenGLPlatform.h"
+#include "RenderAPI/OpenGL/OpenGLMaster.h"
 
 #include "OpenGLContext.h"
 

@@ -8,7 +8,7 @@
 #include "Renderer.h"
 
 #ifdef AGE_INCLUDE_OPENGL
-  #include "Platform/OpenGL/OpenGLVertexArray.h"
+  #include "RenderAPI/OpenGL/OpenGLVertexArray.h"
 #endif
 
 namespace AGE {

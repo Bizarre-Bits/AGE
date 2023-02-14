@@ -2,8 +2,7 @@
 // Created by a on 24.08.22.
 //
 
-#ifndef AGE_CORE_H
-#define AGE_CORE_H
+#pragma once
 
 #include <string>
 #include <memory>
@@ -53,5 +52,3 @@ namespace AGE {
     return std::make_unique<T>(std::forward<Args>(args)...);
   }
 }
-
-#endif//AGE_CORE_H

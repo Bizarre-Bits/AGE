@@ -7,7 +7,7 @@
 #include <bitset>
 #include <stb_image.h>
 
-#include "OpenGLPlatform.h"
+#include "OpenGLMaster.h"
 #include "OpenGLTexture.h"
 
 namespace AGE {

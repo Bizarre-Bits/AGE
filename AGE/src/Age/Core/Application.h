@@ -2,8 +2,7 @@
 // Created by a on 24.08.22.
 //
 
-#ifndef AGE_APPLICATION_H
-#define AGE_APPLICATION_H
+#pragma once
 
 #include "Core.h"
 
@@ -55,5 +54,3 @@ namespace AGE {
   // To be defined in CLIENT
   Application* CreateApplication();
 }// namespace AGE
-
-#endif//AGE_APPLICATION_H

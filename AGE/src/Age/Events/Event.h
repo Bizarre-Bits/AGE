@@ -2,8 +2,7 @@
 // Created by a on 25.08.22.
 //
 
-#ifndef AGE_EVENT_H
-#define AGE_EVENT_H
+#pragma once
 
 #include "agepch.h"
 
@@ -89,5 +88,3 @@ namespace AGE {
   }
 
 }// namespace AGE
-
-#endif//AGE_EVENT_H

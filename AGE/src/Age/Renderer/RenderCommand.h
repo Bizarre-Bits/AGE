@@ -2,8 +2,7 @@
 // Created by alex on 04.10.22.
 //
 
-#ifndef AGE_RENDERCOMMAND_H
-#define AGE_RENDERCOMMAND_H
+#pragma once
 
 #include "RenderAPI.h"
 #include "VertexArray.h"
@@ -23,5 +22,3 @@ namespace AGE {
   };
 
 } // AGE
-
-#endif //AGE_RENDERCOMMAND_H

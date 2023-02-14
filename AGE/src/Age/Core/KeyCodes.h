@@ -2,8 +2,7 @@
 // Created by alex on 27.08.22.
 //
 
-#ifndef AGE_KEYCODES_H
-#define AGE_KEYCODES_H
+#pragma once
 
 #include "agepch.h"
 
@@ -146,5 +145,3 @@ namespace AGE {
     };
   }// namespace Key
 }// namespace AGE
-
-#endif//AGE_KEYCODES_H

@@ -2,8 +2,7 @@
 // Created by alex on 28.08.22.
 //
 
-#ifndef AGE_WINDOW_H
-#define AGE_WINDOW_H
+#pragma once
 
 #include "agepch.h"
 
@@ -49,5 +48,3 @@ namespace AGE {
     Context* m_Context{nullptr};
   };
 }// namespace AGE
-
-#endif//AGE_WINDOW_H

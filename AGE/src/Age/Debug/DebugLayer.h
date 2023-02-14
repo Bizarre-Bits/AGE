@@ -2,8 +2,7 @@
 // Created by alex on 08.09.22.
 //
 
-#ifndef AGE_DEBUGLAYER_H
-#define AGE_DEBUGLAYER_H
+#pragma once
 
 #include "Age/Core/Layer.h"
 
@@ -35,5 +34,3 @@ namespace AGE {
   };
 
 }// namespace AGE
-
-#endif//AGE_DEBUGLAYER_H

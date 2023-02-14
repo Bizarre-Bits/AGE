@@ -2,8 +2,7 @@
 // Created by a on 25.08.22.
 //
 
-#ifndef AGE_KEYEVENT_H
-#define AGE_KEYEVENT_H
+#pragma once
 
 #include "Event.h"
 
@@ -67,5 +66,3 @@ namespace AGE {
   };
 
 }// namespace AGE
-
-#endif//AGE_KEYEVENT_H

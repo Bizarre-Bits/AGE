@@ -2,8 +2,7 @@
 // Created by alex on 2/2/23.
 //
 
-#ifndef AGE_OPENGLFRAMEBUFFER_H
-#define AGE_OPENGLFRAMEBUFFER_H
+#pragma once
 
 #include "Age/Renderer/Framebuffer.h"
 
@@ -31,5 +30,3 @@ namespace AGE {
   };
 
 } // AGE
-
-#endif //AGE_OPENGLFRAMEBUFFER_H

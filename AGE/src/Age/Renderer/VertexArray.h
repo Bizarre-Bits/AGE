@@ -2,8 +2,7 @@
 // Created by alex on 09.09.22.
 //
 
-#ifndef AGE_VERTEXARRAY_H
-#define AGE_VERTEXARRAY_H
+#pragma once
 
 #include "Age/Renderer/Buffer.h"
 
@@ -24,5 +23,3 @@ namespace AGE {
     static Ref<VertexArray> Create();
   };
 }// namespace AGE
-
-#endif//AGE_VERTEXARRAY_H

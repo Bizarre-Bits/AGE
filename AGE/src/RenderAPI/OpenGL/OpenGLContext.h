@@ -2,11 +2,10 @@
 // Created by alex on 08.09.22.
 //
 
-#ifndef AGE_OPENGLCONTEXT_H
-#define AGE_OPENGLCONTEXT_H
+#pragma once
 
 #include "Age/Renderer/Context.h"
-#include "Platform/OpenGL/OpenGLPlatform.h"
+#include "RenderAPI/OpenGL/OpenGLMaster.h"
 
 namespace AGE {
   class OpenGLContext : public Context {
@@ -21,5 +20,3 @@ namespace AGE {
   };
 
 }// namespace AGE
-
-#endif//AGE_OPENGLCONTEXT_H

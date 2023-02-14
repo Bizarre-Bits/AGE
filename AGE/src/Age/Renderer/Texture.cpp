@@ -8,7 +8,7 @@
 #include "Renderer.h"
 
 #ifdef AGE_INCLUDE_OPENGL
-  #include "Platform/OpenGL/OpenGLTexture.h"
+  #include "RenderAPI/OpenGL/OpenGLTexture.h"
 #else
 #endif
 
