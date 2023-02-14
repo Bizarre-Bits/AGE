@@ -14,10 +14,8 @@
 namespace AGE {
   struct WindowProps {
     age_string_t Title;
+    age_string_t IconPath;
     unsigned int Width, Height;
-
-    explicit WindowProps(const age_string_t& title = "AGEngine", unsigned int width = 1280, unsigned int height = 720)
-        : Title{title}, Width{width}, Height{height} {}
   };
 
   /**
@@ -45,8 +43,7 @@ namespace AGE {
 
     inline virtual void* NativeWindow() const = 0;
 
-    // Must be implemented per Platform
-    static Window* Create(const WindowProps& props = WindowProps());
+    static Scope<Window> Create(const WindowProps& props);
 
   protected:
     Context* m_Context{nullptr};

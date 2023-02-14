@@ -9,3 +9,8 @@ updates:
     directory: "/"
     schedule:
       interval: "monthly"
+    target-branch: "dev"
+    labels:
+      - "dependency bump"
+      - "dependecies"
+      - "github apps"

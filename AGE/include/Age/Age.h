@@ -12,6 +12,7 @@
 
 // Utils
 #include "Age/Utils/Random.h"
+#include <glm/glm.hpp>
 
 // Input handling
 #include "Age/Core/Input.h"
@@ -20,8 +21,6 @@
 
 // Layers
 #include "Age/Core/Layer.h"
-#include "Age/ImGui/ImGuiBuild.h"
-#include "Age/ImGui/ImGuiLayer.h"
 #include "Age/Debug/DebugLayer.h"
 
 //Renderer
@@ -32,6 +31,7 @@
 #include "Age/Renderer/Shader.h"
 #include "Age/Renderer/Texture.h"
 #include "Age/Renderer/SubTexture2D.h"
+#include "Age/Renderer/Framebuffer.h"
 #include "Age/Renderer/Context.h"
 #include "Age/Renderer/OrthographicCamera.h"
 #include "Age/Renderer/OrthographicCameraController.h"

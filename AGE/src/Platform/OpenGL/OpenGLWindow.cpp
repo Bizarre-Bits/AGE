@@ -7,6 +7,7 @@
 #include "OpenGLWindow.h"
 
 #include <stb_image.h>
+#include <imgui.h>
 
 #include "Age/Events/KeyEvent.h"
 #include "Age/Events/MouseEvent.h"
@@ -21,12 +22,6 @@ namespace AGE {
     AGE_PROFILE_FUNCTION();
 
     AGE_CORE_ERROR("GLFW Error ({0}): {1}", error, description);
-  }
-
-  Window* Window::Create(const AGE::WindowProps& props) {
-    AGE_PROFILE_FUNCTION();
-
-    return new OpenGLWindow(props);
   }
 
   OpenGLWindow::OpenGLWindow(const WindowProps& props) {
@@ -72,7 +67,7 @@ namespace AGE {
 
     GLFWimage windowIcon;
     windowIcon.pixels = stbi_load(
-        "assets/icons/age_logo.png", &windowIcon.width, &windowIcon.height, 0, 4
+        props.IconPath.c_str(), &windowIcon.width, &windowIcon.height, 0, 4
     );
     glfwSetWindowIcon(m_Window, 1, &windowIcon);
     stbi_image_free(windowIcon.pixels);
@@ -212,7 +207,6 @@ namespace AGE {
 
   void OpenGLWindow::Destroy() {
     AGE_PROFILE_FUNCTION();
-
     glfwDestroyWindow(m_Window);
   }
   void* OpenGLWindow::NativeWindow() const {

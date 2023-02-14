@@ -4,6 +4,8 @@
 
 #include "agepch.h"
 
+#include <imgui.h>
+
 #include "DebugLayer.h"
 
 #include "Age/Core/Window.h"
@@ -11,10 +13,9 @@
 #include "Age/Core/Input.h"
 
 namespace AGE {
-  DebugLayer::DebugLayer() : ImGuiLayer("Debug Layer") {}
+  DebugLayer::DebugLayer() : Layer("Debug Layer") {}
 
-  void DebugLayer::OnUpdate(Timestep ts) {
-    AGE_PROFILE_FUNCTION();
+  void DebugLayer::OnUiRender(Timestep ts) {
 
     constexpr float fpsTextUpdateThresholdSeconds{0.1f};
     static float lastFpsUpdateSeconds{0.0f};
@@ -34,10 +35,10 @@ namespace AGE {
     }
 
     ImGui::Begin("Debug");
-    Scope<Window>& window = Application::Instance()->Window();
+    Window& window = Application::Instance()->Window();
     ImGui::Text(
-        "MainWindow: %s (%i, %i)", window->Title().c_str(), (int)window->Width(),
-        (int)window->Height());
+        "MainWindow: %s (%i, %i)", window.Title().c_str(), (int)window.Width(),
+        (int)window.Height());
     ImGui::Text("FPS: %.2f", lastFps);
     ImGui::Text("Delta Time: %.2fms", ts.Milliseconds());
 

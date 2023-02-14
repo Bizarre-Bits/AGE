@@ -14,19 +14,27 @@
 #include "Timer.h"
 
 namespace AGE {
+  struct ApplicationSpecs {
+    age_string_t AppTitle{"AGE App v1.0.0"};
+    age_string_t AppIcon{"assets/core_assets/icons/age_logo.png"};
+
+    uint32_t Width{1280}, Height{720};
+  };
+
+
   class Application {
   public:
-    Application();
+    Application(const ApplicationSpecs& specs);
     virtual ~Application() = default;
 
     virtual void Run();
 
-    void OnEvent(Event& e);
+    virtual void OnEvent(Event& e);
 
     void PushLayer(Layer* layer);
     void PushOverlay(Layer* layer);
 
-    Scope <AGE::Window>& Window();
+    AGE::Window& Window();
     Timestep Uptime();
 
     static Application* Instance();
