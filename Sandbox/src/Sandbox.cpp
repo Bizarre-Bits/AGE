@@ -1,22 +1,19 @@
-//
-// Created by alex on 04.10.22.
-//
+#include "Age/EntryPoint.h"
+#include "Age/Age.h"
 
-#include <glm/gtc/matrix_transform.hpp>
-
-#include "Sandbox.h"
-#include "Sandbox2DLayer.h"
+namespace Sandbox {
+  class SandboxLayer : public AGE::Layer {
+      public:
+      virtual void OnUpdate(AGE::Timestep ts) override {
+        AGE::RenderCommand::Clear();
+      }
+  };
+} // Sandbox
 
 AGE::Application* AGE::CreateApplication() {
-  return new Sandbox;
+    AGE::ApplicationSpecs specs{};
+    specs.AppTitle = "Sandbox";
+    AGE::Application* app = new AGE::Application{specs};
+    app->PushLayer(new Sandbox::SandboxLayer());
+    return app;
 }
-
-Sandbox::Sandbox() : AGE::Application() {
-  PushLayer(new Sandbox2DLayer);
-//  PushOverlay(new Sandbox2DUI);
-}
-
-Sandbox::~Sandbox() {}
-
-// Sandbox Layer
-

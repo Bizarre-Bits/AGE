@@ -64,8 +64,6 @@ namespace AGE {
     EventDispatcher dispatcher(e);
     dispatcher.Dispatch<MouseScrolledEvent>(
         AGE_BIND_EVENT_FN(&OrthographicCameraController::OnMouseScrolled));
-    dispatcher.Dispatch<WindowResizeEvent>(
-        AGE_BIND_EVENT_FN(&OrthographicCameraController::OnWindowResized));
   }
 
   void OrthographicCameraController::OnResize(float width, float height) {

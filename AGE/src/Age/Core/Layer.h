@@ -19,6 +19,7 @@ namespace AGE {
     virtual void OnDetach() {}
     virtual void OnUpdate(Timestep ts) {}
     virtual void OnEvent(Event& e) {}
+    virtual void OnUiRender(Timestep ts) {}
 
     inline const age_string_t& Name() const { return m_DebugName; }
 

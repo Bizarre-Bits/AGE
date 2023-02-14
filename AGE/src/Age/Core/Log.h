@@ -7,7 +7,7 @@
 
 #include "Age/Core/Core.h"
 
-#include "spdlog/fmt/ostr.h"
+//#include "spdlog/fmt/ostr.h"
 #include "spdlog/spdlog.h"
 
 namespace AGE {

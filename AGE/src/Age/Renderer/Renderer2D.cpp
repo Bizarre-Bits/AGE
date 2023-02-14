@@ -47,7 +47,7 @@ namespace AGE {
   void Renderer2D::Init() {
     AGE_PROFILE_FUNCTION();
 
-    s_Data.Shader2D    = AGE::Shader::Create("assets/shaders/2dRendererShader.glsl");
+    s_Data.Shader2D    = AGE::Shader::Create("assets/core_assets/shaders/2dRendererShader.glsl");
     s_Data.UnitTexture = AGE::Texture2D::Create(1, 1);
 
     uint8_t data[]{255, 255, 255, 255};
