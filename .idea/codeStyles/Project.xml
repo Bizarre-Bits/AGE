@@ -66,8 +66,11 @@
         <rule entity="CLASS_MEMBER_FIELD" visibility="PROTECTED,PRIVATE" specifier="STATIC" prefix="s_" style="PASCAL_CASE" suffix="" />
       </rules>
     </Objective-C-extensions>
+    <clangFormatSettings>
+      <option name="ENABLED" value="true" />
+    </clangFormatSettings>
     <codeStyleSettings language="ObjectiveC">
-      <option name="RIGHT_MARGIN" value="160" />
+      <option name="RIGHT_MARGIN" value="120" />
       <option name="BLANK_LINES_BEFORE_IMPORTS" value="0" />
       <option name="BLANK_LINES_AFTER_IMPORTS" value="0" />
       <option name="BLANK_LINES_AROUND_METHOD" value="0" />
@@ -79,7 +82,7 @@
       <option name="BINARY_OPERATION_SIGN_ON_NEXT_LINE" value="true" />
       <option name="PLACE_ASSIGNMENT_SIGN_ON_NEXT_LINE" value="true" />
       <option name="ENUM_CONSTANTS_WRAP" value="1" />
-      <option name="SOFT_MARGINS" value="160" />
+      <option name="SOFT_MARGINS" value="120" />
       <indentOptions>
         <option name="INDENT_SIZE" value="2" />
         <option name="CONTINUATION_INDENT_SIZE" value="4" />

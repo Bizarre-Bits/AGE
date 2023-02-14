@@ -14,7 +14,6 @@ namespace AGE {
 
   class Random {
   public:
-
     static float Float()
     {
       return (float)s_Distribution(s_RandomEngine) / (float)std::numeric_limits<uint_fast32_t>::max();

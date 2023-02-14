@@ -16,7 +16,6 @@ namespace AGE {
   DebugLayer::DebugLayer() : Layer("Debug Layer") {}
 
   void DebugLayer::OnUiRender(Timestep ts) {
-
     constexpr float fpsTextUpdateThresholdSeconds{0.1f};
     static float lastFpsUpdateSeconds{0.0f};
     static float lastFps{1000.0f / ts.Milliseconds()};

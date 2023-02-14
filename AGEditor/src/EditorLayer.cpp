@@ -34,7 +34,6 @@ namespace AGE {
   }
 
   void EditorLayer::OnUiRender(Timestep ts) {
-
     ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
 
     ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
