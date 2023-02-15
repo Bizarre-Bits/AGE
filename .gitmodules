@@ -12,3 +12,6 @@
 [submodule "AGE/vendor/glm"]
 	path = AGE/vendor/glm
 	url = git@github.com:g-truc/glm.git
+[submodule "AGE/vendor/entt"]
+	path = AGE/vendor/entt
+	url = https://github.com/skypjack/entt.git
