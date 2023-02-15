@@ -42,6 +42,9 @@ namespace AGE {
 
     ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 
+    ImGuiWindowClass viewportWindowClass{};
+    viewportWindowClass.DockNodeFlagsOverrideSet = ImGuiDockNodeFlags_AutoHideTabBar;
+    ImGui::SetNextWindowClass(&viewportWindowClass);
     ImGui::Begin("Viewport");
 
     m_IsViewportHovered      = ImGui::IsWindowHovered();
