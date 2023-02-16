@@ -3,10 +3,18 @@
 //
 
 #pragma once
+#include "agepch.h"
 
 #include <glm/glm.hpp>
 
 namespace AGE {
+  struct TagComponent {
+    age_string_t Tag;
+    TagComponent() = default;
+    TagComponent(const TagComponent&) = default;
+    TagComponent(const age_string_t& tag) : Tag{tag} {}
+  };
+
   struct TransformComponent {
     glm::mat4 Transform{1.0f};
 

@@ -25,7 +25,8 @@ namespace AGE {
 
     bool m_IsViewportHovered{false};
     bool m_IsViewportFocused{false};
-    entt::entity m_Square;
+    Entity m_Square;
+    glm::vec4 m_BgColor{0.1f, 0.1f, 0.1f, 1.0f};
   };
 
 }// namespace AGE

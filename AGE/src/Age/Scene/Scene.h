@@ -11,13 +11,14 @@
 #include "Components.h"
 
 namespace AGE {
+  class Entity;
 
   class Scene {
   public:
     Scene();
     ~Scene() = default;
 
-    entt::entity CreateEntity();
+    Entity CreateEntity(const age_string_t& name = "");
 
     //TODO: Temporary solution. MUST be replaced as we move on to our own entt wrapper
     inline entt::registry& Reg() { return m_Registry; }
@@ -26,6 +27,8 @@ namespace AGE {
 
   private:
     entt::registry m_Registry;
+
+    friend class Entity;
   };
 
 }// namespace AGE

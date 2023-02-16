@@ -4,7 +4,6 @@
 
 #include "EditorLayer.h"
 
-#include <Age/Renderer/RenderCommand.h>
 #include <glm/gtc/type_ptr.hpp>
 #include <imgui.h>
 
@@ -20,11 +19,11 @@ namespace AGE {
   void EditorLayer::OnAttach() {
     Layer::OnAttach();
 
+    RenderCommand::SetClearColor(m_BgColor);
+
     m_ActiveScene = MakeRef<Scene>();
     m_Square      = m_ActiveScene->CreateEntity();
-    auto& reg     = m_ActiveScene->Reg();
-    reg.emplace<SpriteComponent>(m_Square, glm::vec4{1.0f, 0.0f, 1.0f, 1.0f});
-    reg.emplace<TransformComponent>(m_Square);
+    auto sprite   = m_Square.AddComponent<SpriteComponent>(glm::vec4{1.0f, 0.0f, 1.0f, 1.0f});
   }
 
   void EditorLayer::OnUpdate(Timestep ts) {
@@ -82,15 +81,23 @@ namespace AGE {
     ImGui::Text("Focus: %b", m_IsViewportFocused);
     ImGui::Text("Hover: %b", m_IsViewportHovered);
 
-    glm::vec4& tint = m_ActiveScene->Reg().get<SpriteComponent>(m_Square).Tint;
-    ImGui::ColorEdit3("Square Tint", glm::value_ptr(tint));
+    if (ImGui::ColorEdit3("Background", glm::value_ptr(m_BgColor))) {
+      RenderCommand::SetClearColor(m_BgColor);
+    }
+
+    ImGui::Separator();
+    auto& tag  = m_Square.GetComponent<TagComponent>();
+    auto& tint = m_Square.GetComponent<SpriteComponent>().Tint;
+
+    ImGui::Text("%s", tag.Tag.c_str());
+    ImGui::ColorEdit4("Square Tint", glm::value_ptr(tint));
     ImGui::End();
   }
 
   void EditorLayer::OnEvent(Event& e) {
     Layer::OnEvent(e);
     if (!m_IsViewportHovered) {
-      ImGuiIO& io = ImGui::GetIO();
+      const ImGuiIO& io = ImGui::GetIO();
       e.Handled |= e.IsInCategory(EventCategory::EventCategoryMouse) & io.WantCaptureMouse;
       e.Handled |= e.IsInCategory(EventCategory::EventCategoryKeyboard) & io.WantCaptureKeyboard;
     } else {

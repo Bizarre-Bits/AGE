@@ -40,6 +40,7 @@
 // Entity System
 #include "Age/Scene/Scene.h"
 #include "Age/Scene/Components.h"
+#include "Age/Scene/Entity.h"
 
 // Debug
 #include "Age/Debug/Assert.h"
