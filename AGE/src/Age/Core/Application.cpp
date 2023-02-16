@@ -26,7 +26,7 @@ namespace AGE {
     windowProps.IconPath = specs.AppIcon;
 
     m_Window = Window::Create(windowProps);
-    m_Window->EventCallback(AGE_BIND_EVENT_FN(&Application::OnEvent));
+    m_Window->EventCallback(AGE_BIND_EVENT_FN(Application::OnEvent));
 
     Renderer::Init();
     Renderer2D::Init();
@@ -70,7 +70,7 @@ namespace AGE {
     AGE_PROFILE_FUNCTION();
 
     EventDispatcher dispatcher(e);
-    dispatcher.Dispatch<WindowCloseEvent>(AGE_BIND_EVENT_FN(&Application::OnWindowClose));
+    dispatcher.Dispatch<WindowCloseEvent>(AGE_BIND_EVENT_FN(Application::OnWindowClose));
 
     for (auto it{m_LayerStack.end()}; it != m_LayerStack.begin();) {
       (*(--it))->OnEvent(e);
