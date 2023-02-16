@@ -7,8 +7,8 @@
 #include <glm/glm.hpp>
 
 #include "OrthographicCamera.h"
-#include "Texture.h"
 #include "SubTexture2D.h"
+#include "Texture.h"
 
 namespace AGE {
 
@@ -29,6 +29,10 @@ namespace AGE {
     static void Flush();
 
 #pragma region DrawQuad
+
+    static void DrawQuad(const glm::mat4& transform, const glm::vec4& color);
+    static void DrawQuad(const glm::mat4& transform, const Ref<Texture2D>& texture, const glm::vec4& color, float tilingFactor = 1.0f);
+    static void DrawQuad(const glm::mat4& transform, const Ref<SubTexture2D>& subTexture, const glm::vec4& color, float tilingFactor = 1.0f);
 
     static void DrawQuad(const glm::vec2& pos, const glm::vec2& size, const glm::vec4& color);
     static void DrawQuad(const glm::vec3& pos, const glm::vec2& size, const glm::vec4& color);
@@ -78,11 +82,10 @@ namespace AGE {
      * @param rotationDeg  - rotation in degrees.
      * @param texture - texture. If none, will be replaced with 1x1 white texture.
      * @param color - tint color.
-     * @param tillingFactor - tilling factor for the texture.
+     * @param tilingFactor - tilling factor for the texture.
      */
     static void DrawRotatedQuad(
-        const glm::vec3& pos, const glm::vec2& size, float rotationDeg, const Ref<Texture2D>& texture, const glm::vec4& color, float tillingFactor = 1.0f
-    );
+        const glm::vec3& pos, const glm::vec2& size, float rotationDeg, const Ref<Texture2D>& texture, const glm::vec4& color, float tilingFactor = 1.0f);
 
 
     static void DrawRotatedQuad(const glm::vec2& pos, const glm::vec2& size, float rotationDeg, const Ref<SubTexture2D>& subTexture, float tilingFactor = 1.0f);
@@ -96,11 +99,10 @@ namespace AGE {
      * @param rotationDeg  - rotation in degrees.
      * @param subTexture - sub texture
      * @param color - tint color.
-     * @param tillingFactor - tilling factor for the texture.
+     * @param tilingFactor - tilling factor for the texture.
      */
     static void DrawRotatedQuad(
-        const glm::vec3& pos, const glm::vec2& size, float rotationDeg, const Ref<SubTexture2D>& subTexture, const glm::vec4& color, float tillingFactor = 1.0f
-    );
+        const glm::vec3& pos, const glm::vec2& size, float rotationDeg, const Ref<SubTexture2D>& subTexture, const glm::vec4& color, float tilingFactor = 1.0f);
 
 #pragma endregion
 
@@ -119,4 +121,4 @@ namespace AGE {
     [[nodiscard]] static int FindTextureIndex(const Ref<Texture2D>& texture);
   };
 
-} // AGE
+}// namespace AGE

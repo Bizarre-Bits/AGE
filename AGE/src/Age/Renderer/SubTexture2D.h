@@ -15,6 +15,7 @@ namespace AGE {
     SubTexture2D(const Ref <Texture2D>& texture, const glm::vec2& min, const glm::vec2& max);
 
     [[nodiscard]] const glm::vec2* TexCoords() const { return m_TexCoords; }
+    [[nodiscard]] glm::vec2* TexCoords() { return m_TexCoords; }
     [[nodiscard]] const Ref <Texture2D>& GetTexture() const { return m_Texture; }
 
     static Ref <SubTexture2D> CreateFromCoords(const Ref<Texture2D>& texture, const glm::vec2& offset, const glm::vec2& cellSizePx, const glm::vec2& spriteSize = {1.0f, 1.0f});

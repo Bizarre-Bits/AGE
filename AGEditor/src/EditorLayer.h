@@ -15,14 +15,17 @@ namespace AGE {
     virtual void OnUpdate(Timestep ts) override;
     virtual void OnUiRender(Timestep ts) override;
     virtual void OnEvent(Event& e) override;
+    virtual void OnAttach() override;
 
   private:
     glm::vec2 m_ViewportSize;
     Ref<Framebuffer> m_Framebuffer;
+    Ref<Scene> m_ActiveScene;
     OrthographicCameraController m_ViewportCameraController;
 
     bool m_IsViewportHovered{false};
     bool m_IsViewportFocused{false};
+    entt::entity m_Square;
   };
 
 }// namespace AGE

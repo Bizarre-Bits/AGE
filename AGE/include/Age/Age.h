@@ -23,7 +23,7 @@
 #include "Age/Core/Layer.h"
 #include "Age/Debug/DebugLayer.h"
 
-//Renderer
+// Renderer
 #include "Age/Renderer/Renderer.h"
 #include "Age/Renderer/RenderCommand.h"
 #include "Age/Renderer/VertexArray.h"
@@ -35,8 +35,11 @@
 #include "Age/Renderer/Context.h"
 #include "Age/Renderer/OrthographicCamera.h"
 #include "Age/Renderer/OrthographicCameraController.h"
-
 #include "Age/Renderer/Renderer2D.h"
+
+// Entity System
+#include "Age/Scene/Scene.h"
+#include "Age/Scene/Components.h"
 
 // Debug
 #include "Age/Debug/Assert.h"

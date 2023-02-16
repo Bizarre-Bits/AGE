@@ -5,10 +5,11 @@
 #include "EditorLayer.h"
 
 #include <Age/Renderer/RenderCommand.h>
+#include <glm/gtc/type_ptr.hpp>
 #include <imgui.h>
 
 namespace AGE {
-  EditorLayer::EditorLayer() : m_ViewportCameraController(1.0f) {
+  EditorLayer::EditorLayer() : m_ViewportCameraController(1.0f), m_ViewportSize(0.0f) {
     FramebufferSpecification specs;
     specs.Width  = 1;
     specs.Height = 1;
@@ -16,16 +17,27 @@ namespace AGE {
     m_Framebuffer = Framebuffer::Create(specs);
   }
 
+  void EditorLayer::OnAttach() {
+    Layer::OnAttach();
+
+    m_ActiveScene = MakeRef<Scene>();
+    m_Square      = m_ActiveScene->CreateEntity();
+    auto& reg     = m_ActiveScene->Reg();
+    reg.emplace<SpriteComponent>(m_Square, glm::vec4{1.0f, 0.0f, 1.0f, 1.0f});
+    reg.emplace<TransformComponent>(m_Square);
+  }
+
   void EditorLayer::OnUpdate(Timestep ts) {
-    m_Framebuffer->Resize(m_ViewportSize.x, m_ViewportSize.y);
-    m_ViewportCameraController.OnResize(m_ViewportSize.x, m_ViewportSize.y);
+
+    m_Framebuffer->Resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+    m_ViewportCameraController.OnResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 
     m_Framebuffer->Bind();
 
     RenderCommand::Clear();
     Renderer2D::BeginScene(m_ViewportCameraController.GetCamera());
 
-    Renderer2D::DrawQuad(glm::vec2{0.0f}, glm::vec2{1.0f}, glm::vec4{1.0f, 0.0f, 1.0f, 1.0f});
+    m_ActiveScene->OnUpdate(ts);
 
     if (m_IsViewportFocused)
       m_ViewportCameraController.OnUpdate(ts);
@@ -47,8 +59,8 @@ namespace AGE {
     ImGui::SetNextWindowClass(&viewportWindowClass);
     ImGui::Begin("Viewport");
 
-    m_IsViewportHovered      = ImGui::IsWindowHovered();
-    m_IsViewportFocused      = ImGui::IsWindowFocused();
+    m_IsViewportHovered = ImGui::IsWindowHovered();
+    m_IsViewportFocused = ImGui::IsWindowFocused();
 
 
     ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
@@ -70,6 +82,8 @@ namespace AGE {
     ImGui::Text("Focus: %b", m_IsViewportFocused);
     ImGui::Text("Hover: %b", m_IsViewportHovered);
 
+    glm::vec4& tint = m_ActiveScene->Reg().get<SpriteComponent>(m_Square).Tint;
+    ImGui::ColorEdit3("Square Tint", glm::value_ptr(tint));
     ImGui::End();
   }
 
