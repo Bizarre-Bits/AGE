@@ -6,6 +6,7 @@
 
 #include <glm/glm.hpp>
 
+#include "Camera.h"
 #include "OrthographicCamera.h"
 #include "SubTexture2D.h"
 #include "Texture.h"
@@ -22,6 +23,8 @@ namespace AGE {
     static void ShutDown();
 
     static void BeginScene(const OrthographicCamera& camera);
+    static void BeginScene(const Camera& camera, const glm::mat4& transform);
+
     static void EndScene();
 
     static void StartBatch();

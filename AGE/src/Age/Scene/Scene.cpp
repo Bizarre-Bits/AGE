@@ -21,10 +21,31 @@ namespace AGE {
   }
 
   void Scene::OnUpdate(Timestep ts) {
-    auto group = m_Registry.group<TransformComponent>(entt::get<SpriteComponent>);
-    for (auto e: group) {
-      auto [transform, sprite] = group.get<TransformComponent, SpriteComponent>(e);
+    // Render sprites
+    Camera* mainCamera = nullptr;
+    glm::mat4* mainCameraTransform = nullptr;
+    {
+      auto group = m_Registry.group<CameraComponent, TransformComponent>();
+      for(auto entity : group) {
+        auto [camera, transform] = group.get<CameraComponent, TransformComponent>(entity);
+        if(camera.Primary) {
+          mainCamera = &camera.Camera;
+          mainCameraTransform = &transform.Transform;
+        }
+      }
+    }
+
+    if(!mainCamera)
+      return;
+
+    Renderer2D::BeginScene(*mainCamera, *mainCameraTransform);
+
+    auto sprites = m_Registry.group<SpriteComponent>(entt::get<TransformComponent>);
+    for (auto e: sprites) {
+      auto [transform, sprite] = sprites.get<TransformComponent, SpriteComponent>(e);
       Renderer2D::DrawQuad(transform,sprite.Tint);
     }
+
+    Renderer2D::EndScene();
   }
 }// namespace AGE

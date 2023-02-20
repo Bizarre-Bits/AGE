@@ -43,7 +43,8 @@ namespace AGE {
     operator bool() const { return m_EntityHandle != entt::null; }
 
   private:
-    entt::entity m_EntityHandle;
+    entt::entity m_EntityHandle{entt::null};
+
     // TODO: Make weak ptr. Bother with it not sooner than self-made smart-pointer system
     Scene* m_Scene;
 

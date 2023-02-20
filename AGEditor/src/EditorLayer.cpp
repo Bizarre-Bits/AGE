@@ -21,9 +21,17 @@ namespace AGE {
 
     RenderCommand::SetClearColor(m_BgColor);
 
-    m_ActiveScene = MakeRef<Scene>();
-    m_Square      = m_ActiveScene->CreateEntity();
-    auto sprite   = m_Square.AddComponent<SpriteComponent>(glm::vec4{1.0f, 0.0f, 1.0f, 1.0f});
+    m_ActiveScene  = MakeRef<Scene>();
+    m_SquareEntity = m_ActiveScene->CreateEntity("Square");
+    m_SquareEntity.AddComponent<SpriteComponent>(glm::vec4{1.0f, 0.0f, 1.0f, 1.0f});
+
+    m_CameraEntity          = m_ActiveScene->CreateEntity("Primary Camera");
+    auto& cameraComponent   = m_CameraEntity.AddComponent<CameraComponent>(glm::ortho(-16.0f, 16.0f, -9.0f, 9.0f, -1.0f, 1.0f));
+    cameraComponent.Primary = true;
+
+    m_SecondaryCamera                = m_ActiveScene->CreateEntity("Secondary Camera");
+    auto& secondaryCameraComponent   = m_SecondaryCamera.AddComponent<CameraComponent>(glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f));
+    secondaryCameraComponent.Primary = true;
   }
 
   void EditorLayer::OnUpdate(Timestep ts) {
@@ -34,7 +42,6 @@ namespace AGE {
     m_Framebuffer->Bind();
 
     RenderCommand::Clear();
-    Renderer2D::BeginScene(m_ViewportCameraController.GetCamera());
 
     m_ActiveScene->OnUpdate(ts);
 
@@ -42,8 +49,6 @@ namespace AGE {
       m_ViewportCameraController.OnUpdate(ts);
     else
       m_ViewportCameraController.GetCamera().RecalculateViewProjectionMatrix();
-
-    Renderer2D::EndScene();
 
     m_Framebuffer->Unbind();
   }
@@ -86,11 +91,24 @@ namespace AGE {
     }
 
     ImGui::Separator();
-    auto& tag  = m_Square.GetComponent<TagComponent>();
-    auto& tint = m_Square.GetComponent<SpriteComponent>().Tint;
+    auto& tag  = m_SquareEntity.GetComponent<TagComponent>();
+    auto& tint = m_SquareEntity.GetComponent<SpriteComponent>().Tint;
 
     ImGui::Text("%s", tag.Tag.c_str());
     ImGui::ColorEdit4("Square Tint", glm::value_ptr(tint));
+
+    ImGui::Separator();
+    ImGui::Text("Cameras");
+    static bool cameraA = true;
+    if (ImGui::Checkbox("Camera A", &cameraA)) {
+      auto& cameraAComponent   = m_CameraEntity.GetComponent<CameraComponent>();
+      auto& cameraBComponent   = m_SecondaryCamera.GetComponent<CameraComponent>();
+      cameraAComponent.Primary = cameraA;
+      cameraBComponent.Primary = !cameraA;
+    }
+    auto& cameraPosition = (cameraA ? m_CameraEntity : m_SecondaryCamera).GetComponent<TransformComponent>().Transform[3];
+    ImGui::DragFloat2("Camera Transform", glm::value_ptr(cameraPosition));
+
     ImGui::End();
   }
 

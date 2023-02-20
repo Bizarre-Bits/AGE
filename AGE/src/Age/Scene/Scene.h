@@ -20,9 +20,6 @@ namespace AGE {
 
     Entity CreateEntity(const age_string_t& name = "");
 
-    //TODO: Temporary solution. MUST be replaced as we move on to our own entt wrapper
-    inline entt::registry& Reg() { return m_Registry; }
-
     void OnUpdate(Timestep ts);
 
   private:
