@@ -23,14 +23,14 @@ namespace AGE {
   void Scene::OnUpdate(Timestep ts) {
     // Update scripts
     {
-      m_Registry.view<NativeScriptComponent>().each([=](auto entity, NativeScriptComponent& nsc) {
+      m_Registry.view<NativeScriptComponent>().each([this, ts](auto entity, NativeScriptComponent& nsc) {
         if (!nsc.Instance) {
-          nsc.InstantiateFunction();
-          nsc.Instance->m_Entity = {entity, this};
-          nsc.OnCreateFunction(nsc.Instance);
+          nsc.Instance = nsc.InstantiateScript();
+          nsc.Instance->m_Entity = Entity{entity, this};
+          nsc.Instance->OnCreate();
         }
 
-        nsc.OnUpdateFunction(nsc.Instance, ts);
+        nsc.Instance->OnUpdate(ts);
       });
     }
 

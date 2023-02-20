@@ -45,22 +45,14 @@ namespace AGE {
   struct NativeScriptComponent {
     ScriptableEntity* Instance{nullptr};
 
-    std::function<void()> InstantiateFunction;
-    std::function<void()> DestroyInstanceFunction;
-
-    std::function<void(ScriptableEntity* Instance)> OnCreateFunction;
-    std::function<void(ScriptableEntity* Instance, Timestep ts)> OnUpdateFunction;
-    std::function<void(ScriptableEntity* Instance)> OnDestroyFunction;
+    ScriptableEntity* (*InstantiateScript)();
+    void (*DestroyScript)(NativeScriptComponent*);
 
     template<typename T>
       requires std::derived_from<T, ScriptableEntity>
     void Bind() {
-      InstantiateFunction     = [&]() { Instance = new T(); };
-      DestroyInstanceFunction = [&]() { delete (T*)Instance; Instance = nullptr; };
-
-      OnCreateFunction  = [](ScriptableEntity* instance) { instance->OnCreate(); };
-      OnUpdateFunction  = [](ScriptableEntity* instance, Timestep ts) { instance->OnUpdate(ts); };
-      OnDestroyFunction = [](ScriptableEntity* instance) { instance->OnDestroy(); };
+      InstantiateScript = []() { return static_cast<ScriptableEntity*>(new T()); };
+      DestroyScript     = [](NativeScriptComponent* nsc) {delete nsc->Instance; nsc->Instance = nullptr; };
     }
   };
 }// namespace AGE
