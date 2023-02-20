@@ -19,8 +19,10 @@ namespace AGE {
     void OnUiRender();
 
   private:
-    void DrawEntityNode(Entity& entity);
-    void DrawComponents(Entity& entity);
+    void EntityNode(Entity& entity);
+    void Inspector(Entity& entity);
+    void CameraComponentInspector(Entity& entity) const;
+    void TransformComponentInspector(Entity& entity);
 
   private:
     Ref<Scene> m_Context;
