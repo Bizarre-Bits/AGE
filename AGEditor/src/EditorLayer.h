@@ -30,7 +30,6 @@ namespace AGE {
     Entity m_RedSquareEntity;
     Entity m_BlueSquareEntity;
     Entity m_CameraA;
-    Entity m_CameraB;
 
     glm::vec4 m_BgColor{0.1f, 0.1f, 0.1f, 1.0f};
 

@@ -25,18 +25,20 @@ namespace AGE {
 
     m_RedSquareEntity = m_ActiveScene->CreateEntity("Red Square");
     m_RedSquareEntity.AddComponent<SpriteComponent>(glm::vec4{1.0f, 0.0f, 0.0f, 1.0f});
+    auto& redTransform = m_RedSquareEntity.GetComponent<TransformComponent>();
+    redTransform.Transform[3][0] = -0.6f;
 
     m_BlueSquareEntity = m_ActiveScene->CreateEntity("Blue Square");
     m_BlueSquareEntity.AddComponent<SpriteComponent>(glm::vec4{0.0f, 0.0f, 1.0f, 1.0f});
+    auto& blueTransform = m_BlueSquareEntity.GetComponent<TransformComponent>();
+    blueTransform.Transform[3][0] = 0.6f;
 
     m_CameraA               = m_ActiveScene->CreateEntity("Camera A");
     auto& cameraComponent   = m_CameraA.AddComponent<CameraComponent>();
     cameraComponent.Primary = true;
     cameraComponent.Camera.SetProjectionType(SceneCamera::ProjectionType::Perspective);
-
-    m_CameraB                        = m_ActiveScene->CreateEntity("Camera B");
-    auto& secondaryCameraComponent   = m_CameraB.AddComponent<CameraComponent>();
-    secondaryCameraComponent.Primary = false;
+    auto& cameraTransform = m_CameraA.GetComponent<TransformComponent>();
+    cameraTransform.Transform[3][2] = 5.0f;
 
     class CameraControllerScript : public ScriptableEntity {
     public:
@@ -114,23 +116,6 @@ namespace AGE {
 
     if (ImGui::ColorEdit3("Background", glm::value_ptr(m_BgColor))) {
       RenderCommand::SetClearColor(m_BgColor);
-    }
-
-    ImGui::Separator();
-    auto& tag  = m_RedSquareEntity.GetComponent<TagComponent>();
-    auto& tint = m_RedSquareEntity.GetComponent<SpriteComponent>().Tint;
-
-    ImGui::Text("%s", tag.Tag.c_str());
-    ImGui::ColorEdit4("Square Tint", glm::value_ptr(tint));
-
-    ImGui::Separator();
-    ImGui::Text("Cameras");
-    static bool cameraA = true;
-    if (ImGui::Checkbox("Camera A", &cameraA)) {
-      auto& cameraAComponent   = m_CameraA.GetComponent<CameraComponent>();
-      auto& cameraBComponent   = m_CameraB.GetComponent<CameraComponent>();
-      cameraAComponent.Primary = cameraA;
-      cameraBComponent.Primary = !cameraA;
     }
 
     ImGui::End();

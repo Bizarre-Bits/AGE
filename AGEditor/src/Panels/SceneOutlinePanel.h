@@ -20,9 +20,14 @@ namespace AGE {
 
   private:
     void EntityNode(Entity& entity);
-    void Inspector(Entity& entity);
-    void CameraComponentInspector(Entity& entity) const;
-    void TransformComponentInspector(Entity& entity);
+
+    template<typename T>
+    void DrawComponentInspector(const age_string_t& inspectorName, std::function<void(T& component)> callback);
+
+    void Inspector();
+    void CameraComponentInspector(CameraComponent& component) const;
+    void TransformComponentInspector(TransformComponent& component);
+    void TagComponentInspector(TagComponent& component);
 
   private:
     Ref<Scene> m_Context;
@@ -30,5 +35,17 @@ namespace AGE {
 
     friend class Scene;
   };
+
+  template<typename T>
+  void SceneOutlinePanel::DrawComponentInspector(const age_string_t& inspectorName, std::function<void(T& component)> callback) {
+    if (m_SelectedEntity.HasComponent<T>()) {
+      if (ImGui::TreeNodeEx((void*)typeid(T).hash_code(), ImGuiTreeNodeFlags_DefaultOpen, "%s", inspectorName.c_str())) {
+        T& component = m_SelectedEntity.GetComponent<T>();
+        callback(component);
+
+        ImGui::TreePop();
+      }
+    }
+  }
 
 }// namespace AGE
