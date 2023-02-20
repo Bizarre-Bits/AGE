@@ -21,8 +21,22 @@ namespace AGE {
   }
 
   void Scene::OnUpdate(Timestep ts) {
+    // Update scripts
+    {
+      m_Registry.view<NativeScriptComponent>().each([=](auto entity, NativeScriptComponent& nsc) {
+        if (!nsc.Instance) {
+          nsc.InstantiateFunction();
+          nsc.Instance->m_Entity = {entity, this};
+          nsc.OnCreateFunction(nsc.Instance);
+        }
+
+        nsc.OnUpdateFunction(nsc.Instance, ts);
+      });
+    }
+
     // Render sprites
-    Camera* mainCamera             = nullptr;
+    Camera* mainCamera
+        = nullptr;
     glm::mat4* mainCameraTransform = nullptr;
     auto cameras                   = m_Registry.group<CameraComponent>(entt::get<TransformComponent>);
     for (auto entity: cameras) {

@@ -8,7 +8,6 @@
 #include <glm/glm.hpp>
 
 #include "Age/Core/Timer.h"
-#include "Components.h"
 
 namespace AGE {
   class Entity;

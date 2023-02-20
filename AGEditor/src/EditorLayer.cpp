@@ -32,12 +32,35 @@ namespace AGE {
     m_SecondaryCamera                = m_ActiveScene->CreateEntity("Secondary Camera");
     auto& secondaryCameraComponent   = m_SecondaryCamera.AddComponent<CameraComponent>();
     secondaryCameraComponent.Primary = true;
+
+    class CameraControllerScript : public ScriptableEntity {
+    public:
+      virtual ~CameraControllerScript() = default;
+
+      virtual void OnUpdate(Timestep ts) override {
+        auto& transform = GetComponent<TransformComponent>().Transform;
+
+        constexpr float speed = 5.0f;
+
+        if(Input::IsKeyPressed(Key::A))
+          transform[3][0] -= speed * ts;
+        else if(Input::IsKeyPressed(Key::D))
+          transform[3][0] += speed * ts;
+
+        if(Input::IsKeyPressed(Key::S))
+          transform[3][1] -= speed * ts;
+        else if(Input::IsKeyPressed(Key::W))
+          transform[3][1] += speed * ts;
+      }
+    };
+
+    m_SecondaryCamera.AddComponent<NativeScriptComponent>().Bind<CameraControllerScript>();
   }
 
   void EditorLayer::OnUpdate(Timestep ts) {
 
     m_Framebuffer->Resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
-//    m_ViewportCameraController.OnResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+    //    m_ViewportCameraController.OnResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
     m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 
     m_Framebuffer->Bind();
@@ -113,7 +136,7 @@ namespace AGE {
 
     SceneCamera& mainSceneCamera = (cameraA ? m_CameraEntity : m_SecondaryCamera).GetComponent<CameraComponent>().Camera;
     float cameraOrthographicSize = mainSceneCamera.GetOrthographicSize();
-    if(ImGui::DragFloat("Camera Orthographic Size", &cameraOrthographicSize)) {
+    if (ImGui::DragFloat("Camera Orthographic Size", &cameraOrthographicSize)) {
       mainSceneCamera.SetOrthographicSize(cameraOrthographicSize);
     }
 
