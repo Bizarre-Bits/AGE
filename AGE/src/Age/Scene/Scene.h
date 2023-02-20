@@ -26,6 +26,7 @@ namespace AGE {
     entt::registry m_Registry;
 
     friend class Entity;
+    friend class SceneOutlinePanel;
   };
 
 }// namespace AGE

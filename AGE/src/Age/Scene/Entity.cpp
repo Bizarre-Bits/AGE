@@ -5,6 +5,8 @@
 #include "Entity.h"
 
 namespace AGE {
+  const Entity Entity::Null{entt::null, nullptr};
+
   Entity::Entity(entt::entity entity, Scene* scene) : m_EntityHandle(entity), m_Scene(scene) {
   }
 }

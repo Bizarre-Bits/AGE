@@ -6,6 +6,7 @@
 #define AGE_EDITORLAYER_H
 
 #include <Age/Age.h>
+#include <Panels/SceneOutlinePanel.h>
 
 namespace AGE {
 
@@ -31,6 +32,9 @@ namespace AGE {
     Entity m_SecondaryCamera;
 
     glm::vec4 m_BgColor{0.1f, 0.1f, 0.1f, 1.0f};
+
+    //Panels
+    SceneOutlinePanel m_SceneOutlinePanel;
   };
 
 }// namespace AGE

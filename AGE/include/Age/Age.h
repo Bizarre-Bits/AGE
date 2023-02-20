@@ -37,6 +37,8 @@
 #include "Age/Renderer/OrthographicCameraController.h"
 #include "Age/Renderer/Renderer2D.h"
 
+#include <imgui.h>
+
 // Entity System
 #include "Age/Scene/Scene.h"
 #include "Age/Scene/Components.h"

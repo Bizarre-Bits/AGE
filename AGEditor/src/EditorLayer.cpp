@@ -55,6 +55,8 @@ namespace AGE {
     };
 
     m_SecondaryCamera.AddComponent<NativeScriptComponent>().Bind<CameraControllerScript>();
+
+    m_SceneOutlinePanel.SetContext(m_ActiveScene);
   }
 
   void EditorLayer::OnUpdate(Timestep ts) {
@@ -141,6 +143,8 @@ namespace AGE {
     }
 
     ImGui::End();
+
+    m_SceneOutlinePanel.OnUiRender();
   }
 
   void EditorLayer::OnEvent(Event& e) {
