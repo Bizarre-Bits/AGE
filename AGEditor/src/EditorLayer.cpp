@@ -22,16 +22,21 @@ namespace AGE {
     RenderCommand::SetClearColor(m_BgColor);
 
     m_ActiveScene  = MakeRef<Scene>();
-    m_SquareEntity = m_ActiveScene->CreateEntity("Square");
-    m_SquareEntity.AddComponent<SpriteComponent>(glm::vec4{1.0f, 0.0f, 1.0f, 1.0f});
 
-    m_CameraEntity          = m_ActiveScene->CreateEntity("Primary Camera");
-    auto& cameraComponent   = m_CameraEntity.AddComponent<CameraComponent>();
+    m_RedSquareEntity = m_ActiveScene->CreateEntity("Red Square");
+    m_RedSquareEntity.AddComponent<SpriteComponent>(glm::vec4{1.0f, 0.0f, 0.0f, 1.0f});
+
+    m_BlueSquareEntity = m_ActiveScene->CreateEntity("Blue Square");
+    m_BlueSquareEntity.AddComponent<SpriteComponent>(glm::vec4{0.0f, 0.0f, 1.0f, 1.0f});
+
+    m_CameraA               = m_ActiveScene->CreateEntity("Camera A");
+    auto& cameraComponent   = m_CameraA.AddComponent<CameraComponent>();
     cameraComponent.Primary = true;
+    cameraComponent.Camera.SetProjectionType(SceneCamera::ProjectionType::Perspective);
 
-    m_SecondaryCamera                = m_ActiveScene->CreateEntity("Secondary Camera");
-    auto& secondaryCameraComponent   = m_SecondaryCamera.AddComponent<CameraComponent>();
-    secondaryCameraComponent.Primary = true;
+    m_CameraB                        = m_ActiveScene->CreateEntity("Camera B");
+    auto& secondaryCameraComponent   = m_CameraB.AddComponent<CameraComponent>();
+    secondaryCameraComponent.Primary = false;
 
     class CameraControllerScript : public ScriptableEntity {
     public:
@@ -54,7 +59,7 @@ namespace AGE {
       }
     };
 
-    m_SecondaryCamera.AddComponent<NativeScriptComponent>().Bind<CameraControllerScript>();
+    m_CameraA.AddComponent<NativeScriptComponent>().Bind<CameraControllerScript>();
 
     m_SceneOutlinePanel.SetContext(m_ActiveScene);
   }
@@ -70,11 +75,6 @@ namespace AGE {
     RenderCommand::Clear();
 
     m_ActiveScene->OnUpdate(ts);
-
-    if (m_IsViewportFocused)
-      m_ViewportCameraController.OnUpdate(ts);
-    else
-      m_ViewportCameraController.GetCamera().RecalculateViewProjectionMatrix();
 
     m_Framebuffer->Unbind();
   }
@@ -117,8 +117,8 @@ namespace AGE {
     }
 
     ImGui::Separator();
-    auto& tag  = m_SquareEntity.GetComponent<TagComponent>();
-    auto& tint = m_SquareEntity.GetComponent<SpriteComponent>().Tint;
+    auto& tag  = m_RedSquareEntity.GetComponent<TagComponent>();
+    auto& tint = m_RedSquareEntity.GetComponent<SpriteComponent>().Tint;
 
     ImGui::Text("%s", tag.Tag.c_str());
     ImGui::ColorEdit4("Square Tint", glm::value_ptr(tint));
@@ -127,19 +127,10 @@ namespace AGE {
     ImGui::Text("Cameras");
     static bool cameraA = true;
     if (ImGui::Checkbox("Camera A", &cameraA)) {
-      auto& cameraAComponent   = m_CameraEntity.GetComponent<CameraComponent>();
-      auto& cameraBComponent   = m_SecondaryCamera.GetComponent<CameraComponent>();
+      auto& cameraAComponent   = m_CameraA.GetComponent<CameraComponent>();
+      auto& cameraBComponent   = m_CameraB.GetComponent<CameraComponent>();
       cameraAComponent.Primary = cameraA;
       cameraBComponent.Primary = !cameraA;
-    }
-    auto& cameraPosition = (cameraA ? m_CameraEntity : m_SecondaryCamera).GetComponent<TransformComponent>().Transform[3];
-    ImGui::DragFloat2("Camera Transform", glm::value_ptr(cameraPosition));
-
-
-    SceneCamera& mainSceneCamera = (cameraA ? m_CameraEntity : m_SecondaryCamera).GetComponent<CameraComponent>().Camera;
-    float cameraOrthographicSize = mainSceneCamera.GetOrthographicSize();
-    if (ImGui::DragFloat("Camera Orthographic Size", &cameraOrthographicSize)) {
-      mainSceneCamera.SetOrthographicSize(cameraOrthographicSize);
     }
 
     ImGui::End();

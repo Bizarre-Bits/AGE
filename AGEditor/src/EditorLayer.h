@@ -27,9 +27,10 @@ namespace AGE {
     bool m_IsViewportHovered{false};
     bool m_IsViewportFocused{false};
 
-    Entity m_SquareEntity;
-    Entity m_CameraEntity;
-    Entity m_SecondaryCamera;
+    Entity m_RedSquareEntity;
+    Entity m_BlueSquareEntity;
+    Entity m_CameraA;
+    Entity m_CameraB;
 
     glm::vec4 m_BgColor{0.1f, 0.1f, 0.1f, 1.0f};
 
