@@ -5,10 +5,9 @@
 #pragma once
 #include "agepch.h"
 
-#include <Age/Renderer/Camera.h>
 #include <glm/glm.hpp>
 
-#include "Age/Renderer/OrthographicCamera.h"
+#include "SceneCamera.h"
 
 namespace AGE {
   struct TagComponent {
@@ -33,11 +32,12 @@ namespace AGE {
   };
 
   struct CameraComponent {
-    class Camera Camera;
-    bool Primary = false; // TODO: Probably move this to scene
+    class SceneCamera Camera;
+    bool Primary{false};// TODO: Probably move this to scene
+    bool FixedAspectRatio{false};
 
     CameraComponent() = default;
+
     CameraComponent(const CameraComponent&) = default;
-    CameraComponent(const glm::mat4 projection) : Camera(projection) {}
   };
 }// namespace AGE

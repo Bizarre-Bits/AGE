@@ -11,10 +11,11 @@ namespace AGE {
   public:
     Camera() = default;
     Camera(const glm::mat4& projection) : m_Projection(projection) {}
+    virtual ~Camera() = default;
 
     inline const glm::mat4& Projection() const { return m_Projection; }
 
-  private:
+  protected:
     glm::mat4 m_Projection;
   };
 }// namespace AGE

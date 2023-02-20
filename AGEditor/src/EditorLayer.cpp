@@ -26,18 +26,19 @@ namespace AGE {
     m_SquareEntity.AddComponent<SpriteComponent>(glm::vec4{1.0f, 0.0f, 1.0f, 1.0f});
 
     m_CameraEntity          = m_ActiveScene->CreateEntity("Primary Camera");
-    auto& cameraComponent   = m_CameraEntity.AddComponent<CameraComponent>(glm::ortho(-16.0f, 16.0f, -9.0f, 9.0f, -1.0f, 1.0f));
+    auto& cameraComponent   = m_CameraEntity.AddComponent<CameraComponent>();
     cameraComponent.Primary = true;
 
     m_SecondaryCamera                = m_ActiveScene->CreateEntity("Secondary Camera");
-    auto& secondaryCameraComponent   = m_SecondaryCamera.AddComponent<CameraComponent>(glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f));
+    auto& secondaryCameraComponent   = m_SecondaryCamera.AddComponent<CameraComponent>();
     secondaryCameraComponent.Primary = true;
   }
 
   void EditorLayer::OnUpdate(Timestep ts) {
 
     m_Framebuffer->Resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
-    m_ViewportCameraController.OnResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+//    m_ViewportCameraController.OnResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+    m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 
     m_Framebuffer->Bind();
 
@@ -108,6 +109,13 @@ namespace AGE {
     }
     auto& cameraPosition = (cameraA ? m_CameraEntity : m_SecondaryCamera).GetComponent<TransformComponent>().Transform[3];
     ImGui::DragFloat2("Camera Transform", glm::value_ptr(cameraPosition));
+
+
+    SceneCamera& mainSceneCamera = (cameraA ? m_CameraEntity : m_SecondaryCamera).GetComponent<CameraComponent>().Camera;
+    float cameraOrthographicSize = mainSceneCamera.GetOrthographicSize();
+    if(ImGui::DragFloat("Camera Orthographic Size", &cameraOrthographicSize)) {
+      mainSceneCamera.SetOrthographicSize(cameraOrthographicSize);
+    }
 
     ImGui::End();
   }
