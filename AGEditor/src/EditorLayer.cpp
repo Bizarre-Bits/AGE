@@ -26,38 +26,38 @@ namespace AGE {
     m_RedSquareEntity = m_ActiveScene->CreateEntity("Red Square");
     m_RedSquareEntity.AddComponent<SpriteComponent>(glm::vec4{1.0f, 0.0f, 0.0f, 1.0f});
     auto& redTransform = m_RedSquareEntity.GetComponent<TransformComponent>();
-    redTransform.Transform[3][0] = -0.6f;
+    redTransform.Translation.x = -0.6f;
 
     m_BlueSquareEntity = m_ActiveScene->CreateEntity("Blue Square");
     m_BlueSquareEntity.AddComponent<SpriteComponent>(glm::vec4{0.0f, 0.0f, 1.0f, 1.0f});
     auto& blueTransform = m_BlueSquareEntity.GetComponent<TransformComponent>();
-    blueTransform.Transform[3][0] = 0.6f;
+    blueTransform.Translation.x = 0.6f;
 
     m_CameraA               = m_ActiveScene->CreateEntity("Camera A");
     auto& cameraComponent   = m_CameraA.AddComponent<CameraComponent>();
     cameraComponent.Primary = true;
     cameraComponent.Camera.SetProjectionType(SceneCamera::ProjectionType::Perspective);
     auto& cameraTransform = m_CameraA.GetComponent<TransformComponent>();
-    cameraTransform.Transform[3][2] = 5.0f;
+    cameraTransform.Translation.z = 5.0f;
 
     class CameraControllerScript : public ScriptableEntity {
     public:
       virtual ~CameraControllerScript() = default;
 
       virtual void OnUpdate(Timestep ts) override {
-        auto& transform = GetComponent<TransformComponent>().Transform;
+        auto& transform = GetComponent<TransformComponent>().Translation;
 
         constexpr float speed = 5.0f;
 
         if(Input::IsKeyPressed(Key::A))
-          transform[3][0] -= speed * ts;
+          transform.x -= speed * ts;
         else if(Input::IsKeyPressed(Key::D))
-          transform[3][0] += speed * ts;
+          transform.x += speed * ts;
 
         if(Input::IsKeyPressed(Key::S))
-          transform[3][1] -= speed * ts;
+          transform.y -= speed * ts;
         else if(Input::IsKeyPressed(Key::W))
-          transform[3][1] += speed * ts;
+          transform.y += speed * ts;
       }
     };
 

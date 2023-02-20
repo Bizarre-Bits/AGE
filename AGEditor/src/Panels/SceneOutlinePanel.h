@@ -29,6 +29,8 @@ namespace AGE {
     void TransformComponentInspector(TransformComponent& component);
     void TagComponentInspector(TagComponent& component);
 
+    bool Vec3Control(const age_string_t& label, glm::vec3& values, float resetValue = 0.0f, float speed = 1.0f, float columnWidth = 100.0f);
+
   private:
     Ref<Scene> m_Context;
     Entity m_SelectedEntity;

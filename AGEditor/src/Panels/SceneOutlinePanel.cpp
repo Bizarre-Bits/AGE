@@ -4,6 +4,7 @@
 
 #include "SceneOutlinePanel.h"
 
+#include "imgui_internal.h"
 #include <glm/gtc/type_ptr.hpp>
 
 namespace AGE {
@@ -67,8 +68,13 @@ namespace AGE {
   }
 
   void SceneOutlinePanel::TransformComponentInspector(TransformComponent& component) {
-    auto& transform = component.Transform;
-    ImGui::DragFloat3("Position", glm::value_ptr(transform[3]), 0.1f);
+    Vec3Control("Position", component.Translation, 0, 0.1f);
+
+    glm::vec3 rotationDeg{glm::degrees(component.Rotation.x), glm::degrees(component.Rotation.y), glm::degrees(component.Rotation.z)};
+    if (Vec3Control("Rotation", rotationDeg))
+      component.Rotation = {glm::radians(rotationDeg.x), glm::radians(rotationDeg.y), glm::radians(rotationDeg.z)};
+
+    Vec3Control("Scale", component.Scale, 1.0f, 0.1f);
   }
 
   void SceneOutlinePanel::TagComponentInspector(TagComponent& component) {
@@ -125,4 +131,75 @@ namespace AGE {
         camera.SetPerspectiveFarClip(far);
     }
   }
+
+  bool SceneOutlinePanel::Vec3Control(const age_string_t& label, glm::vec3& values, float resetValue, float speed, float columnWidth) {
+    bool isChanged{false};
+
+    ImGui::PushID(label.c_str());
+    ImGui::Columns(2);
+    ImGui::SetColumnWidth(0, columnWidth);
+    ImGui::Text("%s", label.c_str());
+    ImGui::NextColumn();
+
+    ImGui::PushMultiItemsWidths(3, ImGui::CalcItemWidth());
+    ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{0, 0});
+    const float lineHeight = GImGui->FontSize + GImGui->Style.FramePadding.y * 2.0f;
+
+    const ImVec2 buttonSize = {lineHeight + 3.0f, lineHeight};
+
+    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.2f, 0.2f, 1.0f));
+    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.8f, 0.3f, 0.3f, 1.0f));
+    ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.6f, 0.2f, 0.2f, 1.0f));
+    if (ImGui::Button("X", buttonSize)) {
+      values.x  = resetValue;
+      isChanged = true;
+    }
+    ImGui::PopStyleColor(3);
+
+    ImGui::SameLine();
+    if (ImGui::DragFloat("##X", &values.x, speed))
+      isChanged = true;
+
+    ImGui::PopItemWidth();
+    ImGui::SameLine();
+
+    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.6f, 0.2f, 1.0f));
+    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.8f, 0.3f, 1.0f));
+    ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.2f, 0.6f, 0.2f, 1.0f));
+    if (ImGui::Button("Y", buttonSize)) {
+      values.y  = resetValue;
+      isChanged = true;
+    }
+    ImGui::PopStyleColor(3);
+
+    ImGui::SameLine();
+    if (ImGui::DragFloat("##Y", &values.y, speed))
+      isChanged = true;
+
+    ImGui::PopItemWidth();
+    ImGui::SameLine();
+
+    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.2f, 0.6f, 1.0f));
+    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.3f, 0.8f, 1.0f));
+    ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.2f, 0.2f, 0.6f, 1.0f));
+    if (ImGui::Button("Z", buttonSize)) {
+      values.z  = resetValue;
+      isChanged = true;
+    }
+    ImGui::PopStyleColor(3);
+
+    ImGui::SameLine();
+    if (ImGui::DragFloat("##Z", &values.z, speed))
+      isChanged = true;
+
+    ImGui::PopItemWidth();
+
+    ImGui::PopStyleVar();
+    ImGui::PopID();
+
+    ImGui::Columns(1);
+
+    return isChanged;
+  }
+
 }// namespace AGE

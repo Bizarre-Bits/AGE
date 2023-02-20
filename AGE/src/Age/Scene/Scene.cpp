@@ -25,7 +25,7 @@ namespace AGE {
     {
       m_Registry.view<NativeScriptComponent>().each([this, ts](auto entity, NativeScriptComponent& nsc) {
         if (!nsc.Instance) {
-          nsc.Instance = nsc.InstantiateScript();
+          nsc.Instance           = nsc.InstantiateScript();
           nsc.Instance->m_Entity = Entity{entity, this};
           nsc.Instance->OnCreate();
         }
@@ -35,15 +35,15 @@ namespace AGE {
     }
 
     // Render sprites
-    Camera* mainCamera
-        = nullptr;
-    glm::mat4* mainCameraTransform = nullptr;
-    auto cameras                   = m_Registry.group<CameraComponent>(entt::get<TransformComponent>);
+    Camera* mainCamera = nullptr;
+    glm::mat4 mainCameraTransform{};
+
+    auto cameras = m_Registry.group<CameraComponent>(entt::get<TransformComponent>);
     for (auto entity: cameras) {
       auto [camera, transform] = cameras.get<CameraComponent, TransformComponent>(entity);
       if (camera.Primary) {
         mainCamera          = &camera.Camera;
-        mainCameraTransform = &transform.Transform;
+        mainCameraTransform = transform.Transform();
       }
     }
 
@@ -51,12 +51,12 @@ namespace AGE {
     if (!mainCamera)
       return;
 
-    Renderer2D::BeginScene(*mainCamera, *mainCameraTransform);
+    Renderer2D::BeginScene(*mainCamera, mainCameraTransform);
 
     auto sprites = m_Registry.group<SpriteComponent>(entt::get<TransformComponent>);
     for (auto e: sprites) {
       auto [sprite, transform] = sprites.get<SpriteComponent, TransformComponent>(e);
-      Renderer2D::DrawQuad(transform, sprite.Tint);
+      Renderer2D::DrawQuad(transform.Transform(), sprite.Tint);
     }
 
     Renderer2D::EndScene();
