@@ -16,6 +16,15 @@ namespace AGE {
     AGE_ASSERT(m_Context, "There is no scene context provided");
 
     ImGui::Begin("Scene Outline");
+
+    // Right click on blank space
+    if (ImGui::BeginPopupContextWindow()) {
+      if (ImGui::MenuItem("Create Empty Entity"))
+        m_Context->CreateEntity("Entity");
+
+      ImGui::EndPopup();
+    }
+
     m_Context->m_Registry.each([&](auto e) {
       Entity entity{e, m_Context.get()};
       EntityNode(entity);
@@ -42,9 +51,20 @@ namespace AGE {
       m_SelectedEntity = entity;
     }
 
+    bool entityDeleted = false;
+    if (ImGui::BeginPopupContextItem()) {
+      if (ImGui::MenuItem("Delete Entity"))
+        entityDeleted = true;
+
+      ImGui::EndPopup();
+    }
+
     if (opened) {
       ImGui::TreePop();
     }
+
+    if (entityDeleted)
+      m_Context->DestroyEntity(entity);
   }
 
   void SceneOutlinePanel::Inspector() {
@@ -65,6 +85,19 @@ namespace AGE {
     DrawComponentInspector<CameraComponent>("Camera", [this](CameraComponent& component) {
       CameraComponentInspector(component);
     });
+
+    if (ImGui::Button("Add Component"))
+      ImGui::OpenPopup("AddComponent");
+
+    if (ImGui::BeginPopup("AddComponent")) {
+      if (ImGui::MenuItem("Camera"))
+        m_SelectedEntity.AddComponent<CameraComponent>();
+
+      if (ImGui::MenuItem("Sprite"))
+        m_SelectedEntity.AddComponent<SpriteComponent>();
+
+      ImGui::EndPopup();
+    }
   }
 
   void SceneOutlinePanel::TransformComponentInspector(TransformComponent& component) {
@@ -89,6 +122,8 @@ namespace AGE {
 
   void SceneOutlinePanel::CameraComponentInspector(CameraComponent& component) const {
     auto& camera = component.Camera;
+
+    ImGui::Checkbox("Primary", &component.Primary);
 
     const char* projectionTypes[] = {"Perspective", "Orthographic"};
     if (ImGui::BeginCombo("Projection", projectionTypes[(int)camera.GetProjectionType()])) {

@@ -20,6 +20,10 @@ namespace AGE {
     return entity;
   }
 
+  void Scene::DestroyEntity(Entity entity) {
+    m_Registry.destroy(entity);
+  }
+
   void Scene::OnUpdate(Timestep ts) {
     // Update scripts
     {
@@ -61,7 +65,6 @@ namespace AGE {
 
     Renderer2D::EndScene();
   }
-
   void Scene::OnViewportResize(uint32_t width, uint32_t height) {
     auto view = m_Registry.view<CameraComponent>();
     for (auto& cameraEntity: view) {

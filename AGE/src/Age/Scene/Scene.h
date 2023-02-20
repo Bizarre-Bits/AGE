@@ -18,6 +18,7 @@ namespace AGE {
     ~Scene() = default;
 
     Entity CreateEntity(const age_string_t& name = "");
+    void DestroyEntity(Entity entity);
 
     void OnUpdate(Timestep ts);
     void OnViewportResize(uint32_t width, uint32_t height);
