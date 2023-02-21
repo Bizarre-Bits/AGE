@@ -15,6 +15,7 @@ class CmdArgs(TypedDict):
 def main():
     force = "--force" in sys.argv
     set_final_exe_bin = "--set-final-exe-bin" in sys.argv
+    cmake_lists_only = "--cmake-lists-only" in sys.argv
     project_name = ""
     project_namespace = ""
 
@@ -30,6 +31,10 @@ def main():
     cwd = os.getcwd()
     project_root = os.path.join(cwd, f"../{project_name}")
     project_root = os.path.normpath(project_root)
+
+    if cmake_lists_only:
+        make_cmake_lists(project_root, project_name)
+        sys.exit(0)
 
     prepare_dir(project_root, force)
     make_cmake_lists(project_root, project_name)
@@ -142,7 +147,7 @@ def make_cmake_lists(project_root: str, project_name: str):
     with open("./age_project_cmake_lists_template") as file:
         template_text = file.read()
 
-    with open(f"{project_root}/CMakeLists.txt", "x") as file:
+    with open(f"{project_root}/CMakeLists.txt", "w") as file:
         file.write(template_text.format(project_name=project_name, PROJECT_NAME=project_name.upper()))
 
 

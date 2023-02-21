@@ -19,6 +19,9 @@ namespace AGE {
     virtual void OnAttach() override;
 
   private:
+    void SetDarkThemeColors();
+
+  private:
     glm::vec2 m_ViewportSize;
     Ref<Framebuffer> m_Framebuffer;
     Ref<Scene> m_ActiveScene;
@@ -31,10 +34,11 @@ namespace AGE {
     Entity m_BlueSquareEntity;
     Entity m_CameraA;
 
-    glm::vec4 m_BgColor{0.1f, 0.1f, 0.1f, 1.0f};
+    glm::vec4 m_BgColor{0.05f, 0.05f, 0.05f, 1.0f};
 
     //Panels
     SceneOutlinePanel m_SceneOutlinePanel;
+    void SetupDemoFeatures();
   };
 
 }// namespace AGE

@@ -43,9 +43,11 @@ namespace AGE {
   }
 
   void SceneOutlinePanel::EntityNode(Entity& entity) {
-    auto& tag                      = entity.GetComponent<TagComponent>().Tag;
-    ImGuiTreeNodeFlags const flags = (m_SelectedEntity == entity ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow;
-    bool const opened              = ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)entity, flags, "%s", tag.c_str());
+    auto& tag                = entity.GetComponent<TagComponent>().Tag;
+    ImGuiTreeNodeFlags flags = (m_SelectedEntity == entity ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow;
+    flags |= ImGuiTreeNodeFlags_SpanAvailWidth;
+
+    bool const opened = ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)entity, flags, "%s", tag.c_str());
 
     if (ImGui::IsItemClicked()) {
       m_SelectedEntity = entity;
@@ -68,9 +70,33 @@ namespace AGE {
   }
 
   void SceneOutlinePanel::Inspector() {
-    DrawComponentInspector<TagComponent>("Tag", [this](TagComponent& component) {
-      TagComponentInspector(component);
-    });
+    if (m_SelectedEntity.HasComponent<TagComponent>()) {
+      auto& tag = m_SelectedEntity.GetComponent<TagComponent>().Tag;
+      char buffer[256];
+      memset(&buffer[0], 0, sizeof(buffer));
+      memcpy(&buffer[0], tag.c_str(), sizeof(buffer));
+      if (ImGui::InputText("##Tag", &buffer[0], sizeof(buffer))) {
+        tag = age_string_t(buffer);
+      }
+    }
+
+    ImGui::SameLine();
+    ImGui::PushItemWidth(-1);
+
+    if (ImGui::Button("Add Component"))
+      ImGui::OpenPopup("AddComponent");
+
+    if (ImGui::BeginPopup("AddComponent")) {
+      if (ImGui::MenuItem("Camera"))
+        m_SelectedEntity.AddComponent<CameraComponent>();
+
+      if (ImGui::MenuItem("Sprite"))
+        m_SelectedEntity.AddComponent<SpriteComponent>();
+
+      ImGui::EndPopup();
+    }
+
+    ImGui::PopItemWidth();
 
     DrawComponentInspector<TransformComponent>("Transform", [this](TransformComponent& component) {
       TransformComponentInspector(component);
@@ -85,27 +111,16 @@ namespace AGE {
     DrawComponentInspector<CameraComponent>("Camera", [this](CameraComponent& component) {
       CameraComponentInspector(component);
     });
-
-    if (ImGui::Button("Add Component"))
-      ImGui::OpenPopup("AddComponent");
-
-    if (ImGui::BeginPopup("AddComponent")) {
-      if (ImGui::MenuItem("Camera"))
-        m_SelectedEntity.AddComponent<CameraComponent>();
-
-      if (ImGui::MenuItem("Sprite"))
-        m_SelectedEntity.AddComponent<SpriteComponent>();
-
-      ImGui::EndPopup();
-    }
   }
 
   void SceneOutlinePanel::TransformComponentInspector(TransformComponent& component) {
     Vec3Control("Position", component.Translation, 0, 0.1f);
 
-    glm::vec3 rotationDeg{glm::degrees(component.Rotation.x), glm::degrees(component.Rotation.y), glm::degrees(component.Rotation.z)};
+    glm::vec3 rotationDeg{glm::degrees(component.Rotation.x), glm::degrees(component.Rotation.y),
+                          glm::degrees(component.Rotation.z)};
     if (Vec3Control("Rotation", rotationDeg))
-      component.Rotation = {glm::radians(rotationDeg.x), glm::radians(rotationDeg.y), glm::radians(rotationDeg.z)};
+      component.Rotation = {glm::radians(rotationDeg.x), glm::radians(rotationDeg.y),
+                            glm::radians(rotationDeg.z)};
 
     Vec3Control("Scale", component.Scale, 1.0f, 0.1f);
   }
@@ -167,10 +182,14 @@ namespace AGE {
     }
   }
 
-  bool SceneOutlinePanel::Vec3Control(const age_string_t& label, glm::vec3& values, float resetValue, float speed, float columnWidth) {
+  bool SceneOutlinePanel::Vec3Control(const age_string_t& label, glm::vec3& values, float resetValue, float speed,
+                                      float columnWidth) {
+    ImGuiIO& io      = ImGui::GetIO();
+    ImFont* boldFont = io.Fonts->Fonts[0];
     bool isChanged{false};
 
     ImGui::PushID(label.c_str());
+
     ImGui::Columns(2);
     ImGui::SetColumnWidth(0, columnWidth);
     ImGui::Text("%s", label.c_str());
@@ -185,11 +204,15 @@ namespace AGE {
     ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.2f, 0.2f, 1.0f));
     ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.8f, 0.3f, 0.3f, 1.0f));
     ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.6f, 0.2f, 0.2f, 1.0f));
+    ImGui::PushFont(boldFont);
+
     if (ImGui::Button("X", buttonSize)) {
       values.x  = resetValue;
       isChanged = true;
     }
+
     ImGui::PopStyleColor(3);
+    ImGui::PopFont();
 
     ImGui::SameLine();
     if (ImGui::DragFloat("##X", &values.x, speed))
@@ -201,11 +224,14 @@ namespace AGE {
     ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.6f, 0.2f, 1.0f));
     ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.8f, 0.3f, 1.0f));
     ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.2f, 0.6f, 0.2f, 1.0f));
+    ImGui::PushFont(boldFont);
+
     if (ImGui::Button("Y", buttonSize)) {
       values.y  = resetValue;
       isChanged = true;
     }
     ImGui::PopStyleColor(3);
+    ImGui::PopFont();
 
     ImGui::SameLine();
     if (ImGui::DragFloat("##Y", &values.y, speed))
@@ -217,11 +243,14 @@ namespace AGE {
     ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.2f, 0.6f, 1.0f));
     ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.3f, 0.8f, 1.0f));
     ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.2f, 0.2f, 0.6f, 1.0f));
+    ImGui::PushFont(boldFont);
+
     if (ImGui::Button("Z", buttonSize)) {
       values.z  = resetValue;
       isChanged = true;
     }
     ImGui::PopStyleColor(3);
+    ImGui::PopFont();
 
     ImGui::SameLine();
     if (ImGui::DragFloat("##Z", &values.z, speed))

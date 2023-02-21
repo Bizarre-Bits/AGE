@@ -120,6 +120,10 @@ add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/${FINAL_EXE_BINARY_DIR}/assets/cor
         COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/${FINAL_EXE_BINARY_DIR}/assets/core_assets
         DEPENDS ${CMAKE_BINARY_DIR}/${FINAL_EXE_BINARY_DIR}/assets)
 
+add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/${FINAL_EXE_BINARY_DIR}/assets/client_assets
+        COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/${FINAL_EXE_BINARY_DIR}/assets/client_assets
+        DEPENDS ${CMAKE_BINARY_DIR}/${FINAL_EXE_BINARY_DIR}/assets)
+
 foreach (assetSrc ${_AGECORE_ASSETS})
     string(REPLACE ${CMAKE_CURRENT_SOURCE_DIR}/assets/core_assets/ "" assetPath ${assetSrc})
     message(STATUS "AGE_CORE: Add custom command for ${assetPath}")
@@ -132,8 +136,9 @@ foreach (assetSrc ${_AGECORE_ASSETS})
 endforeach ()
 
 add_custom_target(core_assets ALL DEPENDS ${assetsOutputList})
+add_custom_target(client_assets_dir ALL DEPENDS ${CMAKE_BINARY_DIR}/${FINAL_EXE_BINARY_DIR}/assets/client_assets)
 
-add_dependencies(age_core core_assets)
+add_dependencies(age_core core_assets client_assets_dir)
 
 
 

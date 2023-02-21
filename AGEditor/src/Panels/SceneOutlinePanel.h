@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <imgui_internal.h>
+
 #include <Age/Age.h>
 
 namespace AGE {
@@ -11,8 +13,7 @@ namespace AGE {
   class SceneOutlinePanel {
   public:
     SceneOutlinePanel() = default;
-    SceneOutlinePanel(const Ref<Scene>& scene);
-    ~SceneOutlinePanel() = default;
+    explicit SceneOutlinePanel(const Ref<Scene>& scene);
 
     inline void SetContext(const Ref<Scene>& scene) { m_Context = scene; }
 
@@ -41,20 +42,33 @@ namespace AGE {
   template<typename T>
   void SceneOutlinePanel::DrawComponentInspector(const age_string_t& inspectorName, std::function<void(T& component)> callback) {
     if (m_SelectedEntity.HasComponent<T>()) {
-      const ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_AllowItemOverlap;
-      bool open                      = ImGui::TreeNodeEx((void*)typeid(T).hash_code(), flags, "%s", inspectorName.c_str());
+      const ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen
+                                       | ImGuiTreeNodeFlags_AllowItemOverlap
+                                       | ImGuiTreeNodeFlags_SpanAvailWidth
+                                       | ImGuiTreeNodeFlags_Framed
+                                       | ImGuiTreeNodeFlags_FramePadding;
 
-      ImGui::SameLine(ImGui::GetWindowWidth() - 25.0f);
+      const ImVec2 contentRegionAvailable = ImGui::GetContentRegionAvail();
 
-      if (ImGui::Button("+", ImVec2{20, 20}))
-        ImGui::OpenPopup("ComponentSettings");
+      ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{4, 4});
+      const float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
+      ImGui::Separator();
+      bool open = ImGui::TreeNodeEx((void*)typeid(T).hash_code(), flags, "%s", inspectorName.c_str());
+      ImGui::PopStyleVar();
 
       bool deleteComponent{false};
-      if (ImGui::BeginPopup("ComponentSettings")) {
-        if(ImGui::MenuItem("Remove Component"))
-          deleteComponent = true;
 
-        ImGui::EndPopup();
+      if constexpr (!(std::is_same<T, TagComponent>::value || std::is_same<T, TransformComponent>::value)) {
+        ImGui::SameLine(contentRegionAvailable.x - lineHeight * 0.5f );
+        if (ImGui::Button("+", ImVec2{lineHeight, lineHeight}))
+          ImGui::OpenPopup("ComponentSettings");
+
+        if (ImGui::BeginPopup("ComponentSettings")) {
+          if (ImGui::MenuItem("Remove Component"))
+            deleteComponent = true;
+
+          ImGui::EndPopup();
+        }
       }
 
       if (open) {
@@ -63,9 +77,9 @@ namespace AGE {
 
         ImGui::TreePop();
       }
-      if(deleteComponent)
+
+      if (deleteComponent)
         m_SelectedEntity.RemoveComponent<T>();
     }
   }
-
 }// namespace AGE
