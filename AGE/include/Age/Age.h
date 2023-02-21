@@ -44,6 +44,7 @@
 #include "Age/Scene/Components.h"
 #include "Age/Scene/Entity.h"
 #include "Age/Scene/ScriptableEntity.h"
+#include "Age/Scene/SceneSerializer.h"
 
 // Debug
 #include "Age/Debug/Assert.h"

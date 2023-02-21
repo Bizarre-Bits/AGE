@@ -34,8 +34,6 @@ namespace AGE {
     m_ActiveScene = MakeRef<Scene>();
 
     m_SceneOutlinePanel.SetContext(m_ActiveScene);
-
-    SetupDemoFeatures();
   }
 
   void EditorLayer::SetupDemoFeatures() {
@@ -83,7 +81,6 @@ namespace AGE {
   void EditorLayer::OnUpdate(Timestep ts) {
 
     m_Framebuffer->Resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
-    //    m_ViewportCameraController.OnResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
     m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 
     m_Framebuffer->Bind();
@@ -96,51 +93,68 @@ namespace AGE {
   }
 
   void EditorLayer::OnUiRender(Timestep ts) {
-    ImGuiIO& io           = ImGui::GetIO();
-    ImGuiStyle& style     = ImGui::GetStyle();
-    float windowMinSize   = style.WindowMinSize.x;
-    style.WindowMinSize.x = 350.0f;
-    ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
-    style.WindowMinSize.x = windowMinSize;
+    ImGuiWindowFlags windowFlags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
+    ImGuiViewport* viewport      = ImGui::GetMainViewport();
 
-    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+    ImGui::SetNextWindowPos(viewport->Pos);
+    ImGui::SetNextWindowSize(viewport->Size);
 
-    ImGuiWindowClass viewportWindowClass{};
-    viewportWindowClass.DockNodeFlagsOverrideSet = ImGuiDockNodeFlags_AutoHideTabBar;
-    ImGui::SetNextWindowClass(&viewportWindowClass);
-    ImGui::Begin("Viewport");
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
 
-    m_IsViewportHovered = ImGui::IsWindowHovered();
-    m_IsViewportFocused = ImGui::IsWindowFocused();
+    windowFlags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize
+                   | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
 
+    ImGui::Begin("MainDockSpace", nullptr, windowFlags);
 
-    ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
-    m_ViewportSize           = {viewportPanelSize.x, viewportPanelSize.y};
+    ImGuiID dockID = ImGui::GetID("MainDockSpace");
+    ImGui::DockSpace(dockID);
 
-    uint32_t textureID = m_Framebuffer->ColorAttachmentID();
-    ImGui::Image((void*)textureID, viewportPanelSize, {0.0f, 1.0f}, {1.0f, 0.0f});
-
-    ImGui::End();
-
-    ImGui::PopStyleVar();
-
-    ImGui::Begin("Viewport Debug");
-
-    ImGui::Text("Viewport: %d %d", (int)m_ViewportSize.x, (int)m_ViewportSize.y);
-    ImGui::Text("Framebuffer: %d %d", (int)m_Framebuffer->Specification().Width, (int)m_Framebuffer->Specification().Height);
-    ImGui::Text("Aspect ratio: %f", m_ViewportSize.x / m_ViewportSize.y);
-    ImGui::Text("Camera aspect ratio: %f", m_ViewportCameraController.AspectRatio());
-    ImGui::Text("Focus: %b", m_IsViewportFocused);
-    ImGui::Text("Hover: %b", m_IsViewportHovered);
-
-    if (ImGui::ColorEdit3("Background", glm::value_ptr(m_BgColor))) {
-      RenderCommand::SetClearColor(m_BgColor);
-    }
-
-    ImGui::End();
+    MainMenuBar();
+    Viewport();
 
     m_SceneOutlinePanel.OnUiRender();
+
+    ImGui::End();
+
+    ImGui::PopStyleVar(3);
   }
+
+  void EditorLayer::Viewport() {
+    ImGuiWindowClass windowClass;
+    windowClass.DockNodeFlagsOverrideSet |= ImGuiDockNodeFlags_AutoHideTabBar;
+    ImGui::SetNextWindowClass(&windowClass);
+
+    ImGui::Begin("Viewport");
+
+    ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
+    this->m_ViewportSize     = {viewportPanelSize.x, viewportPanelSize.y};
+    ImGui::Image((void*)(uint64_t)this->m_Framebuffer->ColorAttachmentID(), viewportPanelSize, ImVec2{0.0f, 1.0f}, ImVec2{1.0f, 0.0f});
+
+    ImGui::End();
+  }
+
+  void EditorLayer::MainMenuBar() const {
+    if (ImGui::BeginMainMenuBar()) {
+
+      if (ImGui::BeginMenu("File")) {
+        if (ImGui::MenuItem("Save Scene", "Ctrl+S")) {
+          SceneSerializer serializer{m_ActiveScene};
+          serializer.Serialize("scene.yaml");
+        }
+        if (ImGui::MenuItem("Load Scene")) {
+          SceneSerializer serializer{m_ActiveScene};
+          serializer.Deserialize("scene.yaml");
+        }
+
+        ImGui::EndMenu();
+      }
+
+      ImGui::EndMainMenuBar();
+    }
+  }
+
 
   void EditorLayer::OnEvent(Event& e) {
     Layer::OnEvent(e);

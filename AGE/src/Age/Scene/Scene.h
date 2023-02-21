@@ -28,6 +28,7 @@ namespace AGE {
 
     friend class Entity;
     friend class SceneOutlinePanel;
+    friend class SceneSerializer;
   };
 
 }// namespace AGE

@@ -25,8 +25,9 @@ set(AGE_RENDER_API OPENGL CACHE STRING "Render platform to be used. (OPENGL)")
 add_subdirectory(vendor/glm)
 add_subdirectory(vendor/spdlog)
 add_subdirectory(vendor/entt)
+add_subdirectory(vendor/yaml-cpp)
 
-target_link_libraries(age_core PUBLIC spdlog glm EnTT::EnTT)
+target_link_libraries(age_core PUBLIC spdlog glm EnTT::EnTT yaml-cpp)
 
 ##################################################
 #                Figure out OS                   #

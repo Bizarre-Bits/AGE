@@ -15,3 +15,6 @@
 [submodule "AGE/vendor/entt"]
 	path = AGE/vendor/entt
 	url = https://github.com/skypjack/entt.git
+[submodule "AGE/vendor/yaml-cpp"]
+	path = AGE/vendor/yaml-cpp
+	url = https://github.com/jbeder/yaml-cpp.git

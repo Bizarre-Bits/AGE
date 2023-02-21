@@ -24,7 +24,7 @@ namespace AGE {
     }
 
     template<class T>
-    bool HasComponent() {
+    bool HasComponent() const {
       return m_Scene->m_Registry.all_of<T>(m_EntityHandle);
     }
 

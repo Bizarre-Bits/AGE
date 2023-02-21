@@ -39,6 +39,8 @@ namespace AGE {
     //Panels
     SceneOutlinePanel m_SceneOutlinePanel;
     void SetupDemoFeatures();
+    void MainMenuBar() const;
+    void Viewport();
   };
 
 }// namespace AGE
