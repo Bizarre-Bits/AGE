@@ -21,10 +21,23 @@ namespace AGE {
   private:
     void SetDarkThemeColors();
 
+    void CreateNewScene();
+    void SaveSceneAsDialog();
+    void SaveScene();
+    void OpenSceneDialog();
+
+    void SetupDemoFeatures();
+
+    void MainMenuBar();
+    void Viewport();
+
+    bool OnKeyPressed(KeyPressedEvent& e);
+
   private:
     glm::vec2 m_ViewportSize;
     Ref<Framebuffer> m_Framebuffer;
     Ref<Scene> m_ActiveScene;
+    age_string_t m_SceneFilepath;
     OrthographicCameraController m_ViewportCameraController;
 
     bool m_IsViewportHovered{false};
@@ -38,9 +51,6 @@ namespace AGE {
 
     //Panels
     SceneOutlinePanel m_SceneOutlinePanel;
-    void SetupDemoFeatures();
-    void MainMenuBar() const;
-    void Viewport();
   };
 
 }// namespace AGE

@@ -4,7 +4,7 @@
 
 #include "EditorLayer.h"
 
-#include <glm/gtc/type_ptr.hpp>
+#include <Age/Utils/FileDialogs.h>
 #include <imgui.h>
 
 namespace AGE {
@@ -101,7 +101,6 @@ namespace AGE {
 
     ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
     ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
-    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
 
     windowFlags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize
                    | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
@@ -118,7 +117,7 @@ namespace AGE {
 
     ImGui::End();
 
-    ImGui::PopStyleVar(3);
+    ImGui::PopStyleVar(2);
   }
 
   void EditorLayer::Viewport() {
@@ -126,6 +125,7 @@ namespace AGE {
     windowClass.DockNodeFlagsOverrideSet |= ImGuiDockNodeFlags_AutoHideTabBar;
     ImGui::SetNextWindowClass(&windowClass);
 
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{0, 0});
     ImGui::Begin("Viewport");
 
     ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
@@ -133,28 +133,75 @@ namespace AGE {
     ImGui::Image((void*)(uint64_t)this->m_Framebuffer->ColorAttachmentID(), viewportPanelSize, ImVec2{0.0f, 1.0f}, ImVec2{1.0f, 0.0f});
 
     ImGui::End();
+    ImGui::PopStyleVar();
   }
 
-  void EditorLayer::MainMenuBar() const {
+  void EditorLayer::MainMenuBar() {
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{5, 5});
+
     if (ImGui::BeginMainMenuBar()) {
 
       if (ImGui::BeginMenu("File")) {
-        if (ImGui::MenuItem("Save Scene", "Ctrl+S")) {
-          SceneSerializer serializer{m_ActiveScene};
-          serializer.Serialize("scene.yaml");
-        }
-        if (ImGui::MenuItem("Load Scene")) {
-          SceneSerializer serializer{m_ActiveScene};
-          serializer.Deserialize("scene.yaml");
-        }
+        if (ImGui::MenuItem("New", "Ctrl+N"))
+          CreateNewScene();
+
+        if (ImGui::MenuItem("Open...", "Ctrl+O"))
+          OpenSceneDialog();
+
+        if (ImGui::MenuItem("Save", "Ctrl+S")) {}
+
+        if (ImGui::MenuItem("Save As...", "Ctrl+Shift+S"))
+          SaveSceneAsDialog();
 
         ImGui::EndMenu();
       }
 
       ImGui::EndMainMenuBar();
     }
+
+    ImGui::PopStyleVar();
   }
 
+  void EditorLayer::CreateNewScene() {
+    m_ActiveScene = MakeRef<Scene>();
+    m_SceneOutlinePanel.SetContext(m_ActiveScene);
+    m_SceneFilepath = "";
+  }
+
+  void EditorLayer::SaveSceneAsDialog() {
+    const age_string_t filepath{FileDialogs::SaveFile("Scene File (*.agescene)| *.agescene")};
+
+    if (!filepath.empty()) {
+      AGE_TRACE("Saving scene to \"{0}\"", filepath);
+      m_SceneFilepath = filepath;
+      SceneSerializer serializer{m_ActiveScene};
+      serializer.Serialize(filepath);
+    }
+  }
+
+  void EditorLayer::SaveScene() {
+    if(m_SceneFilepath.empty()) {
+      SaveSceneAsDialog();
+      return;
+    }
+
+    SceneSerializer serializer{m_ActiveScene};
+    serializer.Serialize(m_SceneFilepath);
+  }
+
+  void EditorLayer::OpenSceneDialog() {
+    const age_string_t filepath{FileDialogs::OpenFile("Scene File (*.agescene)| *.agescene")};
+
+    if (!filepath.empty()) {
+      AGE_TRACE("Loading scene from \"{0}\"", filepath);
+      CreateNewScene();
+
+      SceneSerializer serializer{m_ActiveScene};
+      serializer.Deserialize(filepath);
+
+      m_SceneFilepath = filepath;
+    }
+  }
 
   void EditorLayer::OnEvent(Event& e) {
     Layer::OnEvent(e);
@@ -165,6 +212,9 @@ namespace AGE {
     } else {
       m_ViewportCameraController.OnEvent(e);
     }
+
+    EventDispatcher dispatcher{e};
+    dispatcher.Dispatch<KeyPressedEvent>(AGE_BIND_EVENT_FN(EditorLayer::OnKeyPressed));
   }
 
   void EditorLayer::SetDarkThemeColors() {
@@ -201,6 +251,39 @@ namespace AGE {
     colors[ImGuiCol_TitleBg]          = ImVec4{0.15f, 0.1505f, 0.151f, 1.0f};
     colors[ImGuiCol_TitleBgActive]    = ImVec4{0.15f, 0.1505f, 0.151f, 1.0f};
     colors[ImGuiCol_TitleBgCollapsed] = ImVec4{0.95f, 0.1505f, 0.951f, 1.0f};
+  }
+
+  bool EditorLayer::OnKeyPressed(KeyPressedEvent& e) {
+    bool ctrlPressed  = Input::IsKeyPressed(Key::LeftControl) || Input::IsKeyPressed(Key::RightControl);
+    bool shiftPressed = Input::IsKeyPressed(Key::LeftShift) || Input::IsKeyPressed(Key::RightShift);
+    switch (e.KeyCode()) {
+      case Key::S: {
+        if (ctrlPressed && shiftPressed) {
+          SaveSceneAsDialog();
+          e.Handled = true;
+        } else if (ctrlPressed) {
+          SaveScene();
+          e.Handled = true;
+        }
+        break;
+      }
+      case Key::O: {
+        if (ctrlPressed) {
+          OpenSceneDialog();
+          e.Handled = true;
+        }
+        break;
+      }
+      case Key::N: {
+        if (ctrlPressed) {
+          CreateNewScene();
+          e.Handled = true;
+        }
+        break;
+      }
+      default:
+        break;
+    }
   }
 
 }// namespace AGE

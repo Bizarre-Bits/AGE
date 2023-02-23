@@ -266,4 +266,9 @@ namespace AGE {
     return isChanged;
   }
 
+  void SceneOutlinePanel::SetContext(const Ref<Scene>& scene) {
+    m_Context        = scene;
+    m_SelectedEntity = Entity::Null;
+  }
+
 }// namespace AGE

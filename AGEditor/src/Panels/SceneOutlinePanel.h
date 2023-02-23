@@ -15,7 +15,7 @@ namespace AGE {
     SceneOutlinePanel() = default;
     explicit SceneOutlinePanel(const Ref<Scene>& scene);
 
-    inline void SetContext(const Ref<Scene>& scene) { m_Context = scene; }
+    void SetContext(const Ref<Scene>& scene);
 
     void OnUiRender();
 

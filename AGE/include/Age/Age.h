@@ -19,6 +19,12 @@
 #include "Age/Core/KeyCodes.h"
 #include "Age/Core/MouseCodes.h"
 
+// Events
+#include "Age/Events/Event.h"
+#include "Age/Events/KeyEvent.h"
+#include "Age/Events/WindowEvent.h"
+#include "Age/Events/MouseEvent.h"
+
 // Layers
 #include "Age/Core/Layer.h"
 #include "Age/Debug/DebugLayer.h"
