@@ -6,14 +6,15 @@ set(CMAKE_CXX_STANDARD_REQUIRED 23)
 
 add_library(age_core STATIC)
 
-target_include_directories(age_core INTERFACE include PUBLIC src vendor/imgui vendor/glm/ vendor/stb_image)
+target_include_directories(age_core INTERFACE include PUBLIC src vendor/imgui vendor/glm/ vendor/stb_image vendor/ImGuizmo)
 
 file(GLOB_RECURSE _AGE_CORE_SRCS src/agepch.cpp src/agepch.h src/Age/*.cpp src/Age/*.h vendor/stb_image/stb_image.cpp vendor/stb_image/stb_image.h)
 list(REMOVE_ITEM _AGE_CORE_SRCS ${REMOVE_CMAKE})
 
 file(GLOB _IMGUI_SRCS vendor/imgui/*.cpp vendor/imgui/*.h)
+list(APPEND _IMGUIZMO_SRCS vendor/ImGuizmo/ImGuizmo.cpp vendor/ImGuizmo/ImGuizmo.h)
 
-target_sources(age_core PRIVATE ${_AGE_CORE_SRCS} ${_IMGUI_SRCS})
+target_sources(age_core PRIVATE ${_AGE_CORE_SRCS} ${_IMGUI_SRCS} ${_IMGUIZMO_SRCS})
 target_precompile_headers(age_core PUBLIC src/agepch.h)
 
 option(AGE_INCLUDE_OPENGL "If ON, OpenGL-specific implementations will be added to the project" ON)

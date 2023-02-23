@@ -18,3 +18,6 @@
 [submodule "AGE/vendor/yaml-cpp"]
 	path = AGE/vendor/yaml-cpp
 	url = https://github.com/jbeder/yaml-cpp.git
+[submodule "AGE/vendor/ImGuizmo"]
+	path = AGE/vendor/ImGuizmo
+	url = https://github.com/CedricGuillemet/ImGuizmo.git

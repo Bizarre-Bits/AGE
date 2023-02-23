@@ -8,6 +8,8 @@
 #include <Age/Age.h>
 #include <Panels/SceneOutlinePanel.h>
 
+#include <ImGuizmo.h>
+
 namespace AGE {
 
   class EditorLayer : public Layer {
@@ -26,8 +28,6 @@ namespace AGE {
     void SaveScene();
     void OpenSceneDialog();
 
-    void SetupDemoFeatures();
-
     void MainMenuBar();
     void Viewport();
 
@@ -38,16 +38,9 @@ namespace AGE {
     Ref<Framebuffer> m_Framebuffer;
     Ref<Scene> m_ActiveScene;
     age_string_t m_SceneFilepath;
-    OrthographicCameraController m_ViewportCameraController;
 
-    bool m_IsViewportHovered{false};
-    bool m_IsViewportFocused{false};
-
-    Entity m_RedSquareEntity;
-    Entity m_BlueSquareEntity;
-    Entity m_CameraA;
-
-    glm::vec4 m_BgColor{0.05f, 0.05f, 0.05f, 1.0f};
+    ImGuizmo::OPERATION m_GizmoOperation{ImGuizmo::OPERATION::TRANSLATE};
+    ImGuizmo::MODE m_GizmoMode{ImGuizmo::MODE::LOCAL};
 
     //Panels
     SceneOutlinePanel m_SceneOutlinePanel;

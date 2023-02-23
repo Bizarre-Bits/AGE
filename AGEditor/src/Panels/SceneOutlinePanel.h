@@ -17,6 +17,8 @@ namespace AGE {
 
     void SetContext(const Ref<Scene>& scene);
 
+    Entity SelectedEntity() const { return m_SelectedEntity; }
+
     void OnUiRender();
 
   private:
@@ -59,7 +61,7 @@ namespace AGE {
       bool deleteComponent{false};
 
       if constexpr (!(std::is_same<T, TagComponent>::value || std::is_same<T, TransformComponent>::value)) {
-        ImGui::SameLine(contentRegionAvailable.x - lineHeight * 0.5f );
+        ImGui::SameLine(contentRegionAvailable.x - lineHeight * 0.5f);
         if (ImGui::Button("+", ImVec2{lineHeight, lineHeight}))
           ImGui::OpenPopup("ComponentSettings");
 

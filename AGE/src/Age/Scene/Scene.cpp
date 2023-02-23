@@ -75,4 +75,15 @@ namespace AGE {
       cameraComponent.Camera.SetViewportSize(width, height);
     }
   }
+
+  Entity Scene::PrimaryCameraEntity() {
+    auto view = m_Registry.view<CameraComponent>();
+    for(auto& cameraEntity: view) {
+      auto& cc = view.get<CameraComponent>(cameraEntity);
+      if(cc.Primary) {
+        return Entity{cameraEntity, this};
+      }
+    }
+    return Entity::Null;
+  }
 }// namespace AGE

@@ -5,10 +5,13 @@
 #include "EditorLayer.h"
 
 #include <Age/Utils/FileDialogs.h>
+#include <Age/Utils/MathUtils.h>
+#include <ImGuizmo.h>
+#include <glm/gtc/type_ptr.hpp>
 #include <imgui.h>
 
 namespace AGE {
-  EditorLayer::EditorLayer() : m_ViewportCameraController(1.0f), m_ViewportSize(0.0f) {
+  EditorLayer::EditorLayer() : m_ViewportSize(0.0f) {
     FramebufferSpecification specs;
     specs.Width  = 1;
     specs.Height = 1;
@@ -29,53 +32,9 @@ namespace AGE {
 
     SetDarkThemeColors();
 
-    RenderCommand::SetClearColor(m_BgColor);
-
     m_ActiveScene = MakeRef<Scene>();
 
     m_SceneOutlinePanel.SetContext(m_ActiveScene);
-  }
-
-  void EditorLayer::SetupDemoFeatures() {
-    m_RedSquareEntity = m_ActiveScene->CreateEntity("Red Square");
-    m_RedSquareEntity.AddComponent<SpriteComponent>(glm::vec4{1.0f, 0.0f, 0.0f, 1.0f});
-    auto& redTransform         = m_RedSquareEntity.GetComponent<TransformComponent>();
-    redTransform.Translation.x = -0.6f;
-
-    m_BlueSquareEntity = m_ActiveScene->CreateEntity("Blue Square");
-    m_BlueSquareEntity.AddComponent<SpriteComponent>(glm::vec4{0.0f, 0.0f, 1.0f, 1.0f});
-    auto& blueTransform         = m_BlueSquareEntity.GetComponent<TransformComponent>();
-    blueTransform.Translation.x = 0.6f;
-
-    m_CameraA               = m_ActiveScene->CreateEntity("Camera A");
-    auto& cameraComponent   = m_CameraA.AddComponent<CameraComponent>();
-    cameraComponent.Primary = true;
-    cameraComponent.Camera.SetProjectionType(SceneCamera::ProjectionType::Perspective);
-    auto& cameraTransform         = m_CameraA.GetComponent<TransformComponent>();
-    cameraTransform.Translation.z = 5.0f;
-
-    class CameraControllerScript : public ScriptableEntity {
-    public:
-      virtual ~CameraControllerScript() = default;
-
-      virtual void OnUpdate(Timestep ts) override {
-        auto& transform = GetComponent<TransformComponent>().Translation;
-
-        constexpr float speed = 5.0f;
-
-        if (Input::IsKeyPressed(Key::A))
-          transform.x -= speed * ts;
-        else if (Input::IsKeyPressed(Key::D))
-          transform.x += speed * ts;
-
-        if (Input::IsKeyPressed(Key::S))
-          transform.y -= speed * ts;
-        else if (Input::IsKeyPressed(Key::W))
-          transform.y += speed * ts;
-      }
-    };
-
-    m_CameraA.AddComponent<NativeScriptComponent>().Bind<CameraControllerScript>();
   }
 
   void EditorLayer::OnUpdate(Timestep ts) {
@@ -132,6 +91,41 @@ namespace AGE {
     this->m_ViewportSize     = {viewportPanelSize.x, viewportPanelSize.y};
     ImGui::Image((void*)(uint64_t)this->m_Framebuffer->ColorAttachmentID(), viewportPanelSize, ImVec2{0.0f, 1.0f}, ImVec2{1.0f, 0.0f});
 
+    Entity selectedEntity = m_SceneOutlinePanel.SelectedEntity();
+
+    if (selectedEntity) {
+      ImGuizmo::SetOrthographic(false);
+      ImGuizmo::SetDrawlist();
+
+      const ImVec2& windowSize = ImGui::GetWindowSize();
+      const ImVec2& windowPos  = ImGui::GetWindowPos();
+
+      ImGuizmo::SetRect(windowPos.x, windowPos.y, windowSize.x, windowSize.y);
+
+      Entity cameraEntity  = m_ActiveScene->PrimaryCameraEntity();
+      const auto& camera   = cameraEntity.GetComponent<CameraComponent>().Camera;
+      glm::mat4 cameraView = glm::inverse(cameraEntity.GetComponent<TransformComponent>().Transform());
+      glm::mat4 projection = camera.Projection();
+
+      auto& tc                  = selectedEntity.GetComponent<TransformComponent>();
+      glm::mat4 entityTransform = tc.Transform();
+
+      bool snap       = Input::IsKeyPressed(Key::LeftControl);
+      float snapValue = 0.5f;
+      if (m_GizmoOperation == ImGuizmo::OPERATION::ROTATE) {
+        snapValue = 45.0f;
+      }
+      float snapValues[3] = {snapValue, snapValue, snapValue};
+
+      ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(projection),
+                           m_GizmoOperation, m_GizmoMode,
+                           glm::value_ptr(entityTransform), nullptr, snap ? snapValues : nullptr);
+
+      if (ImGuizmo::IsUsing()) {
+        MathUtils::DecomposeTransform(entityTransform, tc.Translation, tc.Rotation, tc.Scale);
+      }
+    }
+
     ImGui::End();
     ImGui::PopStyleVar();
   }
@@ -180,7 +174,7 @@ namespace AGE {
   }
 
   void EditorLayer::SaveScene() {
-    if(m_SceneFilepath.empty()) {
+    if (m_SceneFilepath.empty()) {
       SaveSceneAsDialog();
       return;
     }
@@ -205,13 +199,6 @@ namespace AGE {
 
   void EditorLayer::OnEvent(Event& e) {
     Layer::OnEvent(e);
-    if (!m_IsViewportHovered) {
-      const ImGuiIO& io = ImGui::GetIO();
-      e.Handled |= e.IsInCategory(EventCategory::EventCategoryMouse) & io.WantCaptureMouse;
-      e.Handled |= e.IsInCategory(EventCategory::EventCategoryKeyboard) & io.WantCaptureKeyboard;
-    } else {
-      m_ViewportCameraController.OnEvent(e);
-    }
 
     EventDispatcher dispatcher{e};
     dispatcher.Dispatch<KeyPressedEvent>(AGE_BIND_EVENT_FN(EditorLayer::OnKeyPressed));
@@ -254,36 +241,68 @@ namespace AGE {
   }
 
   bool EditorLayer::OnKeyPressed(KeyPressedEvent& e) {
+    bool handled{false};
+
     bool ctrlPressed  = Input::IsKeyPressed(Key::LeftControl) || Input::IsKeyPressed(Key::RightControl);
     bool shiftPressed = Input::IsKeyPressed(Key::LeftShift) || Input::IsKeyPressed(Key::RightShift);
     switch (e.KeyCode()) {
       case Key::S: {
         if (ctrlPressed && shiftPressed) {
           SaveSceneAsDialog();
-          e.Handled = true;
+          handled = true;
         } else if (ctrlPressed) {
           SaveScene();
-          e.Handled = true;
+          handled = true;
         }
         break;
       }
       case Key::O: {
         if (ctrlPressed) {
           OpenSceneDialog();
-          e.Handled = true;
+          handled = true;
         }
         break;
       }
       case Key::N: {
         if (ctrlPressed) {
           CreateNewScene();
-          e.Handled = true;
+          handled = true;
+        }
+        break;
+      }
+      case Key::Q: {
+        if (ctrlPressed) {
+          m_GizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
+          handled          = true;
+        }
+        break;
+      }
+      case Key::W: {
+        if (ctrlPressed) {
+          m_GizmoOperation = ImGuizmo::OPERATION::ROTATE;
+          handled          = true;
+        }
+        break;
+      }
+      case Key::E: {
+        if (ctrlPressed) {
+          m_GizmoOperation = ImGuizmo::OPERATION::SCALE;
+          handled          = true;
+        }
+        break;
+      }
+      case Key::L: {
+        if (ctrlPressed) {
+          m_GizmoMode = m_GizmoMode == ImGuizmo::MODE::LOCAL ? ImGuizmo::MODE::WORLD : ImGuizmo::MODE::LOCAL;
+          handled     = true;
         }
         break;
       }
       default:
         break;
     }
+
+    return handled;
   }
 
 }// namespace AGE
