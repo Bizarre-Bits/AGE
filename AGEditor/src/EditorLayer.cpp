@@ -34,9 +34,7 @@ namespace AGE {
 
     SetDarkThemeColors();
 
-    m_ActiveScene = MakeRef<Scene>();
-
-    m_SceneOutlinePanel.SetContext(m_ActiveScene);
+    CreateNewScene();
   }
 
   void EditorLayer::OnUpdate(Timestep ts) {
@@ -171,6 +169,7 @@ namespace AGE {
     m_ActiveScene = MakeRef<Scene>();
     m_SceneOutlinePanel.SetContext(m_ActiveScene);
     m_SceneFilepath = "";
+    Application::Instance()->Window().SetTitle("AGEditor - Untitled");
   }
 
   void EditorLayer::SaveSceneAsDialog() {
@@ -182,6 +181,8 @@ namespace AGE {
       m_SceneFilepath = filepath;
       SceneSerializer serializer{m_ActiveScene};
       serializer.Serialize(filepath);
+
+      Application::Instance()->Window().SetTitle("AGEditor - " + m_SceneFilepath.substr(m_SceneFilepath.find_last_of("/\\") + 1));
     }
   }
 
@@ -207,6 +208,8 @@ namespace AGE {
       serializer.Deserialize(filepath);
 
       m_SceneFilepath = filepath;
+
+      Application::Instance()->Window().SetTitle("AGEditor - " + m_SceneFilepath.substr(m_SceneFilepath.find_last_of("/\\") + 1));
     }
   }
 
