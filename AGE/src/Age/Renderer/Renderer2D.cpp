@@ -111,6 +111,15 @@ namespace AGE {
     StartBatch();
   }
 
+  void Renderer2D::BeginScene(const EditorCamera& camera) {
+    AGE_PROFILE_FUNCTION();
+
+    s_Data.Shader2D->Bind();
+    s_Data.Shader2D->SetMat4("u_ViewProjection", camera.ViewProjection());
+
+    StartBatch();
+  }
+
   void Renderer2D::BeginScene(const Camera& camera, const glm::mat4& transform) {
     AGE_PROFILE_FUNCTION();
 

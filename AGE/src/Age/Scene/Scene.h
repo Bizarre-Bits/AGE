@@ -8,6 +8,7 @@
 #include <glm/glm.hpp>
 
 #include "Age/Core/Timer.h"
+#include "Age/Renderer/EditorCamera.h"
 
 namespace AGE {
   class Entity;
@@ -22,7 +23,8 @@ namespace AGE {
 
     Entity PrimaryCameraEntity();
 
-    void OnUpdate(Timestep ts);
+    void OnUpdateEditor(Timestep ts, EditorCamera& camera);
+    void OnUpdateRuntime(Timestep ts);
     void OnViewportResize(uint32_t width, uint32_t height);
 
   private:

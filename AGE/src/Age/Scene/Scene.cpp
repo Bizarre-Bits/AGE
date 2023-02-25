@@ -24,7 +24,19 @@ namespace AGE {
     m_Registry.destroy(entity);
   }
 
-  void Scene::OnUpdate(Timestep ts) {
+  void Scene::OnUpdateEditor(Timestep ts, EditorCamera& camera) {
+    Renderer2D::BeginScene(camera);
+
+    auto sprites = m_Registry.group<SpriteComponent>(entt::get<TransformComponent>);
+    for (auto e: sprites) {
+      auto [sprite, transform] = sprites.get<SpriteComponent, TransformComponent>(e);
+      Renderer2D::DrawQuad(transform.Transform(), sprite.Tint);
+    }
+
+    Renderer2D::EndScene();
+  }
+
+  void Scene::OnUpdateRuntime(Timestep ts) {
     // Update scripts
     {
       m_Registry.view<NativeScriptComponent>().each([this, ts](auto entity, NativeScriptComponent& nsc) {
@@ -65,6 +77,7 @@ namespace AGE {
 
     Renderer2D::EndScene();
   }
+
   void Scene::OnViewportResize(uint32_t width, uint32_t height) {
     auto view = m_Registry.view<CameraComponent>();
     for (auto& cameraEntity: view) {
@@ -78,9 +91,9 @@ namespace AGE {
 
   Entity Scene::PrimaryCameraEntity() {
     auto view = m_Registry.view<CameraComponent>();
-    for(auto& cameraEntity: view) {
+    for (auto& cameraEntity: view) {
       auto& cc = view.get<CameraComponent>(cameraEntity);
-      if(cc.Primary) {
+      if (cc.Primary) {
         return Entity{cameraEntity, this};
       }
     }

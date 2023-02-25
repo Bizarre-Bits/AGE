@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <Age/Renderer/EditorCamera.h>
 #include <glm/glm.hpp>
 
 #include "Camera.h"
@@ -23,6 +24,7 @@ namespace AGE {
     static void ShutDown();
 
     static void BeginScene(const OrthographicCamera& camera);
+    static void BeginScene(const EditorCamera& camera);
     static void BeginScene(const Camera& camera, const glm::mat4& transform);
 
     static void EndScene();
