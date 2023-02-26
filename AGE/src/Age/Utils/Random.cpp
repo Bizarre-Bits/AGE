@@ -2,6 +2,8 @@
 // Created by alex on 1/26/23.
 //
 
+#include "agepch.h"
+
 #include "Random.h"
 
 namespace AGE {

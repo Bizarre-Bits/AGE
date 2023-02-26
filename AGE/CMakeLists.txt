@@ -15,7 +15,11 @@ file(GLOB _IMGUI_SRCS vendor/imgui/*.cpp vendor/imgui/*.h)
 list(APPEND _IMGUIZMO_SRCS vendor/ImGuizmo/ImGuizmo.cpp vendor/ImGuizmo/ImGuizmo.h)
 
 target_sources(age_core PRIVATE ${_AGE_CORE_SRCS} ${_IMGUI_SRCS} ${_IMGUIZMO_SRCS})
-target_precompile_headers(age_core PUBLIC src/agepch.h)
+
+# TODO: Add precompiled header support for the Windows
+if (NOT WIN32)
+    target_precompile_headers(age_core PUBLIC src/agepch.h)
+endif ()
 
 option(AGE_INCLUDE_OPENGL "If ON, OpenGL-specific implementations will be added to the project" ON)
 option(AGE_INCLUDE_VULCAN "If ON, Vulcan-specific implementations will be added to the project" OFF)
@@ -72,6 +76,10 @@ if (AGE_OS STREQUAL "Linux")
     message(STATUS "Adding Linux specific code")
     file(GLOB _LINUX_CODE_SRCS src/Platform/Linux/*.cpp)
     list(APPEND _PLATFORM_CODE_SRCS ${_LINUX_CODE_SRCS})
+elseif (AGE_OS STREQUAL "Windows")
+    message(STATUS "Adding Windows specific code")
+    file(GLOB _WINDOWS_CODE_SRCS src/Platform/Windows/*.cpp)
+    list(APPEND _PLATFORM_CODE_SRCS ${_WINDOWS_CODE_SRCS})
 endif ()
 
 target_sources(age_core PUBLIC ${_PLATFORM_CODE_SRCS})

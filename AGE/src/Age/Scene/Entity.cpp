@@ -2,6 +2,8 @@
 // Created by alex on 2/16/23.
 //
 
+#include "agepch.h"
+
 #include "Entity.h"
 
 namespace AGE {

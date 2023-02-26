@@ -2,6 +2,8 @@
 // Created by alex on 2/15/23.
 //
 
+#include "agepch.h"
+
 #include "Scene.h"
 #include "Age/Renderer/Renderer2D.h"
 #include "Components.h"

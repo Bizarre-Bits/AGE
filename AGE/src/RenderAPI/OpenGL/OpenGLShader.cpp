@@ -1,8 +1,9 @@
 //
 // Created by alex on 08.09.22.
 //
-#include "OpenGLMaster.h"
+
 #include "agepch.h"
+#include "OpenGLMaster.h"
 
 #include <fstream>
 #include <glm/gtc/type_ptr.hpp>

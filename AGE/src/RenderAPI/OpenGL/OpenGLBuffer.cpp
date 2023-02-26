@@ -3,6 +3,7 @@
 //
 
 #include "agepch.h"
+
 #include "RenderAPI/OpenGL/OpenGLMaster.h"
 
 #include "OpenGLBuffer.h"

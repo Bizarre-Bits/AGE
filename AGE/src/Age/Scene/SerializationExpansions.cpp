@@ -2,6 +2,8 @@
 // Created by alex on 2/21/23.
 //
 
+#include "agepch.h"
+
 #include "SerializationExpansions.h"
 
 namespace AGE {
