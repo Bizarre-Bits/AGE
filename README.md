@@ -3,7 +3,7 @@
 
 <div align="center">
 <p>
-  <img alt="Supported platforms" src="https://img.shields.io/static/v1?label=Platforms&message=Linux&color=1aa943&style=flat-square">
+  <img alt="Supported platforms" src="https://img.shields.io/static/v1?label=Platforms&message=Linux | Windows&color=1aa943&style=flat-square">
   <img alt="Version" src="https://img.shields.io/static/v1?label=Version&message=0.0.0pre&color=red&style=flat-square">
   <a href="https://github.com/nightingazer/AGE/blob/main/LICENSE"><img alt="Licence" src="https://img.shields.io/static/v1?label=Licence&message=Apache%202.0&color=1aa943&style=flat-square"></a>
 </p>
