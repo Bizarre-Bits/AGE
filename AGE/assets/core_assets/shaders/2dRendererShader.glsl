@@ -32,8 +32,10 @@ layout(location = 3) in float v_TillingFactor;
 
 uniform sampler2D u_Textures[32];
 
-out vec4 f_Color;
+layout(location = 0) out vec4 f_Color;
+layout(location = 1) out vec4 f_EntityColor;
 
 void main() {
     f_Color = texture(u_Textures[int(v_TexIndex)], v_TexCoord * v_TillingFactor) * v_Color;
+    f_EntityColor = vec4(1.0f, 0.0f, 0.0f, 1.0f);
 }

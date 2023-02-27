@@ -16,7 +16,7 @@ namespace AGE {
     specs.Width = 1;
     specs.Height = 1;
     specs.Samples = 1;
-    specs.Attachments = {FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::Depth};
+    specs.Attachments = {FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::Depth};
 
     m_Framebuffer = Framebuffer::Create(specs);
   }
@@ -101,7 +101,7 @@ namespace AGE {
     ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
     m_ViewportSize = {viewportPanelSize.x, viewportPanelSize.y};
     this->m_ViewportSize = {viewportPanelSize.x, viewportPanelSize.y};
-    ImGui::Image((void*)(uint64_t)this->m_Framebuffer->ColorAttachmentID(),
+    ImGui::Image((void*)(uint64_t)this->m_Framebuffer->ColorAttachmentID(1),
                  viewportPanelSize, ImVec2{0.0f, 1.0f}, ImVec2{1.0f, 0.0f});
 
     Entity selectedEntity = m_SceneOutlinePanel.SelectedEntity();

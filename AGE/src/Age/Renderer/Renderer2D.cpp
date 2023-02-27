@@ -154,6 +154,9 @@ namespace AGE {
 
     auto dataSize = (uint32_t)((uint8_t*)s_Data.QuadVertexBufferPtr
                                - (uint8_t*)s_Data.QuadVertexBufferBase);
+    if(dataSize == 0)
+      return;
+
     s_Data.QuadVertexBuffer->SetData(s_Data.QuadVertexBufferBase, dataSize);
 
     s_Data.Shader2D->Bind();
