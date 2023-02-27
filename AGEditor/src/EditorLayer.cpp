@@ -15,6 +15,8 @@ namespace AGE {
     FramebufferSpecification specs;
     specs.Width = 1;
     specs.Height = 1;
+    specs.Samples = 1;
+    specs.Attachments = {FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::Depth};
 
     m_Framebuffer = Framebuffer::Create(specs);
   }
@@ -182,7 +184,8 @@ namespace AGE {
       SceneSerializer serializer{m_ActiveScene};
       serializer.Serialize(filepath);
 
-      Application::Instance()->Window().SetTitle("AGEditor - " + m_SceneFilepath.substr(m_SceneFilepath.find_last_of("/\\") + 1));
+      Application::Instance()->Window().SetTitle(
+          "AGEditor - " + m_SceneFilepath.substr(m_SceneFilepath.find_last_of("/\\") + 1));
     }
   }
 
@@ -209,7 +212,8 @@ namespace AGE {
 
       m_SceneFilepath = filepath;
 
-      Application::Instance()->Window().SetTitle("AGEditor - " + m_SceneFilepath.substr(m_SceneFilepath.find_last_of("/\\") + 1));
+      Application::Instance()->Window().SetTitle(
+          "AGEditor - " + m_SceneFilepath.substr(m_SceneFilepath.find_last_of("/\\") + 1));
     }
   }
 
