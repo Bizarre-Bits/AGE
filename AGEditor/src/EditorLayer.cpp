@@ -368,7 +368,7 @@ namespace AGE {
   }
 
   bool EditorLayer::OnMouseClicked(MouseButtonPressedEvent& e) {
-    if (e.MouseButton() != Mouse::ButtonLeft || !m_ViewportHovered)
+    if (e.MouseButton() != Mouse::ButtonLeft || !m_ViewportHovered || ImGuizmo::IsOver())
       return false;
 
     m_Framebuffer->Bind();

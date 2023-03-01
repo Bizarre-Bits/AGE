@@ -45,16 +45,16 @@ namespace AGE {
   }
 
   float EditorCamera::ZoomSpeed() const {
-    float distance = m_Distance * 0.2f;
+    float distance = m_Distance * 0.25f;
     distance = std::max(distance, 0.0f);
     float speed = distance * distance;
-    speed = std::min(speed, 100.0f); // max speed = 100
+    speed = std::min(speed, 200.0f); // max speed = 100
     return speed;
   }
 
   void EditorCamera::OnUpdate(Timestep ts) {
     const glm::vec2& mouse{Input::MouseX(), Input::MouseY()};
-    glm::vec2 delta = (mouse - m_InitialMousePosition) * 0.003f;
+    glm::vec2 delta = (mouse - m_InitialMousePosition) * 0.006f;
     m_InitialMousePosition = mouse;
 
     if (Input::IsMouseButtonPressed(Mouse::ButtonMiddle)) {
