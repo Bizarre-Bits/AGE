@@ -32,18 +32,22 @@ namespace AGE {
     void Viewport();
 
     bool OnKeyPressed(KeyPressedEvent& e);
+    bool OnMouseClicked(MouseButtonPressedEvent& e);
 
   private:
     bool m_ViewportHovered;
-
+    bool m_ViewportFocused;
+    glm::vec2 m_ViewportMousePos;
     glm::vec2 m_ViewportSize;
-    Ref<Framebuffer> m_Framebuffer;
-    Ref<Scene> m_ActiveScene;
+    glm::vec2 m_ViewportBounds[2];
+
+    Ref <Framebuffer> m_Framebuffer;
+    Ref <Scene> m_ActiveScene;
     EditorCamera m_EditorCamera;
 
     age_string_t m_SceneFilepath;
     ImGuizmo::MODE m_GizmoMode{ImGuizmo::MODE::LOCAL};
-    ImGuizmo::OPERATION m_GizmoOperation{ImGuizmo::OPERATION::TRANSLATE};
+    ImGuizmo::OPERATION m_GizmoOperation{static_cast<ImGuizmo::OPERATION>(0)};
 
     //Panels
     SceneOutlinePanel m_SceneOutlinePanel;

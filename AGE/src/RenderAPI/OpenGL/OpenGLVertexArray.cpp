@@ -32,7 +32,7 @@ namespace AGE {
     glBindVertexArray(0);
   }
 
-  void OpenGLVertexArray::AddVertexBuffer(Ref<VertexBuffer> vertexBuffer) {
+  void OpenGLVertexArray::AddVertexBuffer(Ref <VertexBuffer> vertexBuffer) {
     AGE_PROFILE_FUNCTION();
 
     AGE_CORE_ASSERT(!vertexBuffer->Layout().Elements().empty(), "Vertex buffer has no layout");
@@ -43,14 +43,30 @@ namespace AGE {
     uint32_t index{0};
     for (const BufferElement& element: vertexBuffer->Layout()) {
       glEnableVertexAttribArray(index);
-      glVertexAttribPointer(
-          index,
-          element.ComponentCount(),
-          shader_data_to_glenum(element.Type),
-          element.Normalized ? GL_TRUE : GL_FALSE,
-          vertexBuffer->Layout().Stride(),
-          (void*)element.Offset
-      );
+      GLenum dataType{shader_data_to_glenum(element.Type)};
+      switch (dataType) {
+        case GL_FLOAT:
+          glVertexAttribPointer(
+              index,
+              element.ComponentCount(),
+              dataType,
+              element.Normalized ? GL_TRUE : GL_FALSE,
+              vertexBuffer->Layout().Stride(),
+              (void*)element.Offset
+          );
+          break;
+        case GL_BOOL:
+        case GL_INT:
+          glVertexAttribIPointer(
+              index,
+              element.ComponentCount(),
+              dataType,
+              vertexBuffer->Layout().Stride(),
+              (void*)element.Offset
+          );
+          break;
+      }
+
       index++;
     }
 
@@ -60,7 +76,7 @@ namespace AGE {
     vertexBuffer->Unbind();
   }
 
-  void OpenGLVertexArray::SetIndexBuffer(Ref<AGE::IndexBuffer> indexBuffer) {
+  void OpenGLVertexArray::SetIndexBuffer(Ref <AGE::IndexBuffer> indexBuffer) {
     AGE_PROFILE_FUNCTION();
 
     glBindVertexArray(m_RenderID);
@@ -70,13 +86,15 @@ namespace AGE {
     glBindVertexArray(0);
   }
 
-  std::vector<Ref<VertexBuffer>> OpenGLVertexArray::VertexBuffers() const {
+  std::vector<Ref < VertexBuffer>>
+
+  OpenGLVertexArray::VertexBuffers() const {
     AGE_PROFILE_FUNCTION();
 
     return m_VertexBuffers;
   }
 
-  Ref<IndexBuffer> OpenGLVertexArray::IndexBuffer() const {
+  Ref <IndexBuffer> OpenGLVertexArray::IndexBuffer() const {
     AGE_PROFILE_FUNCTION();
 
     return m_IndexBuffer;

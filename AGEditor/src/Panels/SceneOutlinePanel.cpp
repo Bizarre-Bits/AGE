@@ -65,8 +65,10 @@ namespace AGE {
       ImGui::TreePop();
     }
 
-    if (entityDeleted)
+    if (entityDeleted) {
       m_Context->DestroyEntity(entity);
+      m_SelectedEntity = Entity::Null;
+    }
   }
 
   void SceneOutlinePanel::Inspector() {
@@ -269,6 +271,10 @@ namespace AGE {
   void SceneOutlinePanel::SetContext(const Ref<Scene>& scene) {
     m_Context        = scene;
     m_SelectedEntity = Entity::Null;
+  }
+
+  void SceneOutlinePanel::SelectEntity(const Entity& entity) {
+    m_SelectedEntity = entity;
   }
 
 }// namespace AGE

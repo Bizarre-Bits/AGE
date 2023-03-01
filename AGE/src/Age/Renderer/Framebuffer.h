@@ -5,6 +5,7 @@
 #pragma once
 
 #include "Age/Core/Core.h"
+#include "Age/Renderer/VertexArray.h"
 
 namespace AGE {
   enum class FramebufferTextureFormat {
@@ -12,6 +13,7 @@ namespace AGE {
 
     // Color
     RGBA8,
+    RED_INT,
 
     // Depth/stencil
     DEPTH24STENCIL8,
@@ -55,6 +57,8 @@ namespace AGE {
     virtual uint32_t ColorAttachmentID(uint32_t index = 0) const = 0;
 
     virtual void Resize(uint32_t width, uint32_t height) = 0;
+    virtual int ReadPixel(uint32_t attachmentIndex, int x, int y) = 0;
+    virtual void ClearAttachment(uint32_t index, const void* value) = 0;
 
     virtual void Bind() = 0;
     virtual void Unbind() = 0;

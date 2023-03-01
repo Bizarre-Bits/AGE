@@ -18,6 +18,7 @@ namespace AGE {
     void SetContext(const Ref<Scene>& scene);
 
     Entity SelectedEntity() const { return m_SelectedEntity; }
+    void SelectEntity(const Entity& entity);
 
     void OnUiRender();
 

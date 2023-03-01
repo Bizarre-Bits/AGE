@@ -32,7 +32,11 @@ namespace AGE {
     auto sprites = m_Registry.group<SpriteComponent>(entt::get<TransformComponent>);
     for (auto e: sprites) {
       auto [sprite, transform] = sprites.get<SpriteComponent, TransformComponent>(e);
-      Renderer2D::DrawQuad(transform.Transform(), sprite.Tint);
+      Renderer2D::QuadData quadData{};
+      quadData.EntityID = (int)e;
+      quadData.Transform = transform.Transform();
+      quadData.Color = sprite.Tint;
+      Renderer2D::DrawQuad(quadData);
     }
 
     Renderer2D::EndScene();

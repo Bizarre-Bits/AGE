@@ -58,7 +58,7 @@ namespace AGE {
     entt::entity m_EntityHandle{entt::null};
 
     // TODO: Make weak ptr. Bother with it not sooner than self-made smart-pointer system
-    Scene* m_Scene;
+    Scene* m_Scene{nullptr};
 
     friend class Scene;
   };

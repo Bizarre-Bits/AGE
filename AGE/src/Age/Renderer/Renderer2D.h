@@ -20,6 +20,15 @@ namespace AGE {
    */
   class Renderer2D {
   public:
+    struct QuadData {
+      glm::mat4 Transform;
+      glm::vec4 Color;
+      Ref<Texture2D> Texture;
+      Ref<SubTexture2D> SubTexture;
+      float Tiling{0};
+      int EntityID;
+    };
+  public:
     static void Init();
     static void ShutDown();
 
@@ -34,6 +43,8 @@ namespace AGE {
     static void Flush();
 
 #pragma region DrawQuad
+
+    static void DrawQuad(const QuadData& data);
 
     static void DrawQuad(const glm::mat4& transform, const glm::vec4& color);
     static void DrawQuad(const glm::mat4& transform, const Ref<Texture2D>& texture, const glm::vec4& color, float tilingFactor = 1.0f);

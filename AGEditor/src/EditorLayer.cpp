@@ -4,6 +4,7 @@
 
 #include "EditorLayer.h"
 
+#include <Age/Age.h>
 #include <Age/Utils/FileDialogs.h>
 #include <Age/Utils/MathUtils.h>
 #include <ImGuizmo.h>
@@ -16,7 +17,8 @@ namespace AGE {
     specs.Width = 1;
     specs.Height = 1;
     specs.Samples = 1;
-    specs.Attachments = {FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::Depth};
+    specs.Attachments = {FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::RED_INT,
+                         FramebufferTextureFormat::Depth};
 
     m_Framebuffer = Framebuffer::Create(specs);
   }
@@ -28,9 +30,11 @@ namespace AGE {
     io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
     io.Fonts->AddFontFromFileTTF(
-        "assets/client_assets/AGEditor/fonts/Roboto/Roboto-Bold.ttf", 18.0f);
+        "assets/client_assets/AGEditor/fonts/Roboto/Roboto-Bold.ttf", 18.0f
+    );
     io.FontDefault = io.Fonts->AddFontFromFileTTF(
-        "assets/client_assets/AGEditor/fonts/Roboto/Roboto-Regular.ttf", 18.0f);
+        "assets/client_assets/AGEditor/fonts/Roboto/Roboto-Regular.ttf", 18.0f
+    );
 
     ImGui::StyleColorsDark();
 
@@ -42,15 +46,20 @@ namespace AGE {
   void EditorLayer::OnUpdate(Timestep ts) {
     m_Framebuffer->Resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
     m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x,
-                                    (uint32_t)m_ViewportSize.y);
+                                    (uint32_t)m_ViewportSize.y
+    );
     m_EditorCamera.SetViewportSize(m_ViewportSize.x, m_ViewportSize.y);
 
     if (m_ViewportHovered)
       m_EditorCamera.OnUpdate(ts);
 
     m_Framebuffer->Bind();
-
     RenderCommand::Clear();
+
+    {
+      int data{-1};
+      m_Framebuffer->ClearAttachment(1, &data);
+    }
 
     m_ActiveScene->OnUpdateEditor(ts, m_EditorCamera);
 
@@ -97,12 +106,28 @@ namespace AGE {
     ImGui::Begin("Viewport");
 
     m_ViewportHovered = ImGui::IsWindowHovered();
+    m_ViewportFocused = ImGui::IsWindowFocused();
 
     ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
+
+    ImVec2 viewportOffset = ImGui::GetCursorPos();
+    ImVec2 minBound = ImGui::GetWindowPos();
+
+    minBound.x += viewportOffset.x;
+    minBound.y += viewportOffset.y;
+    ImVec2 maxBounds = {minBound.x + m_ViewportSize.x, minBound.y + m_ViewportSize.y};
+    m_ViewportBounds[0] = {minBound.x, minBound.y};
+    m_ViewportBounds[1] = {maxBounds.x, maxBounds.y};
+
+    auto [mx, my] = ImGui::GetMousePos();
+    m_ViewportMousePos.x = mx - m_ViewportBounds[0].x;
+    m_ViewportMousePos.y = m_ViewportBounds[1].y - my;
+
     m_ViewportSize = {viewportPanelSize.x, viewportPanelSize.y};
-    this->m_ViewportSize = {viewportPanelSize.x, viewportPanelSize.y};
-    ImGui::Image((void*)(uint64_t)this->m_Framebuffer->ColorAttachmentID(1),
-                 viewportPanelSize, ImVec2{0.0f, 1.0f}, ImVec2{1.0f, 0.0f});
+
+    ImGui::Image((void*)(uint64_t)this->m_Framebuffer->ColorAttachmentID(0),
+                 viewportPanelSize, ImVec2{0.0f, 1.0f}, ImVec2{1.0f, 0.0f}
+    );
 
     Entity selectedEntity = m_SceneOutlinePanel.SelectedEntity();
 
@@ -125,14 +150,18 @@ namespace AGE {
       }
       float snapValues[3] = {snapValue, snapValue, snapValue};
 
-      ImGuizmo::Manipulate(glm::value_ptr(m_EditorCamera.ViewMatrix()), glm::value_ptr(m_EditorCamera.Projection()),
-                           m_GizmoOperation, m_GizmoMode,
-                           glm::value_ptr(entityTransform), nullptr,
-                           snap ? snapValues : nullptr);
+      ImGuizmo::Manipulate(
+          glm::value_ptr(m_EditorCamera.ViewMatrix()), glm::value_ptr(m_EditorCamera.Projection()),
+          m_GizmoOperation, m_GizmoMode,
+          glm::value_ptr(entityTransform), nullptr,
+          snap ? snapValues : nullptr
+      );
 
       if (ImGuizmo::IsUsing()) {
-        MathUtils::DecomposeTransform(entityTransform, tc.Translation,
-                                      tc.Rotation, tc.Scale);
+        MathUtils::DecomposeTransform(
+            entityTransform, tc.Translation,
+            tc.Rotation, tc.Scale
+        );
       }
     }
 
@@ -223,7 +252,9 @@ namespace AGE {
 
     EventDispatcher dispatcher{e};
     dispatcher.Dispatch<KeyPressedEvent>(
-        AGE_BIND_EVENT_FN(EditorLayer::OnKeyPressed));
+        AGE_BIND_EVENT_FN(EditorLayer::OnKeyPressed)
+    );
+    dispatcher.Dispatch<MouseButtonPressedEvent>(AGE_BIND_EVENT_FN(EditorLayer::OnMouseClicked));
   }
 
   void EditorLayer::SetDarkThemeColors() {
@@ -269,6 +300,7 @@ namespace AGE {
                        Input::IsKeyPressed(Key::RightControl);
     bool shiftPressed = Input::IsKeyPressed(Key::LeftShift) ||
                         Input::IsKeyPressed(Key::RightShift);
+
     switch (e.KeyCode()) {
       case Key::S: {
         if (ctrlPressed && shiftPressed) {
@@ -294,34 +326,38 @@ namespace AGE {
         }
         break;
       }
+      default:
+        break;
+    }
+
+    // Viewport specific shortcuts
+    if (!m_ViewportFocused)
+      return handled;
+
+    switch (e.KeyCode()) {
       case Key::Q: {
-        if (ctrlPressed) {
-          m_GizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
-          handled = true;
-        }
+        m_GizmoOperation = static_cast<ImGuizmo::OPERATION>(0);
+        handled = true;
         break;
       }
       case Key::W: {
-        if (ctrlPressed) {
-          m_GizmoOperation = ImGuizmo::OPERATION::ROTATE;
-          handled = true;
-        }
+        m_GizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
+        handled = true;
         break;
       }
       case Key::E: {
-        if (ctrlPressed) {
-          m_GizmoOperation = ImGuizmo::OPERATION::SCALE;
-          handled = true;
-        }
+        m_GizmoOperation = ImGuizmo::OPERATION::ROTATE;
+        handled = true;
+        break;
+      }
+      case Key::R: {
+        m_GizmoOperation = ImGuizmo::OPERATION::SCALE;
+        handled = true;
         break;
       }
       case Key::L: {
-        if (ctrlPressed) {
-          m_GizmoMode = m_GizmoMode == ImGuizmo::MODE::LOCAL
-                        ? ImGuizmo::MODE::WORLD
-                        : ImGuizmo::MODE::LOCAL;
-          handled = true;
-        }
+        m_GizmoMode = m_GizmoMode == ImGuizmo::MODE::LOCAL ? ImGuizmo::MODE::WORLD : ImGuizmo::MODE::LOCAL;
+        handled = true;
         break;
       }
       default:
@@ -329,6 +365,22 @@ namespace AGE {
     }
 
     return handled;
+  }
+
+  bool EditorLayer::OnMouseClicked(MouseButtonPressedEvent& e) {
+    if (e.MouseButton() != Mouse::ButtonLeft || !m_ViewportHovered)
+      return false;
+
+    m_Framebuffer->Bind();
+    const int id = m_Framebuffer->ReadPixel(1, (int)m_ViewportMousePos.x, (int)m_ViewportMousePos.y);
+    m_Framebuffer->Unbind();
+    Entity entity{Entity::Null};
+    if (id != -1 && m_ViewportHovered)
+      entity = Entity{(entt::entity)(uint32_t)id, m_ActiveScene.get()};
+
+    m_SceneOutlinePanel.SelectEntity(entity);
+
+    return true;
   }
 
 } // namespace AGE
