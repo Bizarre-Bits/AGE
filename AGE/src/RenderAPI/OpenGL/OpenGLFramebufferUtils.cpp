@@ -24,6 +24,9 @@ namespace AGE::FramebufferUtils {
 
     bool isMultisample = samples > 1;
     GLenum target = TextureTarget(isMultisample);
+
+    glBindTexture(target, colorAttachmentID);
+
     if (isMultisample) {
       glTexStorage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, (int)samples, internalFormat, width, height, GL_FALSE);
     } else {
