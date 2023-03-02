@@ -2,6 +2,8 @@
 // Created by alex on 1/31/23.
 //
 
+#include "agepch.h"
+
 #include "SubTexture2D.h"
 
 namespace AGE {

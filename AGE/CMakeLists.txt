@@ -6,15 +6,20 @@ set(CMAKE_CXX_STANDARD_REQUIRED 23)
 
 add_library(age_core STATIC)
 
-target_include_directories(age_core INTERFACE include PUBLIC src vendor/imgui vendor/glm/ vendor/stb_image)
+target_include_directories(age_core INTERFACE include PUBLIC src vendor/imgui vendor/glm/ vendor/stb_image vendor/ImGuizmo)
 
 file(GLOB_RECURSE _AGE_CORE_SRCS src/agepch.cpp src/agepch.h src/Age/*.cpp src/Age/*.h vendor/stb_image/stb_image.cpp vendor/stb_image/stb_image.h)
 list(REMOVE_ITEM _AGE_CORE_SRCS ${REMOVE_CMAKE})
 
 file(GLOB _IMGUI_SRCS vendor/imgui/*.cpp vendor/imgui/*.h)
+list(APPEND _IMGUIZMO_SRCS vendor/ImGuizmo/ImGuizmo.cpp vendor/ImGuizmo/ImGuizmo.h)
 
-target_sources(age_core PRIVATE ${_AGE_CORE_SRCS} ${_IMGUI_SRCS})
-target_precompile_headers(age_core PUBLIC src/agepch.h)
+target_sources(age_core PRIVATE ${_AGE_CORE_SRCS} ${_IMGUI_SRCS} ${_IMGUIZMO_SRCS})
+
+# TODO: Add precompiled header support for the Windows
+if (NOT WIN32)
+    target_precompile_headers(age_core PUBLIC src/agepch.h)
+endif ()
 
 option(AGE_INCLUDE_OPENGL "If ON, OpenGL-specific implementations will be added to the project" ON)
 option(AGE_INCLUDE_VULCAN "If ON, Vulcan-specific implementations will be added to the project" OFF)
@@ -24,8 +29,10 @@ set(AGE_RENDER_API OPENGL CACHE STRING "Render platform to be used. (OPENGL)")
 
 add_subdirectory(vendor/glm)
 add_subdirectory(vendor/spdlog)
+add_subdirectory(vendor/entt)
+add_subdirectory(vendor/yaml-cpp)
 
-target_link_libraries(age_core PUBLIC spdlog glm)
+target_link_libraries(age_core PUBLIC spdlog glm EnTT::EnTT yaml-cpp)
 
 ##################################################
 #                Figure out OS                   #
@@ -34,12 +41,12 @@ target_link_libraries(age_core PUBLIC spdlog glm)
 if (WIN32)
     target_compile_definitions(age_core PUBLIC AGE_OS_WINDOWS)
     message(STATUS "Windows platform")
-    set(AGE_OS "WINDOWS")
+    set(AGE_OS "Windows")
     set(AGE_PLATFORM "Desktop")
 elseif (UNIX AND NOT APPLE)
     target_compile_definitions(age_core PUBLIC AGE_OS_LINUX)
     message(STATUS "Linux platform")
-    set(AGE_OS "LINUX")
+    set(AGE_OS "Linux")
     set(AGE_PLATFORM "Desktop")
 endif ()
 
@@ -60,8 +67,19 @@ endif ()
 ##################################################
 
 if (AGE_PLATFORM STREQUAL "Desktop")
-    message(STATUS "We will use Desktop platform specific code")
-    file(GLOB _PLATFORM_CODE_SRCS src/Platform/Desktop/*.cpp)
+    message(STATUS "Adding desktop specific code")
+    file(GLOB _DESKTOP_CODE_SRCS src/Platform/Desktop/*.cpp)
+    list(APPEND _PLATFORM_CODE_SRCS ${_DESKTOP_CODE_SRCS})
+endif ()
+
+if (AGE_OS STREQUAL "Linux")
+    message(STATUS "Adding Linux specific code")
+    file(GLOB _LINUX_CODE_SRCS src/Platform/Linux/*.cpp)
+    list(APPEND _PLATFORM_CODE_SRCS ${_LINUX_CODE_SRCS})
+elseif (AGE_OS STREQUAL "Windows")
+    message(STATUS "Adding Windows specific code")
+    file(GLOB _WINDOWS_CODE_SRCS src/Platform/Windows/*.cpp)
+    list(APPEND _PLATFORM_CODE_SRCS ${_WINDOWS_CODE_SRCS})
 endif ()
 
 target_sources(age_core PUBLIC ${_PLATFORM_CODE_SRCS})
@@ -119,6 +137,10 @@ add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/${FINAL_EXE_BINARY_DIR}/assets/cor
         COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/${FINAL_EXE_BINARY_DIR}/assets/core_assets
         DEPENDS ${CMAKE_BINARY_DIR}/${FINAL_EXE_BINARY_DIR}/assets)
 
+add_custom_command(OUTPUT ${CMAKE_BINARY_DIR}/${FINAL_EXE_BINARY_DIR}/assets/client_assets
+        COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/${FINAL_EXE_BINARY_DIR}/assets/client_assets
+        DEPENDS ${CMAKE_BINARY_DIR}/${FINAL_EXE_BINARY_DIR}/assets)
+
 foreach (assetSrc ${_AGECORE_ASSETS})
     string(REPLACE ${CMAKE_CURRENT_SOURCE_DIR}/assets/core_assets/ "" assetPath ${assetSrc})
     message(STATUS "AGE_CORE: Add custom command for ${assetPath}")
@@ -131,8 +153,9 @@ foreach (assetSrc ${_AGECORE_ASSETS})
 endforeach ()
 
 add_custom_target(core_assets ALL DEPENDS ${assetsOutputList})
+add_custom_target(client_assets_dir ALL DEPENDS ${CMAKE_BINARY_DIR}/${FINAL_EXE_BINARY_DIR}/assets/client_assets)
 
-add_dependencies(age_core core_assets)
+add_dependencies(age_core core_assets client_assets_dir)
 
 
 

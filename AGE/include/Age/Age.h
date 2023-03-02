@@ -19,11 +19,17 @@
 #include "Age/Core/KeyCodes.h"
 #include "Age/Core/MouseCodes.h"
 
+// Events
+#include "Age/Events/Event.h"
+#include "Age/Events/KeyEvent.h"
+#include "Age/Events/WindowEvent.h"
+#include "Age/Events/MouseEvent.h"
+
 // Layers
 #include "Age/Core/Layer.h"
 #include "Age/Debug/DebugLayer.h"
 
-//Renderer
+// Renderer
 #include "Age/Renderer/Renderer.h"
 #include "Age/Renderer/RenderCommand.h"
 #include "Age/Renderer/VertexArray.h"
@@ -35,8 +41,16 @@
 #include "Age/Renderer/Context.h"
 #include "Age/Renderer/OrthographicCamera.h"
 #include "Age/Renderer/OrthographicCameraController.h"
-
 #include "Age/Renderer/Renderer2D.h"
+
+#include <imgui.h>
+
+// Entity System
+#include "Age/Scene/Scene.h"
+#include "Age/Scene/Components.h"
+#include "Age/Scene/Entity.h"
+#include "Age/Scene/ScriptableEntity.h"
+#include "Age/Scene/SceneSerializer.h"
 
 // Debug
 #include "Age/Debug/Assert.h"

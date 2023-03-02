@@ -12,3 +12,12 @@
 [submodule "AGE/vendor/glm"]
 	path = AGE/vendor/glm
 	url = git@github.com:g-truc/glm.git
+[submodule "AGE/vendor/entt"]
+	path = AGE/vendor/entt
+	url = https://github.com/skypjack/entt.git
+[submodule "AGE/vendor/yaml-cpp"]
+	path = AGE/vendor/yaml-cpp
+	url = https://github.com/jbeder/yaml-cpp.git
+[submodule "AGE/vendor/ImGuizmo"]
+	path = AGE/vendor/ImGuizmo
+	url = https://github.com/CedricGuillemet/ImGuizmo.git

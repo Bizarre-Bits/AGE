@@ -20,7 +20,7 @@ namespace AGE {
   /**
 	 * @brief Interface representing a desktop based system's window
 	 */
-  class  Window {
+  class Window {
   public:
     using EventCallbackFn = std::function<void(Event&)>;
 
@@ -39,6 +39,8 @@ namespace AGE {
 
     virtual void SetVSync(bool enabled) = 0;
     virtual bool VSync() const = 0;
+
+    virtual void SetTitle(const age_string_t& title) = 0;
 
     inline virtual void* NativeWindow() const = 0;
 

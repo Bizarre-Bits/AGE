@@ -2,12 +2,16 @@
 // Created by alex on 2/5/23.
 //
 
+#include "agepch.h"
+
 #include "OpenGLImGuiHandler.h"
-#include "imgui.h"
-#include "backends/imgui_impl_opengl3.h"
+
+#include <imgui.h>
+#include <backends/imgui_impl_opengl3.h>
+#include <backends/imgui_impl_glfw.h>
+#include <ImGuizmo.h>
 
 #include "Age/Core/Application.h"
-#include "backends/imgui_impl_glfw.h"
 
 namespace AGE {
   bool OpenGLImGuiHandler::s_IsInitialized{false};
@@ -47,7 +51,9 @@ namespace AGE {
   void OpenGLImGuiHandler::BeginFrame() {
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
+
     ImGui::NewFrame();
+    ImGuizmo::BeginFrame();
   }
 
   void OpenGLImGuiHandler::EndFrame() {

@@ -9,8 +9,7 @@
 #include "EditorLayer.h"
 
 namespace AGE {
-
-  class Editor : public Application{
+  class Editor : public Application {
   public:
     Editor(const ApplicationSpecs& specs);
   };

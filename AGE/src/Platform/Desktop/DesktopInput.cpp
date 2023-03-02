@@ -2,6 +2,8 @@
 // Created by alex on 2/14/23.
 //
 
+#include "agepch.h"
+
 #include "Age/Core/Input.h"
 #include "agepch.h"
 #include <Age/Core/Application.h>

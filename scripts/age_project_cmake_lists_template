@@ -8,21 +8,21 @@ add_executable({project_name} ${{_{PROJECT_NAME}_SRCS}})
 include_directories({project_name} src)
 target_link_libraries({project_name} PUBLIC age_core)
 
-file(GLOB_RECURSE _{PROJECT_NAME}_ASSETS ${{CMAKE_CURRENT_SOURCE_DIR}}/assets/*)
+file(GLOB_RECURSE _{PROJECT_NAME}_ASSETS ${{CMAKE_CURRENT_SOURCE_DIR}}/assets/client_assets/{project_name}/*)
 message(STATUS ${{_{PROJECT_NAME}_ASSETS}})
 
-add_custom_command(OUTPUT ${{CMAKE_CURRENT_BINARY_DIR}}/assets/client_assets
-        COMMAND ${{CMAKE_COMMAND}} -E make_directory ${{CMAKE_CURRENT_BINARY_DIR}}/assets/client_assets
-        DEPENDS ${{CMAKE_CURRENT_BINARY_DIR}}/assets)
+add_custom_command(OUTPUT ${{CMAKE_CURRENT_BINARY_DIR}}/assets/client_assets/{project_name}
+        COMMAND ${{CMAKE_COMMAND}} -E make_directory ${{CMAKE_CURRENT_BINARY_DIR}}/assets/client_assets/{project_name}
+        DEPENDS ${{CMAKE_CURRENT_BINARY_DIR}}/assets/client_assets)
 
 foreach (assetSrc ${{_{PROJECT_NAME}_ASSETS}})
-    string(REPLACE ${{CMAKE_CURRENT_SOURCE_DIR}}/assets/client_assets/ "" assetPath ${{assetSrc}})
+    string(REPLACE ${{CMAKE_CURRENT_SOURCE_DIR}}/assets/client_assets/{project_name} "" assetPath ${{assetSrc}})
     message(STATUS "AGE_CLIENT: Add custom command for ${{assetPath}}")
-    list(APPEND assetsOutputList ${{CMAKE_CURRENT_BINARY_DIR}}/assets/client_assets/${{assetPath}})
+    list(APPEND assetsOutputList ${{CMAKE_CURRENT_BINARY_DIR}}/assets/client_assets/{project_name}/${{assetPath}})
     target_sources({project_name} PUBLIC ${{assetSrc}})
-    add_custom_command(OUTPUT ${{CMAKE_CURRENT_BINARY_DIR}}/assets/client_assets/${{assetPath}}
-            COMMAND ${{CMAKE_COMMAND}} -E copy ${{assetSrc}} ${{CMAKE_CURRENT_BINARY_DIR}}/assets/client_assets/${{assetPath}}
-            DEPENDS ${{assetSrc}} ${{CMAKE_CURRENT_BINARY_DIR}}/assets/client_assets
+    add_custom_command(OUTPUT ${{CMAKE_CURRENT_BINARY_DIR}}/assets/client_assets/{project_name}/${{assetPath}}
+            COMMAND ${{CMAKE_COMMAND}} -E copy ${{assetSrc}} ${{CMAKE_CURRENT_BINARY_DIR}}/assets/client_assets/{project_name}/${{assetPath}}
+            DEPENDS ${{assetSrc}} ${{CMAKE_CURRENT_BINARY_DIR}}/assets/client_assets/{project_name}
             COMMENT "Client Assets: Copy ${{assetPath}}")
 endforeach ()
 

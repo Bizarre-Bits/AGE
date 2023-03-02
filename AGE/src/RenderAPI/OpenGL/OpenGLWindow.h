@@ -25,6 +25,8 @@ namespace AGE {
     void SetVSync(bool enabled) override;
     bool VSync() const override;
 
+    void SetTitle(const age_string_t& title) override;
+
     virtual void* NativeWindow() const override;
 
     virtual void EventCallback(const EventCallbackFn& callback) override;

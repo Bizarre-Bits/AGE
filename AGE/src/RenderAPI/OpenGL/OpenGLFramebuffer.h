@@ -14,19 +14,29 @@ namespace AGE {
     virtual ~OpenGLFramebuffer() override;
 
     [[nodiscard]] const FramebufferSpecification& Specification() const override;
-    [[nodiscard]] inline uint32_t ColorAttachmentID() const override { return m_ColorAttachment; }
+
+    [[nodiscard]] inline uint32_t ColorAttachmentID(uint32_t index) const override {
+      AGE_CORE_ASSERT(index < m_ColorAttachments.size());
+      return m_ColorAttachments[index];
+    }
 
     virtual void Resize(uint32_t width, uint32_t height) override;
+    int ReadPixel(uint32_t attachmentIndex, int x, int y) override;
+    void ClearAttachment(uint32_t index, const void* value) override;
 
     virtual void Bind() override;
     virtual void Unbind() override;
 
     void Invalidate();
+
   private:
     FramebufferSpecification m_Specification;
-    uint32_t                 m_RenderID{0};
-    uint32_t                 m_ColorAttachment{0};
-    uint32_t                 m_DepthAttachment{0};
+    uint32_t m_RenderID{0};
+    std::vector<uint32_t> m_ColorAttachments;
+    uint32_t m_DepthAttachment;
+
+    std::vector<FramebufferTextureSpecification> m_ColorAttachmentSpecifications;
+    FramebufferTextureSpecification m_DepthAttachmentSpecification;
   };
 
 } // AGE
