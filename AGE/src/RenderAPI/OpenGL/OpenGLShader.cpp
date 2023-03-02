@@ -85,7 +85,17 @@ namespace AGE {
           cacheDirectory / (shaderFilepath.filename().string() + ShaderUtils::GLShaderCachedVulkanFileExtension(stage));
       std::ifstream in(cachedFilepath, std::ios::in | std::ios::binary);
 
-      if (in.is_open()) {
+      bool isCacheOutdated{false};
+
+      if(in.is_open()) {
+        auto cacheModificationTime = std::filesystem::last_write_time(cachedFilepath);
+        auto shaderModificationTime = std::filesystem::last_write_time(shaderFilepath);
+
+        if(shaderModificationTime > cacheModificationTime)
+          isCacheOutdated = true;
+      }
+
+      if (in.is_open() && !isCacheOutdated) {
         in.seekg(0, std::ios::end);
         auto size = in.tellg();
         in.seekg(std::ios::beg);
@@ -94,6 +104,8 @@ namespace AGE {
         data.resize(size / sizeof(uint32_t));
         in.read((char*)data.data(), size);
       } else {
+        AGE_CORE_TRACE("Recompiling shader({0}) because cache is outdated or does not exist", cachedFilepath.string());
+
         const shaderc::SpvCompilationResult shaderModule = compiler.CompileGlslToSpv(
             source,
             ShaderUtils::GLShaderStageToShaderC(stage),
@@ -139,7 +151,17 @@ namespace AGE {
           cacheDirectory / (shaderFilepath.filename().string() + ShaderUtils::GLShaderCachedOpenGLFileExtension(stage));
 
       std::ifstream in(cachedFilepath, std::ios::in | std::ios::binary);
-      if (in.is_open()) {
+
+      bool isCacheOutdated{false};
+      if(in.is_open()) {
+        auto cacheModificationTime = std::filesystem::last_write_time(cachedFilepath);
+        auto shaderModificationTime = std::filesystem::last_write_time(shaderFilepath);
+
+        if(shaderModificationTime > cacheModificationTime)
+          isCacheOutdated = true;
+      }
+
+      if (in.is_open() && !isCacheOutdated) {
         in.seekg(0, std::ios::end);
         auto size = in.tellg();
         in.seekg(std::ios::beg);
@@ -148,6 +170,8 @@ namespace AGE {
         data.resize(size / sizeof(uint32_t));
         in.read((char*)data.data(), size);
       } else {
+        AGE_CORE_TRACE("Recompiling shader({0}) because cache is outdated or does not exist", cachedFilepath.string());
+
         spirv_cross::CompilerGLSL glslCompiler(spirv);
         m_OpenGLSources[stage] = glslCompiler.compile();
         auto& source = m_OpenGLSources[stage];
