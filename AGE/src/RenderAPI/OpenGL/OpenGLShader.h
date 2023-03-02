@@ -16,7 +16,7 @@ namespace AGE {
     OpenGLShader(
         const age_string_t& name, const age_string_t& vertexSrc, const age_string_t& fragmentSrc
     );
-    OpenGLShader(const age_string_t filepath);
+    OpenGLShader(const age_string_t& filepath);
     ~OpenGLShader();
 
     virtual void Bind() const override;
@@ -38,12 +38,12 @@ namespace AGE {
     virtual void SetName(const age_string_t& value) override { m_Name = value; }
 
   private:
-    age_string_t LoadShaderFile(const age_string_t& filepath) const;
-    GLuint StringToShaderType(const age_string_t& source) const;
-    std::unordered_map<GLenum, age_string_t> MapShaders(const age_string_t& shaderSrc);
-    void Compile(const std::unordered_map<GLenum, age_string_t>& shaderSrcs);
+    void CompileOrGetVulkanBinaries(const std::unordered_map<GLenum, age_string_t>& shaderSrcs);
+    void CompileOrGetOpenGLBinaries();
+    void CreateProgram();
+    void Reflect(GLenum stage, const std::vector<uint32_t>& shaderData);
 
-    void UploadUniformFloat(const age_string_t& name, const float value) const;
+    void UploadUniformFloat(const age_string_t& name, float value) const;
     void UploadUniformFloat2(const age_string_t& name, const glm::vec2& vector) const;
     void UploadUniformFloat3(const age_string_t& name, const glm::vec3& vector) const;
     void UploadUniformFloat4(const age_string_t& name, const glm::vec4& vector) const;
@@ -51,10 +51,16 @@ namespace AGE {
     void UploadUniformMat4(const age_string_t& name, const glm::mat4& matrix) const;
     void UploadUniformMat3(const age_string_t& name, const glm::mat3& matrix) const;
 
-    void UploadUniformInt(const age_string_t& name, const int value) const;
+    void UploadUniformInt(const age_string_t& name, int value) const;
 
   private:
-    unsigned int m_RendererID;
+    uint32_t m_RendererID;
+    age_string_t m_Filepath;
     age_string_t m_Name;
+
+    std::unordered_map<GLenum, std::vector<uint32_t>> m_VulkanSPIRV;
+    std::unordered_map<GLenum, std::vector<uint32_t>> m_OpenGLSPIRV;
+
+    std::unordered_map<GLenum, age_string_t> m_OpenGLSources;
   };
 }
