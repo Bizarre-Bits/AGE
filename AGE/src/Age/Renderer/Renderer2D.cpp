@@ -8,6 +8,7 @@
 #include "Renderer2D.h"
 #include "Shader.h"
 #include "VertexArray.h"
+#include "UniformBuffer.h"
 
 namespace AGE {
   struct QuadVertex {
@@ -41,6 +42,12 @@ namespace AGE {
     glm::vec4 QuadVertexPositions[4];
 
     Renderer2D::Statistics Stats;
+
+    struct CameraData {
+      glm::mat4 ViewProjection;
+    } CameraBuffer;
+
+    Ref <UniformBuffer> CameraUniform;
   };
 
   static Renderer2DData s_Data;
@@ -98,6 +105,8 @@ namespace AGE {
     s_Data.QuadVertexPositions[1] = {0.5f, 0.5f, 0.0f, 1.0f};
     s_Data.QuadVertexPositions[2] = {0.5f, -0.5f, 0.0f, 1.0f};
     s_Data.QuadVertexPositions[3] = {-0.5f, -0.5f, 0.0f, 1.0f};
+
+    s_Data.CameraUniform = UniformBuffer::Create(sizeof(Renderer2DData::CameraData), 0);
   }
 
   void Renderer2D::ShutDown() {
@@ -107,8 +116,8 @@ namespace AGE {
   void Renderer2D::BeginScene(const OrthographicCamera& camera) {
     AGE_PROFILE_FUNCTION();
 
-    s_Data.Shader2D->Bind();
-    s_Data.Shader2D->SetMat4("u_ViewProjection", camera.ViewProjectionMatrix());
+    s_Data.CameraBuffer.ViewProjection = camera.ViewProjectionMatrix();
+    s_Data.CameraUniform->SetData(&s_Data.CameraBuffer, sizeof(Renderer2DData::CameraData));
 
     StartBatch();
   }
@@ -116,8 +125,8 @@ namespace AGE {
   void Renderer2D::BeginScene(const EditorCamera& camera) {
     AGE_PROFILE_FUNCTION();
 
-    s_Data.Shader2D->Bind();
-    s_Data.Shader2D->SetMat4("u_ViewProjection", camera.ViewProjection());
+    s_Data.CameraBuffer.ViewProjection = camera.ViewProjection();
+    s_Data.CameraUniform->SetData(&s_Data.CameraBuffer, sizeof(Renderer2DData::CameraData));
 
     StartBatch();
   }
@@ -127,8 +136,8 @@ namespace AGE {
 
     glm::mat4 viewProj = camera.Projection() * glm::inverse(transform);
 
-    s_Data.Shader2D->Bind();
-    s_Data.Shader2D->SetMat4("u_ViewProjection", viewProj);
+    s_Data.CameraBuffer.ViewProjection = camera.Projection() * glm::inverse(transform);
+    s_Data.CameraUniform->SetData(&s_Data.CameraBuffer, sizeof(Renderer2DData::CameraData));
 
     StartBatch();
   }
@@ -140,6 +149,7 @@ namespace AGE {
   }
 
   void Renderer2D::StartBatch() {
+    s_Data.Shader2D->Bind();
     s_Data.QuadIndexCount = 0;
     s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
 

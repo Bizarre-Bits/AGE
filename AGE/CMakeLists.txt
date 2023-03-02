@@ -31,8 +31,14 @@ add_subdirectory(vendor/glm)
 add_subdirectory(vendor/spdlog)
 add_subdirectory(vendor/entt)
 add_subdirectory(vendor/yaml-cpp)
-
 target_link_libraries(age_core PUBLIC spdlog glm EnTT::EnTT yaml-cpp)
+
+message(STATUS "Vulkan SDK: $ENV{VULKAN_SDK}")
+
+find_package(Vulkan REQUIRED)
+target_link_directories(age_core PUBLIC "$ENV{VULKAN_SDK}/lib")
+target_link_libraries(age_core PUBLIC shaderc_combined spirv-cross-core spirv-cross-glsl)
+target_include_directories(age_core PUBLIC ${Vulkan_INCLUDE_DIRS})
 
 ##################################################
 #                Figure out OS                   #

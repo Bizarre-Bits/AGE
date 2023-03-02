@@ -7,8 +7,13 @@
 
 #include <fstream>
 #include <glm/gtc/type_ptr.hpp>
+#include <shaderc/shaderc.hpp>
+#include <spirv_cross/spirv_cross.hpp>
+#include <spirv_cross/spirv_glsl.hpp>
 
 #include "OpenGLShader.h"
+#include "OpenGLShaderUtils.h"
+#include "Age/Core/Timer.h"
 
 namespace AGE {
   OpenGLShader::OpenGLShader(
@@ -16,23 +21,35 @@ namespace AGE {
   ) : m_Name(name) {
     AGE_PROFILE_FUNCTION();
 
-    std::unordered_map<GLenum, age_string_t> sources{std::pair{GL_VERTEX_SHADER, vertexSrc},
-                                                     std::pair{GL_FRAGMENT_SHADER, fragmentSrc}};
-    Compile(sources);
+    std::unordered_map<GLenum, age_string_t> sources;
+    sources[GL_VERTEX_SHADER] = vertexSrc;
+    sources[GL_FRAGMENT_SHADER] = fragmentSrc;
+
+    CompileOrGetVulkanBinaries(sources);
+    CompileOrGetOpenGLBinaries();
+    CreateProgram();
   }
 
-  OpenGLShader::OpenGLShader(const age_string_t filepath) {
+  OpenGLShader::OpenGLShader(const age_string_t& filepath) : m_Filepath{filepath} {
     AGE_PROFILE_FUNCTION();
 
-    const age_string_t shader{LoadShaderFile(filepath)};
-    Compile(MapShaders(shader));
+    ShaderUtils::CreateCacheDirectoryIfNeeded();
 
+    age_string_t const source = ShaderUtils::LoadShaderFile(filepath);
+    auto shaderSources = ShaderUtils::MapShaders(source);
+    {
+      Timer timer;
+      timer.Start();
+      CompileOrGetVulkanBinaries(shaderSources);
+      CompileOrGetOpenGLBinaries();
+      CreateProgram();
+      AGE_CORE_INFO("Compiled shaders in {0}ms", timer.DeltaTime().Milliseconds());
+    }
     auto lastSlash = filepath.find_last_of("/\\");
     lastSlash = lastSlash == age_string_t::npos ? 0 : lastSlash + 1;
     auto lastDot = filepath.rfind('.');
-    auto size    =
-             lastDot == age_string_t::npos ? filepath.size() - lastSlash : lastDot - lastSlash;
-    m_Name = filepath.substr(lastSlash, size);
+    auto count = lastDot == age_string_t::npos ? filepath.size() - lastSlash : lastDot - lastSlash;
+    m_Name = filepath.substr(lastSlash, count);
   }
 
   OpenGLShader::~OpenGLShader() {
@@ -50,6 +67,166 @@ namespace AGE {
 
     glUseProgram(0);
   }
+
+  void OpenGLShader::CompileOrGetVulkanBinaries(const std::unordered_map<GLenum, age_string_t>& shaderSrcs) {
+    const shaderc::Compiler compiler;
+    shaderc::CompileOptions options;
+    options.SetTargetEnvironment(shaderc_target_env_vulkan, shaderc_env_version_vulkan_1_2);
+    constexpr bool optimize = true;
+    if constexpr (optimize) {
+      options.SetOptimizationLevel(shaderc_optimization_level_performance);
+    }
+    const std::filesystem::path cacheDirectory = ShaderUtils::CacheDirectory();
+
+    auto& shaderData = m_VulkanSPIRV;
+    for (auto&& [stage, source]: shaderSrcs) {
+      const std::filesystem::path shaderFilepath = m_Filepath;
+      const std::filesystem::path cachedFilepath =
+          cacheDirectory / (shaderFilepath.filename().string() + ShaderUtils::GLShaderCachedVulkanFileExtension(stage));
+      std::ifstream in(cachedFilepath, std::ios::in | std::ios::binary);
+
+      if (in.is_open()) {
+        in.seekg(0, std::ios::end);
+        auto size = in.tellg();
+        in.seekg(std::ios::beg);
+
+        auto& data = shaderData[stage];
+        data.resize(size / sizeof(uint32_t));
+        in.read((char*)data.data(), size);
+      } else {
+        const shaderc::SpvCompilationResult shaderModule = compiler.CompileGlslToSpv(
+            source,
+            ShaderUtils::GLShaderStageToShaderC(stage),
+            m_Filepath.c_str(),
+            options
+        );
+        if (shaderModule.GetCompilationStatus() != shaderc_compilation_status_success) {
+          AGE_CORE_ERROR(shaderModule.GetErrorMessage());
+          AGE_CORE_ASSERT(false);
+        }
+        shaderData[stage] = std::vector<uint32_t>(shaderModule.cbegin(), shaderModule.cend());
+
+        std::ofstream out(cachedFilepath, std::ios::out | std::ios::binary);
+        if (out.is_open()) {
+          auto& data = shaderData[stage];
+          out.write((char*)data.data(), data.size() * sizeof(uint32_t));
+          out.flush();
+          out.close();
+        }
+      }
+    }
+
+    for (auto&& [stage, data]: shaderData)
+      Reflect(stage, data);
+  }
+
+  void OpenGLShader::CompileOrGetOpenGLBinaries() {
+    auto& shaderData = m_OpenGLSPIRV;
+    const shaderc::Compiler compiler;
+    shaderc::CompileOptions options;
+    options.SetTargetEnvironment(shaderc_target_env_vulkan, shaderc_env_version_vulkan_1_2);
+    constexpr bool optimize = true;
+    if constexpr (optimize) {
+      options.SetOptimizationLevel(shaderc_optimization_level_performance);
+    }
+
+    const std::filesystem::path cacheDirectory = ShaderUtils::CacheDirectory();
+    shaderData.clear();
+    m_OpenGLSources.clear();
+    for (auto&& [stage, spirv]: m_VulkanSPIRV) {
+      std::filesystem::path shaderFilepath = m_Filepath;
+      std::filesystem::path cachedFilepath =
+          cacheDirectory / (shaderFilepath.filename().string() + ShaderUtils::GLShaderCachedOpenGLFileExtension(stage));
+
+      std::ifstream in(cachedFilepath, std::ios::in | std::ios::binary);
+      if (in.is_open()) {
+        in.seekg(0, std::ios::end);
+        auto size = in.tellg();
+        in.seekg(std::ios::beg);
+
+        auto& data = shaderData[stage];
+        data.resize(size / sizeof(uint32_t));
+        in.read((char*)data.data(), size);
+      } else {
+        spirv_cross::CompilerGLSL glslCompiler(spirv);
+        m_OpenGLSources[stage] = glslCompiler.compile();
+        auto& source = m_OpenGLSources[stage];
+
+        shaderc::SpvCompilationResult shaderModule = compiler.CompileGlslToSpv(
+            source, ShaderUtils::GLShaderStageToShaderC(stage), m_Filepath.c_str()
+        );
+        if (shaderModule.GetCompilationStatus() != shaderc_compilation_status_success) {
+          AGE_CORE_ERROR(shaderModule.GetErrorMessage());
+          AGE_CORE_ASSERT(false);
+        }
+
+        shaderData[stage] = std::vector<uint32_t>(shaderModule.cbegin(), shaderModule.cend());
+
+        std::ofstream out(cachedFilepath, std::ios::out | std::ios::binary);
+        if(out.is_open()) {
+          auto& data = shaderData[stage];
+          out.write((char*)data.data(), data.size() * sizeof(uint32_t));
+          out.flush();
+          out.close();
+        }
+      }
+    }
+  }
+
+  void OpenGLShader::CreateProgram() {
+    GLuint program = glCreateProgram();
+
+    std::vector<GLuint> shaderIDs;
+    for(auto&& [stage, spirv] : m_OpenGLSPIRV) {
+      GLuint shaderID = shaderIDs.emplace_back(glCreateShader(stage));
+      glShaderBinary(1, &shaderID, GL_SHADER_BINARY_FORMAT_SPIR_V, spirv.data(), spirv.size() * sizeof(uint32_t));
+      glSpecializeShader(shaderID, "main", 0, nullptr, nullptr);
+      glAttachShader(program, shaderID);
+    }
+
+    glLinkProgram(program);
+
+    GLint isLinked;
+    glGetProgramiv(program, GL_LINK_STATUS, &isLinked);
+    if(isLinked == GL_FALSE) {
+      GLint maxLength;
+      glGetProgramiv(program, GL_INFO_LOG_LENGTH, &maxLength);
+      std::vector<GLchar> infoLog(maxLength);
+      glGetProgramInfoLog(program, maxLength, &maxLength, infoLog.data());
+      AGE_CORE_ERROR("Shader linking failed ({0}):\n{1}", m_Filepath, infoLog.data());
+
+      glDeleteProgram(program);
+      for(auto id: shaderIDs)
+        glDeleteShader(id);
+    }
+
+    m_RendererID = program;
+  }
+
+  void OpenGLShader::Reflect(GLenum stage, const std::vector<uint32_t>& shaderData) {
+    spirv_cross::Compiler compiler(shaderData);
+    spirv_cross::ShaderResources resources = compiler.get_shader_resources();
+
+    AGE_CORE_TRACE("OpenGLShader::Reflect - {0} {1}", ShaderUtils::GLShaderStageToString(stage), m_Filepath);
+    AGE_CORE_TRACE("  {0} uniform buffers", resources.uniform_buffers.size());
+    AGE_CORE_TRACE("  {0} resources", resources.sampled_images.size());
+
+    AGE_CORE_TRACE("Uniform buffers:");
+    for(const auto& resource : resources.uniform_buffers) {
+      const auto& bufferType = compiler.get_type(resource.base_type_id);
+      uint32_t bufferSize = compiler.get_declared_struct_size(bufferType);
+      uint32_t binding = compiler.get_decoration(resource.id, spv::DecorationBinding);
+      int memberCount = bufferType.member_types.size();
+
+      AGE_CORE_TRACE("  {0}", resource.name);
+      AGE_CORE_TRACE("    size = {0}", bufferSize);
+      AGE_CORE_TRACE("    Binding = {0}", binding);
+      AGE_CORE_TRACE("    Members = {0}", memberCount);
+    }
+  }
+
+
+#pragma region Uniforms
 
   void OpenGLShader::UploadUniformFloat(const age_string_t& name, const float value) const {
     AGE_PROFILE_FUNCTION();
@@ -71,6 +248,7 @@ namespace AGE {
     GLint location = glGetUniformLocation(m_RendererID, name.c_str());
     glUniform3f(location, vector.x, vector.y, vector.z);
   }
+
   void OpenGLShader::UploadUniformFloat4(const age_string_t& name, const glm::vec4& vector) const {
     AGE_PROFILE_FUNCTION();
 
@@ -99,130 +277,11 @@ namespace AGE {
     glUniform1i(location, value);
   }
 
-  age_string_t OpenGLShader::LoadShaderFile(const age_string_t& filepath) const {
-    AGE_PROFILE_FUNCTION();
-
-    age_string_t  result;
-    std::ifstream in(filepath, std::ios::in | std::ios::binary);
-    if (in) {
-      in.seekg(0, std::ios::end);
-      size_t size = in.tellg();
-      if (size != -1) {
-        result.resize(size);
-        in.seekg(0, std::ios::beg);
-        in.read(&result[0], (int32_t)size);
-      } else {
-        AGE_CORE_ERROR("Could not read from file '{0}'", filepath);
-      }
-    } else {
-      AGE_CORE_ERROR("Could not open file '{0}'", filepath);
-    }
-    return result;
-  }
-
-  std::unordered_map<GLenum, age_string_t> OpenGLShader::MapShaders(const age_string_t& shaderSrc) {
-    AGE_PROFILE_FUNCTION();
-
-    std::unordered_map<GLenum, age_string_t> shaderMap;
-
-    const char* typeToken{"#type"};
-    size_t typeTokenSize{strlen(typeToken)};
-
-    size_t pos = shaderSrc.find(typeToken, 0);
-    while (pos != age_string_t::npos) {
-      size_t eol = shaderSrc.find_first_of("\r\n", pos);
-      AGE_CORE_ASSERT(eol != age_string_t::npos, "Syntax error");
-
-      size_t       begin = pos + typeTokenSize + 1;
-      age_string_t type{shaderSrc.substr(begin, eol - begin)};
-
-      size_t nextLinePos = shaderSrc.find_first_not_of("\r\n", eol);
-      AGE_CORE_ASSERT(nextLinePos != age_string_t::npos, "Syntax error");
-
-      pos = shaderSrc.find(typeToken, nextLinePos);
-
-      shaderMap[StringToShaderType(type)] = (pos == age_string_t::npos) ? shaderSrc.substr(
-          nextLinePos
-      ) : shaderSrc.substr(nextLinePos, pos - nextLinePos);
-    }
-
-    return shaderMap;
-  }
-
-  GLuint OpenGLShader::StringToShaderType(const age_string_t& source) const {
-    AGE_PROFILE_FUNCTION();
-
-    if (source == "vertex")
-      return GL_VERTEX_SHADER;
-    if (source == "fragment")
-      return GL_FRAGMENT_SHADER;
-    if (source == "geometry")
-      return GL_GEOMETRY_SHADER;
-
-    AGE_CORE_ERROR("Unknown shader type: '{0}'", source);
-    return 0;
-  }
-
-  void OpenGLShader::Compile(const std::unordered_map<GLenum, age_string_t>& sources) {
-    AGE_PROFILE_FUNCTION();
-
-    GLuint shaderIDS[sources.size()];
-    GLuint* nextShaderInsert{shaderIDS};
-
-    m_RendererID = glCreateProgram();
-
-    for (auto source: sources) {
-      auto [shaderType, sourceStr] = source;
-
-      GLuint shaderID = glCreateShader(shaderType);
-
-      auto shaderCSrc = (GLchar*)sourceStr.c_str();
-      glShaderSource(shaderID, 1, &shaderCSrc, 0);
-      glCompileShader(shaderID);
-
-      GLint isCompiled{0};
-      glGetShaderiv(shaderID, GL_COMPILE_STATUS, &isCompiled);
-      if (isCompiled == GL_FALSE) {
-        GLint maxLength = 0;
-        glGetShaderiv(shaderID, GL_INFO_LOG_LENGTH, &maxLength);
-        char infoLog[maxLength];
-        glGetShaderInfoLog(shaderID, maxLength, &maxLength, infoLog);
-
-        glDeleteShader(shaderID);
-        AGE_CORE_ERROR("Failed to compile shader: \n {0}", age_string_t{infoLog});
-        continue;
-      }
-
-      glAttachShader(m_RendererID, shaderID);
-
-      *nextShaderInsert = shaderID;
-      nextShaderInsert++;
-    }
-
-    glLinkProgram(m_RendererID);
-
-    GLint isLinked{0};
-    glGetProgramiv(m_RendererID, GL_LINK_STATUS, &isLinked);
-    if (isLinked == GL_FALSE) {
-      GLint maxLength = 0;
-      glGetShaderiv(m_RendererID, GL_INFO_LOG_LENGTH, &maxLength);
-      char infoLog[maxLength];
-      glGetProgramInfoLog(m_RendererID, maxLength, &maxLength, infoLog);
-
-      glDeleteProgram(m_RendererID);
-      AGE_CORE_ERROR("Failed to link program: \n {0}", age_string_t{infoLog});
-    }
-
-    for (auto shader: shaderIDS) {
-      glDetachShader(m_RendererID, shader);
-      glDeleteShader(shader);
-    }
-  }
-
   void OpenGLShader::SetMat4(const age_string_t& name, const glm::mat4& value) {
     AGE_PROFILE_FUNCTION();
 
-    UploadUniformMat4(name, value);
+//    UploadUniformMat4(name, value);
+    glUniformMatrix4fv(0, 1, GL_FALSE, glm::value_ptr(value));
   }
 
   void OpenGLShader::SetFloat4(const age_string_t& name, const glm::vec4& value) {
@@ -261,5 +320,7 @@ namespace AGE {
     int location = glGetUniformLocation(m_RendererID, name.c_str());
     glUniform1iv(location, count, values);
   }
+
+#pragma endregion
 
 }
