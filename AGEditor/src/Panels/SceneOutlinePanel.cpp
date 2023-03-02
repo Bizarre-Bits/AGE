@@ -159,7 +159,6 @@ namespace AGE {
     }
 
     if (camera.GetProjectionType() == SceneCamera::ProjectionType::Orthographic) {
-
       float size{camera.GetOrthographicSize()}, near{camera.GetOrthographicNearClip()}, far{camera.GetOrthographicFarClip()};
       if (ImGui::DragFloat("Size", &size, 1.0f, 0.0f))
         camera.SetOrthographicSize(size);

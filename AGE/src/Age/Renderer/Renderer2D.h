@@ -28,6 +28,7 @@ namespace AGE {
       float Tiling{0};
       int EntityID;
     };
+
   public:
     static void Init();
     static void ShutDown();

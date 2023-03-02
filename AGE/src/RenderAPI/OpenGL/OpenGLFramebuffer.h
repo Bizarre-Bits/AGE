@@ -28,6 +28,7 @@ namespace AGE {
     virtual void Unbind() override;
 
     void Invalidate();
+
   private:
     FramebufferSpecification m_Specification;
     uint32_t m_RenderID{0};

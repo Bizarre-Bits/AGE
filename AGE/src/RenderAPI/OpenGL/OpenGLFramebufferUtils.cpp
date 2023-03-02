@@ -44,7 +44,6 @@ namespace AGE::FramebufferUtils {
 
   void AttachDepthTexture(uint32_t depthAttachmentID, uint32_t samples, GLenum nativeFormat, GLenum framebufferTarget,
                           uint32_t width, uint32_t height) {
-
     if (nativeFormat == 0 || framebufferTarget == 0)
       return;
 

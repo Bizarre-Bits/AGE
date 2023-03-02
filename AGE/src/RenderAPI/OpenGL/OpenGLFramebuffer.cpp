@@ -134,7 +134,6 @@ namespace AGE {
         FramebufferUtils::GLDataType(textureFormat),
         value
     );
-
   }
 
 } // AGE
