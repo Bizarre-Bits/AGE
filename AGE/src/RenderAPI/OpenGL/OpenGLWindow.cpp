@@ -58,7 +58,7 @@ namespace AGE {
     );
     glfwSetWindowUserPointer(m_Window, &m_Data);
 
-    m_Context = new OpenGLContext{m_Window};
+    m_Context = CreateScope<OpenGLContext>(m_Window);
     m_Context->Init();
 
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);

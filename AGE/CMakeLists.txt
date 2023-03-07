@@ -141,8 +141,14 @@ if (AGE_INCLUDE_VULKAN)
     message(STATUS "Including Vulkan")
 
     target_compile_definitions(age_core PUBLIC AGE_INCLUDE_VULKAN)
-    file(GLOB _IMGUI_VULKAN_BE vendor/imgui/backends/imgui_impl_vulkan.cpp vendor/imgui/backends/imgui_impl_vulka)
-    list(APPEND _IMGUI_BE_SRCS ${IMGUI_OPENGL_BE})
+    list(APPEND _IMGUI_BE_SRCS vendor/imgui/backends/imgui_impl_vulkan.cpp vendor/imgui/backends/imgui_impl_vulkan.h)
+
+    file(GLOB _AGE_VULKAN_PLATFORM_SRCS src/RenderAPI/Vulkan/*.cpp src/RenderAPI/Vulkan/*.h)
+
+    target_sources(age_core PUBLIC ${_AGE_VULKAN_PLATFORM_SRCS})
+
+    target_link_libraries(age_imgui PUBLIC vulkan)
+    target_link_libraries(age_core PUBLIC vulkan)
 endif ()
 
 target_compile_definitions(age_core PUBLIC AGE_RENDER_API_${AGE_RENDER_API})

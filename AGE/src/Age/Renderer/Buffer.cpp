@@ -8,8 +8,11 @@
 #include "Renderer.h"
 #include "RenderAPI.h"
 
-#ifdef AGE_INCLUDE_OPENGL
+#if defined(AGE_INCLUDE_OPENGL)
   #include "RenderAPI/OpenGL/OpenGLBuffer.h"
+#endif
+#if defined(AGE_INCLUDE_VULKAN)
+  #include "RenderAPI/Vulkan/VulkanBuffer.h"
 #endif
 
 namespace AGE {
@@ -38,7 +41,7 @@ namespace AGE {
     }
   }
 
-  Ref<VertexBuffer> VertexBuffer::Create(float* vertices, uint32_t count) {
+  Ref <VertexBuffer> VertexBuffer::Create(float* vertices, uint32_t count) {
     AGE_PROFILE_FUNCTION();
 
     switch (Renderer::GetAPI()) {
@@ -47,13 +50,18 @@ namespace AGE {
         //Sorry for this mess. TODO: should figure out a way to make it more readable.
 
         // OpenGL VertexBuffer
-#ifdef AGE_INCLUDE_OPENGL
-        return std::make_shared<OpenGLVertexBuffer>(vertices, count);
+#if defined(AGE_INCLUDE_OPENGL)
+        return MakeRef<OpenGLVertexBuffer>(vertices, count);
 #else
-        AGE_CORE_ASSERT(false, "RendererAPI::OpenGL is not available because OpenGL is not included in this compilation")
+        AGE_CORE_ASSERT(false, "OpenGL is not available because OpenGL is not included in this compilation")
 #endif
 
-        // Handle unconfigured RendererAPI
+      case RenderAPI::API::Vulkan:
+#if defined(AGE_INCLUDE_VULKAN)
+        return MakeRef<VulkanVertexBuffer>(vertices, count);
+#else
+        AGE_CORE_ASSERT(false, "Vulkan is not available because Vulkan is not included in this compilation")
+#endif
       default: {
         AGE_CORE_ASSERT(false,
                         "Could not create a vertex buffer, as there is no RendererAPI selected");
@@ -64,7 +72,7 @@ namespace AGE {
   }
 
 
-  Ref<VertexBuffer> VertexBuffer::Create(uint32_t size) {
+  Ref <VertexBuffer> VertexBuffer::Create(uint32_t size) {
     AGE_PROFILE_FUNCTION();
 
     switch (Renderer::GetAPI()) {
@@ -73,13 +81,19 @@ namespace AGE {
         //Sorry for this mess. TODO: should figure out a way to make it more readable.
 
         // OpenGL VertexBuffer
-#ifdef AGE_INCLUDE_OPENGL
-        return std::make_shared<OpenGLVertexBuffer>(size);
+#if defined(AGE_INCLUDE_OPENGL)
+        return MakeRef<OpenGLVertexBuffer>(size);
 #else
-        AGE_CORE_ASSERT(false, "RendererAPI::OpenGL is not available because OpenGL is not included in this compilation")
+        AGE_CORE_ASSERT(false, "OpenGL is not available because OpenGL is not included in this compilation")
 #endif
 
-        // Handle unconfigured RendererAPI
+      case RenderAPI::API::Vulkan:
+#if defined(AGE_INCLUDE_VULKAN)
+        return MakeRef<VulkanVertexBuffer>(size);
+#else
+        AGE_CORE_ASSERT(false, "Vulkan is not available because Vulkan is not included in this compilation")
+#endif
+
       default: {
         AGE_CORE_ASSERT(false,
                         "Could not create a vertex buffer, as there is no RendererAPI selected");
@@ -89,14 +103,20 @@ namespace AGE {
     return nullptr;
   }
 
-  Ref<IndexBuffer> IndexBuffer::Create(uint32_t* indices, uint32_t count) {
+  Ref <IndexBuffer> IndexBuffer::Create(uint32_t* indices, uint32_t count) {
     AGE_PROFILE_FUNCTION();
 
     switch (Renderer::GetAPI()) {
       case RenderAPI::API::None: AGE_CORE_ASSERT(false, "RendererAPI::None is not supported");
       case RenderAPI::API::OpenGL:
-#ifdef AGE_INCLUDE_OPENGL
-        return std::make_shared<OpenGLIndexBuffer>(indices, count);
+#if defined(AGE_INCLUDE_OPENGL)
+        return MakeRef<OpenGLIndexBuffer>(indices, count);
+#else
+        AGE_CORE_ASSERT(false, "RendererAPI::OpenGL is not available because OpenGL is not included in this compilation");
+#endif
+      case RenderAPI::API::Vulkan:
+#if defined(AGE_INCLUDE_VULKAN)
+        return MakeRef<VulkanIndexBuffer>(indices, count);
 #else
         AGE_CORE_ASSERT(false, "RendererAPI::OpenGL is not available because OpenGL is not included in this compilation");
 #endif
@@ -112,7 +132,7 @@ namespace AGE {
   uint32_t shader_data_size(ShaderDataType type) {
     AGE_PROFILE_FUNCTION();
 
-    uint8_t dataType       = ((uint8_t)type & 0b111'00000) >> 5;
+    uint8_t dataType = ((uint8_t)type & 0b111'00000) >> 5;
     uint8_t componentCount = (uint8_t)type & 0b000'11111;
 
     switch (dataType) {

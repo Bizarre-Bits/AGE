@@ -7,7 +7,7 @@
 #include "RenderCommand.h"
 
 namespace AGE {
-  RenderAPI* RenderCommand::s_RenderAPI{RenderAPI::Create()};
+  Scope<RenderAPI> RenderCommand::s_RenderAPI{RenderAPI::Create()};
 
   void RenderCommand::Init() {
     AGE_PROFILE_FUNCTION();

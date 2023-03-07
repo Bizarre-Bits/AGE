@@ -38,7 +38,7 @@
 #include "Age/Renderer/Texture.h"
 #include "Age/Renderer/SubTexture2D.h"
 #include "Age/Renderer/Framebuffer.h"
-#include "Age/Renderer/Context.h"
+#include "Age/Renderer/RenderContext.h"
 #include "Age/Renderer/OrthographicCamera.h"
 #include "Age/Renderer/OrthographicCameraController.h"
 #include "Age/Renderer/Renderer2D.h"

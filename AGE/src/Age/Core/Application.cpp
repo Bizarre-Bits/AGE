@@ -31,10 +31,6 @@ namespace AGE {
     Renderer::Init();
     Renderer2D::Init();
     ImGuiHandler::InitImGui();
-
-#ifdef DEBUG
-    PushOverlay(new DebugLayer);
-#endif
   }
 
   void Application::Run() {

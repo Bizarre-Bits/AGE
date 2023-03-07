@@ -18,7 +18,7 @@ namespace AGE {
 
     static void DrawIndexed(const Ref <VertexArray>& va, uint32_t count = 0);
   private:
-    static RenderAPI* s_RenderAPI;
+    static Scope<RenderAPI> s_RenderAPI;
   };
 
 } // AGE

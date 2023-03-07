@@ -8,9 +8,14 @@
 #if defined(AGE_INCLUDE_OPENGL)
   #include "RenderAPI/OpenGL/OpenGLImGuiHandler.h"
 #endif
+#if defined(AGE_INCLUDE_VULKAN)
+  #include "RenderAPI/Vulkan/VulkanRenderAPI.h"
+#endif
 
 #include "Renderer.h"
 #include "RenderAPI.h"
+#include "RenderAPI/OpenGL/OpenGLRenderAPI.h"
+#include "RenderAPI/Vulkan/VulkanImGuiHandler.h"
 
 namespace AGE {
   Ref<ImGuiHandler_PlatformImpl> ImGuiHandler::s_ImGuiPlatformAPI = ImGuiHandler::CreatePlatformAPI();
@@ -24,7 +29,13 @@ namespace AGE {
 #ifdef AGE_INCLUDE_OPENGL
         return MakeRef<OpenGLImGuiHandler>();
 #else
-        AGE_CORE_ASSER(false, "OpenGL is not available, because it is not included into the current compilation")
+        AGE_CORE_ASSERT(false, "OpenGL is not available, because it is not included into the current compilation")
+#endif
+case RenderAPI::API::Vulkan:
+#ifdef AGE_INCLUDE_VULKAN
+        return MakeRef<VulkanImGuiHandler>();
+#else
+        AGE_CORE_ASSERT(false, "Vulkan is not available, because it is not included into the current compilation")
 #endif
       default: {
         AGE_CORE_ASSERT(false,

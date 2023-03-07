@@ -8,12 +8,15 @@
 #if defined(AGE_INCLUDE_OPENGL)
   #include "RenderAPI/OpenGL/OpenGLWindow.h"
 #endif
+#if defined(AGE_INCLUDE_VULKAN)
+  #include "RenderAPI/Vulkan/VulkanWindow.h"
+#endif
 
 #include "Age/Renderer/Renderer.h"
 #include "Age/Renderer/RenderAPI.h"
 
 namespace AGE {
-  Scope<Window> Window::Create(const AGE::WindowProps& props) {
+  Scope <Window> Window::Create(const AGE::WindowProps& props) {
     AGE_PROFILE_FUNCTION();
 
     switch (Renderer::GetAPI()) {
@@ -23,6 +26,11 @@ namespace AGE {
         return CreateScope<OpenGLWindow>(props);
 #else
         AGE_CORE_ASSER(false, "OpenGL is not available, because it is not included into the current compilation")
+#endif
+      case RenderAPI::API::Vulkan:
+#if defined(AGE_INCLUDE_VULKAN)
+      return CreateScope<VulkanWindow>(props);
+#else
 #endif
       default: {
         AGE_CORE_ASSERT(false,

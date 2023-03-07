@@ -5,10 +5,10 @@
 #pragma once
 
 namespace AGE {
-  class Context {
+  class RenderContext {
   public:
-    Context() = default;
-    virtual ~Context() = default;
+    RenderContext() = default;
+    virtual ~RenderContext() = default;
 
     virtual void Init() = 0;
     virtual void SwapBuffers() = 0;

@@ -4,11 +4,11 @@
 
 #pragma once
 
-#include "Age/Renderer/Context.h"
+#include "Age/Renderer/RenderContext.h"
 #include "RenderAPI/OpenGL/OpenGLMaster.h"
 
 namespace AGE {
-  class OpenGLContext : public Context {
+  class OpenGLContext : public RenderContext {
   public:
     explicit OpenGLContext(GLFWwindow* windowHandle);
 

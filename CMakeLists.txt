@@ -3,6 +3,7 @@ project(AGE)
 set(CMAKE_CXX_STANDARD 23)
 
 # Project Subdirectories
+add_subdirectory(VulkanExperiment)
 add_subdirectory(AGEditor)
 add_subdirectory(Sandbox)
 

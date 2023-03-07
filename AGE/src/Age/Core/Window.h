@@ -4,11 +4,9 @@
 
 #pragma once
 
-#include "agepch.h"
-
 #include "Age/Core/Core.h"
 #include "Age/Events/Event.h"
-#include "Age/Renderer/Context.h"
+#include "Age/Renderer/RenderContext.h"
 
 namespace AGE {
   struct WindowProps {
@@ -24,9 +22,7 @@ namespace AGE {
   public:
     using EventCallbackFn = std::function<void(Event&)>;
 
-    virtual ~Window() {
-      delete m_Context;
-    }
+    virtual ~Window() = default;
 
     virtual void OnUpdate() = 0;
     virtual void Clear() = 0;
@@ -47,6 +43,6 @@ namespace AGE {
     static Scope<Window> Create(const WindowProps& props);
 
   protected:
-    Context* m_Context{nullptr};
+    Scope<RenderContext> m_Context{nullptr};
   };
 }// namespace AGE

@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include "Age/Core/Core.h"
 #include "glm/vec4.hpp"
 #include "VertexArray.h"
 
@@ -14,6 +15,7 @@ namespace AGE {
     enum class API {
       None,
       OpenGL,
+      Vulkan
     };
   public:
     virtual void Init() = 0;
@@ -24,7 +26,7 @@ namespace AGE {
     virtual void DrawIndexed(const Ref <VertexArray>& va, uint32_t count) = 0;
 
     static API GetAPI() { return s_API; }
-    static RenderAPI* Create();
+    static Scope<RenderAPI> Create();
   private:
     static API s_API;
   };
