@@ -13,6 +13,10 @@ class CmdArgs(TypedDict):
 
 
 def main():
+    if "--help" in sys.argv:
+        show_help()
+        sys.exit(0)
+
     force = "--force" in sys.argv
     set_final_exe_bin = "--set-final-exe-bin" in sys.argv
     cmake_lists_only = "--cmake-lists-only" in sys.argv
@@ -46,7 +50,7 @@ def main():
 
 
 def print_usage():
-    print(f"Usage: {sys.argv[0]} --project [project_name] (--namespace [namespace])  (--force)")
+    print(f"Usage: {sys.argv[0]} --project <project_name> (--namespace <namespace>)  (--force)")
 
 
 def check_is_option(opt: str) -> bool:
@@ -73,7 +77,8 @@ def parse_cmd_args() -> CmdArgs | None:
                 print_usage()
                 sys.exit(1)
             if not is_valid_cpp_symbol_name(result['project_name']):
-                print(f"Incorrect project name: {result['project_name']}! Project name must also be a correct C++ symbol name.")
+                print(
+                    f"Incorrect project name: {result['project_name']}! Project name must also be a correct C++ symbol name.")
                 sys.exit(1)
         except IndexError:
             print("There is no project name provided")
@@ -90,7 +95,8 @@ def parse_cmd_args() -> CmdArgs | None:
                 print_usage()
                 sys.exit(1)
             if not is_valid_cpp_symbol_name(result['project_namespace']):
-                print(f"Incorrect project namespace: {result['project_namespace']}! Project namespace must be a correct C++ symbol name.")
+                print(
+                    f"Incorrect project namespace: {result['project_namespace']}! Project namespace must be a correct C++ symbol name.")
                 sys.exit(1)
         except IndexError:
             print("There is no project namespace provided")
@@ -196,6 +202,18 @@ def add_subdirectory(project_name: str):
                 file.write(f"add_subdirectory({project_name})\n")
             else:
                 file.write(line)
+
+
+def show_help():
+    print_usage()
+    print()
+    print("Available flags:")
+    print("\t{:<30}Show this message".format("--help"))
+    print("\t{:<30}Specifies the project name".format("--project"))
+    print("\t{:<30}Specifies the project's namespace".format("--namespace"))
+    print("\t{:<30}The project will be created even if there is already a directory with that name".format("--force"))
+    print("\t{:<30}Will set AGE_FINAL_EXE_BIN to the project's bin directory".format("--set-final-exe-bin"))
+    print("\t{:<30}Will generate only CMakeLists.txt".format("--cmake-lists-only"))
 
 
 if __name__ == "__main__":
