@@ -32,6 +32,7 @@ namespace AGE {
   private:
     void Init(const WindowProps& props);
     void Dispose();
+    EventCallbackFn m_EventCallbackFn{nullptr};
 
   private:
     GLFWwindow* m_WindowHandle{nullptr};

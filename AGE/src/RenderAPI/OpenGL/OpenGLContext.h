@@ -12,7 +12,7 @@ namespace AGE {
   public:
     explicit OpenGLContext(GLFWwindow* windowHandle);
 
-    virtual void Init() override;
+    virtual void Init();
     virtual void SwapBuffers() override;
 
   private:

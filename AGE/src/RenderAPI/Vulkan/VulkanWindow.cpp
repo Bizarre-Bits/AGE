@@ -3,6 +3,7 @@
 //
 
 
+#include <Age/Events/WindowEvent.h>
 #include "agepch.h"
 
 #include "VulkanWindow.h"
@@ -38,7 +39,7 @@ namespace AGE {
   }
 
   void VulkanWindow::EventCallback(const Window::EventCallbackFn& callback) {
-
+    m_EventCallbackFn = callback;
   }
 
   void VulkanWindow::SetVSync(bool enabled) {
@@ -78,6 +79,15 @@ namespace AGE {
     contextCreateInfo.AppName = props.Title.c_str();
 
     m_Context = CreateScope<VulkanRenderContext>(contextCreateInfo);
+
+    glfwSetWindowUserPointer(m_WindowHandle, this);
+
+    glfwSetWindowCloseCallback(m_WindowHandle, [](GLFWwindow* window) {
+      auto vulkanWindow = (VulkanWindow*)glfwGetWindowUserPointer(window);
+
+      WindowCloseEvent event;
+      vulkanWindow->m_EventCallbackFn(event);
+    });
   }
 
   void VulkanWindow::Dispose() {
