@@ -30,6 +30,7 @@ namespace AGE {
     void CreateLogicalDevice();
     void CreateSurface(const VulkanRenderContextCreateInfo& contextCreateInfo);
     void CreateSwapChain();
+    void CreateImageViews();
 
     void PopulateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT& createInfo);
     void SetupDebugMessenger();
@@ -68,6 +69,7 @@ namespace AGE {
     VkSurfaceKHR m_Surface{VK_NULL_HANDLE};
     VkSwapchainKHR m_SwapChain{VK_NULL_HANDLE};
     std::vector<VkImage> m_SwapChainImages;
+    std::vector<VkImageView> m_SwapChainImageViews;
     VkFormat m_SwapChainFormat;
     VkExtent2D m_SwapChainExtent;
   };
