@@ -26,6 +26,8 @@ namespace AGE {
   private:
     void CreateInstance(const VulkanRenderContextCreateInfo& createInfo);
     void PickPhysicalDevice();
+    void RetrieveQueues();
+    void CreateLogicalDevice();
 
     void PopulateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT& createInfo);
     void SetupDebugMessenger();
@@ -58,6 +60,8 @@ namespace AGE {
     VkDebugUtilsMessengerEXT m_DebugMessenger{VK_NULL_HANDLE};
     VkPhysicalDevice m_PhysicalDevice{VK_NULL_HANDLE};
     VkDevice m_LogicalDevice{VK_NULL_HANDLE};
+    VkQueue m_GraphicsQueue{VK_NULL_HANDLE};
+    VkQueue m_PresentQueue{VK_NULL_HANDLE};
   };
 
 } // AGE

@@ -2,11 +2,12 @@
 // Created by alex on 3/7/23.
 //
 
-
-#include <map>
 #include "agepch.h"
 
+#include <map>
+
 #include "VulkanRenderContext.h"
+#include "QueueFamilyIndices.h"
 
 namespace AGE {
   static const std::vector<const char*> s_ValidationLayers = {"VK_LAYER_KHRONOS_validation"};
@@ -26,6 +27,8 @@ namespace AGE {
     CreateInstance(createInfo);
     SetupDebugMessenger();
     PickPhysicalDevice();
+    CreateLogicalDevice();
+    RetrieveQueues();
   }
 
   void VulkanRenderContext::SwapBuffers() {
@@ -96,6 +99,7 @@ namespace AGE {
   }
 
   void VulkanRenderContext::Cleanup() {
+    vkDestroyDevice(m_LogicalDevice, nullptr);
     DestroyDebugMessenger(m_VkInstance, m_DebugMessenger, nullptr);
     vkDestroyInstance(m_VkInstance, nullptr);
   }
@@ -216,10 +220,12 @@ namespace AGE {
       uint32_t rating = RatePhysicalDeviceSuitability(device);
       deviceRates.emplace(rating, device);
     }
+
+    AGE_CORE_INFO("Available physical devices:");
     for (auto [rate, dev]: deviceRates) {
       VkPhysicalDeviceProperties props{};
       vkGetPhysicalDeviceProperties(dev, &props);
-      AGE_CORE_INFO("{0} {1}", rate, props.deviceName);
+      AGE_CORE_INFO("\t{0} ({1})", props.deviceName, rate);
     }
 
     const auto [maxRate, maxDevice] = *deviceRates.rbegin();
@@ -233,6 +239,9 @@ namespace AGE {
   uint32_t VulkanRenderContext::RatePhysicalDeviceSuitability(VkPhysicalDevice device) {
     constexpr uint32_t GB{1024 * 1024 * 1024};
     uint32_t rate{0};
+
+    if (!FindQueueFamilies(device).IsComplete())
+      return 0;
 
     VkPhysicalDeviceFeatures features{};
     vkGetPhysicalDeviceFeatures(device, &features);
@@ -257,5 +266,43 @@ namespace AGE {
     }
 
     return rate;
+  }
+
+  void VulkanRenderContext::RetrieveQueues() {
+    QueueFamilyIndices indices{FindQueueFamilies(m_PhysicalDevice)};
+    vkGetDeviceQueue(m_LogicalDevice, indices.GraphicsFamily.value(), 0, &m_GraphicsQueue);
+  }
+
+  void VulkanRenderContext::CreateLogicalDevice() {
+    QueueFamilyIndices indices{FindQueueFamilies(m_PhysicalDevice)};
+
+    VkDeviceQueueCreateInfo queueCreateInfo{};
+    queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+    queueCreateInfo.queueFamilyIndex = indices.GraphicsFamily.value();
+    queueCreateInfo.queueCount = 1;
+    float queuePriority = 1.0f;
+    queueCreateInfo.pQueuePriorities = &queuePriority;
+
+    VkPhysicalDeviceFeatures physicalDeviceFeatures{};
+    vkGetPhysicalDeviceFeatures(m_PhysicalDevice, &physicalDeviceFeatures);
+
+    VkDeviceCreateInfo createInfo{};
+    createInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
+    createInfo.pQueueCreateInfos = &queueCreateInfo;
+    createInfo.queueCreateInfoCount = 1;
+    createInfo.pEnabledFeatures = &physicalDeviceFeatures;
+
+    createInfo.enabledExtensionCount = 0;
+
+    if (c_EnableValidationLayers) {
+      createInfo.enabledLayerCount = s_ValidationLayers.size();
+      createInfo.ppEnabledLayerNames = s_ValidationLayers.data();
+    } else {
+      createInfo.enabledLayerCount = 0;
+    }
+
+    if (vkCreateDevice(m_PhysicalDevice, &createInfo, nullptr, &m_LogicalDevice) != VK_SUCCESS) {
+      AGE_CORE_CRITICAL("Failed to create a Vulkan logical device");
+    }
   }
 } // AGE
