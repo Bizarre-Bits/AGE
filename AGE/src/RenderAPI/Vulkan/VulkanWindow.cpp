@@ -72,6 +72,8 @@ namespace AGE {
       AGE_CORE_CRITICAL("Failed to create a window");
     }
 
+    glfwMakeContextCurrent(m_WindowHandle);
+
     VulkanRenderContextCreateInfo contextCreateInfo{};
     contextCreateInfo.WindowHandle = m_WindowHandle;
     contextCreateInfo.WindowWidth = props.Width;
@@ -82,12 +84,14 @@ namespace AGE {
 
     glfwSetWindowUserPointer(m_WindowHandle, this);
 
-    glfwSetWindowCloseCallback(m_WindowHandle, [](GLFWwindow* window) {
-      auto vulkanWindow = (VulkanWindow*)glfwGetWindowUserPointer(window);
+    glfwSetWindowCloseCallback(
+        m_WindowHandle, [](GLFWwindow* window) {
+          auto vulkanWindow = (VulkanWindow*)glfwGetWindowUserPointer(window);
 
-      WindowCloseEvent event;
-      vulkanWindow->m_EventCallbackFn(event);
-    });
+          WindowCloseEvent event;
+          vulkanWindow->m_EventCallbackFn(event);
+        }
+    );
   }
 
   void VulkanWindow::Dispose() {

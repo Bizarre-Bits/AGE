@@ -29,6 +29,7 @@ namespace AGE {
     void RetrieveQueues();
     void CreateLogicalDevice();
     void CreateSurface(const VulkanRenderContextCreateInfo& contextCreateInfo);
+    void CreateSwapChain();
 
     void PopulateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT& createInfo);
     void SetupDebugMessenger();
@@ -54,6 +55,7 @@ namespace AGE {
         const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
         void* pUserData
     );
+    bool CheckDeviceExtensionSupport(VkPhysicalDevice device);
     uint32_t RatePhysicalDeviceSuitability(VkPhysicalDevice device);
 
   private:
@@ -64,6 +66,10 @@ namespace AGE {
     VkQueue m_GraphicsQueue{VK_NULL_HANDLE};
     VkQueue m_PresentQueue{VK_NULL_HANDLE};
     VkSurfaceKHR m_Surface{VK_NULL_HANDLE};
+    VkSwapchainKHR m_SwapChain{VK_NULL_HANDLE};
+    std::vector<VkImage> m_SwapChainImages;
+    VkFormat m_SwapChainFormat;
+    VkExtent2D m_SwapChainExtent;
   };
 
 } // AGE
