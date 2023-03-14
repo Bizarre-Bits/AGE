@@ -5,6 +5,7 @@
 #include "agepch.h"
 
 #include <map>
+#include <set>
 
 #include "VulkanRenderContext.h"
 #include "QueueFamilyIndices.h"
@@ -25,6 +26,7 @@ namespace AGE {
 
   void VulkanRenderContext::Init(const VulkanRenderContextCreateInfo& createInfo) {
     CreateInstance(createInfo);
+    CreateSurface(createInfo);
     SetupDebugMessenger();
     PickPhysicalDevice();
     CreateLogicalDevice();
@@ -101,6 +103,7 @@ namespace AGE {
   void VulkanRenderContext::Cleanup() {
     vkDestroyDevice(m_LogicalDevice, nullptr);
     DestroyDebugMessenger(m_VkInstance, m_DebugMessenger, nullptr);
+    vkDestroySurfaceKHR(m_VkInstance, m_Surface, nullptr);
     vkDestroyInstance(m_VkInstance, nullptr);
   }
 
@@ -240,7 +243,7 @@ namespace AGE {
     constexpr uint32_t GB{1024 * 1024 * 1024};
     uint32_t rate{0};
 
-    if (!FindQueueFamilies(device).IsComplete())
+    if (!FindQueueFamilies(device, m_Surface).IsComplete())
       return 0;
 
     VkPhysicalDeviceFeatures features{};
@@ -269,27 +272,34 @@ namespace AGE {
   }
 
   void VulkanRenderContext::RetrieveQueues() {
-    QueueFamilyIndices indices{FindQueueFamilies(m_PhysicalDevice)};
+    QueueFamilyIndices indices{FindQueueFamilies(m_PhysicalDevice, m_Surface)};
     vkGetDeviceQueue(m_LogicalDevice, indices.GraphicsFamily.value(), 0, &m_GraphicsQueue);
+    vkGetDeviceQueue(m_LogicalDevice, indices.PresentFamily.value(), 0, &m_PresentQueue);
   }
 
   void VulkanRenderContext::CreateLogicalDevice() {
-    QueueFamilyIndices indices{FindQueueFamilies(m_PhysicalDevice)};
+    QueueFamilyIndices indices{FindQueueFamilies(m_PhysicalDevice, m_Surface)};
 
-    VkDeviceQueueCreateInfo queueCreateInfo{};
-    queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
-    queueCreateInfo.queueFamilyIndex = indices.GraphicsFamily.value();
-    queueCreateInfo.queueCount = 1;
+    std::vector<VkDeviceQueueCreateInfo> queueCreateInfos;
+    std::set<uint32_t> uniqueQueueFamilies{indices.GraphicsFamily.value(), indices.PresentFamily.value()};
+
     float queuePriority = 1.0f;
-    queueCreateInfo.pQueuePriorities = &queuePriority;
+    for (uint32_t family: uniqueQueueFamilies) {
+      VkDeviceQueueCreateInfo queueCreateInfo{};
+      queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+      queueCreateInfo.queueFamilyIndex = indices.GraphicsFamily.value();
+      queueCreateInfo.queueCount = 1;
+      queueCreateInfo.pQueuePriorities = &queuePriority;
+      queueCreateInfos.push_back(queueCreateInfo);
+    }
 
     VkPhysicalDeviceFeatures physicalDeviceFeatures{};
     vkGetPhysicalDeviceFeatures(m_PhysicalDevice, &physicalDeviceFeatures);
 
     VkDeviceCreateInfo createInfo{};
     createInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
-    createInfo.pQueueCreateInfos = &queueCreateInfo;
-    createInfo.queueCreateInfoCount = 1;
+    createInfo.pQueueCreateInfos = queueCreateInfos.data();
+    createInfo.queueCreateInfoCount = queueCreateInfos.size();
     createInfo.pEnabledFeatures = &physicalDeviceFeatures;
 
     createInfo.enabledExtensionCount = 0;
@@ -303,6 +313,12 @@ namespace AGE {
 
     if (vkCreateDevice(m_PhysicalDevice, &createInfo, nullptr, &m_LogicalDevice) != VK_SUCCESS) {
       AGE_CORE_CRITICAL("Failed to create a Vulkan logical device");
+    }
+  }
+
+  void VulkanRenderContext::CreateSurface(const VulkanRenderContextCreateInfo& contextCreateInfo) {
+    if (glfwCreateWindowSurface(m_VkInstance, contextCreateInfo.WindowHandle, nullptr, &m_Surface) != VK_SUCCESS) {
+      AGE_CORE_CRITICAL("Failed to create window surface");
     }
   }
 } // AGE

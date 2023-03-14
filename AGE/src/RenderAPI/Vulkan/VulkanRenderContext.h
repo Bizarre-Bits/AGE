@@ -28,6 +28,7 @@ namespace AGE {
     void PickPhysicalDevice();
     void RetrieveQueues();
     void CreateLogicalDevice();
+    void CreateSurface(const VulkanRenderContextCreateInfo& contextCreateInfo);
 
     void PopulateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT& createInfo);
     void SetupDebugMessenger();
@@ -62,6 +63,7 @@ namespace AGE {
     VkDevice m_LogicalDevice{VK_NULL_HANDLE};
     VkQueue m_GraphicsQueue{VK_NULL_HANDLE};
     VkQueue m_PresentQueue{VK_NULL_HANDLE};
+    VkSurfaceKHR m_Surface{VK_NULL_HANDLE};
   };
 
 } // AGE

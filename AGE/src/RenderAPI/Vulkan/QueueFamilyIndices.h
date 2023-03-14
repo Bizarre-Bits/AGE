@@ -11,11 +11,12 @@
 namespace AGE {
   struct QueueFamilyIndices {
     std::optional<uint32_t> GraphicsFamily;
+    std::optional<uint32_t> PresentFamily;
 
     inline bool IsComplete() const {
-      return GraphicsFamily.has_value();
+      return GraphicsFamily.has_value() && PresentFamily.has_value();
     }
   };
 
-  QueueFamilyIndices FindQueueFamilies(VkPhysicalDevice device);
+  QueueFamilyIndices FindQueueFamilies(VkPhysicalDevice device, VkSurfaceKHR surface);
 } // AGE
